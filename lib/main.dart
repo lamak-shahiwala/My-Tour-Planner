@@ -17,6 +17,7 @@ class MyTourPlanner extends StatelessWidget {
     return  const Scaffold(
       body: Column(children: [
         Text("IS THIS WINDOW ACTIVE??")
+        
       ],)
     );
   }
