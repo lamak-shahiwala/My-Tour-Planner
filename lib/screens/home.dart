@@ -3,6 +3,7 @@
 * *IMP*
 * */
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -14,9 +15,11 @@ class Home extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Home Screen")
+            Text("Yo!"),
+            Text("Home Screen"),
           ],),
       ),
+      bottomNavigationBar: mtp_BottomAppBar(),
     );
   }
 }
