@@ -1,7 +1,3 @@
-/*
-* This file will contain user registration functionalities.
-* *IMP*
-* */
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 

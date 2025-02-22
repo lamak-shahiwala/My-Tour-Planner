@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
+
 
 class Create_or_Generate__Trip extends StatelessWidget {
   const Create_or_Generate__Trip({super.key});
@@ -9,6 +11,7 @@ class Create_or_Generate__Trip extends StatelessWidget {
       body: Column(children: [
         
       ],),
+      bottomNavigationBar: mtp_BottomAppBar(),
     );
   }
 }

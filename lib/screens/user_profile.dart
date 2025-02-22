@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
+
 
 class UserProfile extends StatelessWidget {
   const UserProfile({super.key});
@@ -11,6 +13,7 @@ class UserProfile extends StatelessWidget {
         children: [
         Text("User Profile page!"),
       ],),
+      bottomNavigationBar: mtp_BottomAppBar(),
     );
   }
 }
