@@ -1,3 +1,8 @@
+/*
+* things to do: store start date and end date in a var
+*
+**/
+
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';
@@ -9,7 +14,7 @@ import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
 class CreateTrip extends StatelessWidget {
   CreateTrip({super.key});
 
-  final String page_title = "Create your trip Itinerary \nwith us.";
+  final String page_title = "Create your trip Itinerary\nwith us.";
   final TextEditingController trip_name = TextEditingController();
   final TextEditingController location = TextEditingController();
 

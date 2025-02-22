@@ -54,7 +54,7 @@ class WhiteTextField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: const BorderSide(
-            color: Color(0xFF0097B2),
+            color: Color(0xFFD8DDE3),
             width: 1.2,
           ),
         ),
