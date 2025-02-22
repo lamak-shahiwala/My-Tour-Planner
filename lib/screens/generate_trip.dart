@@ -39,9 +39,9 @@ class GenerateTrip extends StatelessWidget {
                     Text(page_title, style: sub_heading, textAlign: TextAlign.center,),
                     SizedBox(height: 40,),
                     WhiteTextField(labelText: "Enter Trip Name", controller: trip_name),
-                    SizedBox(height: 40,),
+                    SizedBox(height: 25,),
                     WhiteSearchBar(hintText: "Select Location", controller: location),
-                    SizedBox(height: 40,),
+                    SizedBox(height: 25,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -49,9 +49,9 @@ class GenerateTrip extends StatelessWidget {
                         WhiteDatePicker(datePicker_Label: "End Date"),
                       ],
                     ),
-                    SizedBox(height: 30,),
+                    SizedBox(height: 25,),
                     DropDownMenu(),
-                    SizedBox(height: 30,),
+                    SizedBox(height: 25,),
                     SaveNextButton(onPress: (){
 
                     }, buttonLabel: Text("Next",style: save_next_button,)),
