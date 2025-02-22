@@ -4,6 +4,7 @@
 * */
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/home.dart';
+import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:my_tour_planner/utilities/text_field/light_grey_text_field.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
@@ -28,19 +29,7 @@ class UserLogin extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 30,
-                    color: Color.fromRGBO(214, 214, 214, 1),
-                  ),
-                ),
-              ),
+              ArrowBackButton(),
               Image.asset(
                 'assets/images/MTP_Logo.png',
                 width: 194,

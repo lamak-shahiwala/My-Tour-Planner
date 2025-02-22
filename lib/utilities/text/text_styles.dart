@@ -50,3 +50,19 @@ const textField_placeholder = TextStyle(
   fontFamily: "Sofia_Sans",
   fontWeight: FontWeight.w400,
 );
+
+const hello_user = TextStyle(
+  color: Color.fromRGBO(53, 50, 66, 1),
+  fontSize: 20,
+  fontFamily: 'Sofia_Sans',
+  fontWeight: FontWeight.w600,
+  fontStyle: FontStyle.italic,
+);
+
+const save_next_button =  TextStyle(
+  color: Color.fromRGBO(254, 254, 254, 1),
+  fontSize: 18,
+  fontFamily: 'Sofia_Sans',
+  fontWeight: FontWeight.w200,
+  height: 1.2,
+);

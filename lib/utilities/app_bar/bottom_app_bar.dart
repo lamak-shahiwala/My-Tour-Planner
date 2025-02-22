@@ -15,28 +15,27 @@ class _mtp_BottomAppBarState extends State<mtp_BottomAppBar> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Color(0xFFFFFFFF),
+      color: Color.fromRGBO(250, 250, 250, 1),
       child: Container(
         height: 72,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Home()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Home()));
             },
               icon: SvgPicture.asset(
                 "assets/images/icons/home.svg", height: 24,
                 width: 24,),),
             IconButton(onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Create_or_Generate__Trip()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => Create_or_Generate__Trip()));
             },
               icon: SvgPicture.asset(
                 "assets/images/icons/create_generate.svg", height: 24,
                 width: 24,),),
             IconButton(onPressed: () {
-              Navigator.push(context,
+              Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const UserProfile()));
             },
                 icon: Icon(

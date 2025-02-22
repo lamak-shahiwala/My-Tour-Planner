@@ -1,10 +1,11 @@
 /*
 * This file will contain user login functionalities.
-* *IMP*
+* Incomplete..
 * */
 
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/home.dart';
+import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:my_tour_planner/utilities/text_field/light_grey_text_field.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
@@ -30,19 +31,7 @@ class UserRegistration extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 30,
-                    color: Color.fromRGBO(214, 214, 214, 1),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
+              ArrowBackButton(),
               Image.asset(
                 'assets/images/MTP_Logo.png',
                 width: 194,

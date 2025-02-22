@@ -127,6 +127,7 @@ class create_generate_button extends StatelessWidget {
   final double horizontalPadding;
   final double verticalPadding;
   final double height;
+  final double width;
   final double elevationValue;
   final Color backgroundColor;
   final Color borderColor;
@@ -138,7 +139,8 @@ class create_generate_button extends StatelessWidget {
   final void Function()? onPress;
 
   const create_generate_button({super.key,
-    this.height = 340.0,
+    this.height = 101.0,
+    this.width = 269,
     this.horizontalMargin = 5.0,
     this.verticalMargin = 5.0,
     this.verticalPadding = 10,
@@ -158,7 +160,7 @@ class create_generate_button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: width,
       height: height,
       margin: EdgeInsets.symmetric(
           horizontal: horizontalMargin, vertical: verticalMargin),
