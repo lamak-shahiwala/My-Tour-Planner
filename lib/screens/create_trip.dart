@@ -50,7 +50,7 @@ class CreateTrip extends StatelessWidget {
                       ),
                       SizedBox(height: 30,),
                       SaveNextButton(onPress: (){
-
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                       }, buttonLabel: Text("Next",style: save_next_button,)),
                     ],
                   ),

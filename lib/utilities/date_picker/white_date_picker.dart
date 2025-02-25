@@ -36,10 +36,10 @@ class _WhiteDatePickerState extends State<WhiteDatePicker> {
           buttonLabel: Text(
             _selectedDate == null
                 ? widget.datePicker_Label
-                : "${DateFormat.yMMMMd().format(_selectedDate ?? DateTime.now())}",
+                : "${DateFormat("dd MMM, y").format(_selectedDate ?? DateTime.now())}",
             style: TextStyle(
               color: Color(0xFF666666),
-              fontSize: 20,
+              fontSize: 18,
               fontFamily: "Sofia_Sans",
               fontWeight: FontWeight.w400,
             ),
