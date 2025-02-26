@@ -22,11 +22,11 @@ class _ExpandableCustomItineraryNoteTextFieldState
       color: Color(0xFF666666),
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w400,
-      fontSize: 14,
+      fontSize: 20,
     );
     const textFieldStyle = TextStyle(
       color: Color(0xFF000000),
-      fontSize: 14,
+      fontSize: 20,
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w400,
     );
@@ -35,7 +35,7 @@ class _ExpandableCustomItineraryNoteTextFieldState
         ConstrainedBox(
           constraints: BoxConstraints(
             minHeight: 50, // Ensures initial height is small
-            maxHeight: 150, // Prevents excessive expansion
+            maxHeight: 300, // Prevents excessive expansion
           ),
           child: TextField(
             controller: widget.controller,
@@ -48,20 +48,7 @@ class _ExpandableCustomItineraryNoteTextFieldState
               labelStyle: textField_placeholder,
               hintText: "Note....",
               hintStyle: textField_placeholder,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-                borderSide: const BorderSide(
-                  color: Color(0xFFD8DDE3),
-                  width: 1.2,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-                borderSide: const BorderSide(
-                  color: Color(0xFFD8DDE3),
-                  width: 1.2,
-                ),
-              ),
+              border: OutlineInputBorder(),
             ),
             onChanged: (text) {
               setState(() {}); // Forces rebuild for dynamic height

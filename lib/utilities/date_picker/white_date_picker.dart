@@ -4,29 +4,24 @@ import 'package:intl/intl.dart';
 
 class WhiteDatePicker extends StatefulWidget {
   final String datePicker_Label;
-  DateTime? selectedDate;
-
-  WhiteDatePicker({super.key,
-    required this.datePicker_Label,
-    required this.selectedDate,
-  });
-
+  const WhiteDatePicker({Key? key, required this.datePicker_Label}) : super(key: key);
   @override
   _WhiteDatePickerState createState() => _WhiteDatePickerState();
 }
 
 class _WhiteDatePickerState extends State<WhiteDatePicker> {
+  DateTime? _selectedDate;
   Future<void> _selectDate(BuildContext context) async {
     DateTime now = DateTime.now();
     DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: widget.selectedDate ?? now,
+      initialDate: _selectedDate ?? now,
       firstDate: now,
       lastDate: now.add(Duration(days: 365)),
     );
-    if (picked != null && picked != widget.selectedDate) {
+    if (picked != null && picked != _selectedDate) {
       setState(() {
-        widget.selectedDate = picked;
+        _selectedDate = picked;
       });
     }
   }
@@ -39,9 +34,9 @@ class _WhiteDatePickerState extends State<WhiteDatePicker> {
         WhiteDatePicker_button(
           onPress: () => _selectDate(context),
           buttonLabel: Text(
-            widget.selectedDate == null
+            _selectedDate == null
                 ? widget.datePicker_Label
-                : "${DateFormat("dd MMM, y").format(widget.selectedDate ?? DateTime.now())}",
+                : "${DateFormat("dd MMM, y").format(_selectedDate ?? DateTime.now())}",
             style: TextStyle(
               color: Color(0xFF666666),
               fontSize: 18,
