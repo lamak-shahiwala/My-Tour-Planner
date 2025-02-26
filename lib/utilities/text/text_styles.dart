@@ -37,6 +37,20 @@ const sub_heading =  TextStyle(
   fontWeight: FontWeight.w600,
 );
 
+const heading =  TextStyle(
+  color: Color.fromRGBO(53, 50, 66, 1),
+  fontSize: 24,
+  fontFamily: 'Sofia_Sans',
+  fontWeight: FontWeight.w600,
+);
+
+const date_heading =  TextStyle(
+  color: Color.fromRGBO(53, 50, 66, 1),
+  fontSize: 18,
+  fontFamily: 'Sofia_Sans',
+  fontWeight: FontWeight.w500,
+);
+
 const lightGrey_paragraph_text =  TextStyle(
   color: Color.fromRGBO(211, 211, 211, 1),
   fontSize: 15,

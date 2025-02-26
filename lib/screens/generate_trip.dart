@@ -13,11 +13,14 @@ import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
 
 class GenerateTrip extends StatelessWidget {
-  GenerateTrip({super.key});
+  GenerateTrip({super.key, this.start_date, this.end_date});
 
   final String page_title = "Generate your trip Itinerary.\nProvide details for your\nIdeal Trip.";
   final TextEditingController trip_name = TextEditingController();
   final TextEditingController location = TextEditingController();
+
+  final DateTime? start_date;
+  final DateTime? end_date;
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +48,8 @@ class GenerateTrip extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        WhiteDatePicker(datePicker_Label: "Start Date"),
-                        WhiteDatePicker(datePicker_Label: "End Date"),
+                        WhiteDatePicker(datePicker_Label: "Start Date", selectedDate: start_date,),
+                        WhiteDatePicker(datePicker_Label: "End Date", selectedDate: end_date,),
                       ],
                     ),
                     SizedBox(height: 25,),
