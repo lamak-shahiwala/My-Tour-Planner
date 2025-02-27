@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/welcome.dart';
+import 'package:my_tour_planner/utilities/text/text_styles.dart';
 
 class AppStartWelcome extends StatefulWidget {
   const AppStartWelcome({super.key});

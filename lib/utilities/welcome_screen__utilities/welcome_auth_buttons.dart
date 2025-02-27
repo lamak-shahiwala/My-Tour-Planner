@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_tour_planner/utilities/button/button.dart';
-import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/screens/user_login.dart';
 import 'package:my_tour_planner/screens/user_registration.dart';
+import 'package:my_tour_planner/utilities/button/button.dart';
+import 'package:my_tour_planner/utilities/text/text_styles.dart';
 
 class WelcomeAuthButtons extends StatefulWidget {
   const WelcomeAuthButtons({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_tour_planner/utilities/welcome_screen__utilities/welcome_page_view.dart';
-import 'package:my_tour_planner/utilities/welcome_screen__utilities/welcome_auth_buttons.dart';
 import 'package:my_tour_planner/utilities/welcome_screen__utilities/app_start_welcome.dart';
+import 'package:my_tour_planner/utilities/welcome_screen__utilities/welcome_auth_buttons.dart';
+import 'package:my_tour_planner/utilities/welcome_screen__utilities/welcome_page_view.dart';
 
 class welcome extends StatelessWidget {
   const welcome({super.key});

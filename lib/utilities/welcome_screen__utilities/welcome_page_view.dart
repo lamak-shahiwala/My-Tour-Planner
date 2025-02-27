@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_tour_planner/utilities/welcome_screen__utilities/dot_animation.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
+import 'package:my_tour_planner/utilities/welcome_screen__utilities/dot_animation.dart';
 
 
 class page_view_for_features extends StatelessWidget {

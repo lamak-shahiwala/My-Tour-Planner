@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/create_trip.dart';
 import 'package:my_tour_planner/screens/generate_trip.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
-import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
+import 'package:my_tour_planner/utilities/text/text_styles.dart';
 
 class Create_or_Generate__Trip extends StatelessWidget {
   Create_or_Generate__Trip({super.key});

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_tour_planner/utilities/button/save_next_button.dart';
 import 'package:my_tour_planner/utilities/itinerary_screen_utilities/dynamic_itinerary_details.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 class DateWiseItineraries extends StatefulWidget {
