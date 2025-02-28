@@ -29,39 +29,68 @@ class CreateTrip extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(height: 30,),
-                ArrowBackButton(),
-                SizedBox(height: 50,),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(page_title, style: sub_heading, textAlign: TextAlign.center,),
-                      SizedBox(height: 40,),
-                      WhiteTextField(labelText: "Enter Trip Name", controller: trip_name),
-                      SizedBox(height: 40,),
-                      WhiteSearchBar(hintText: "Select Location", controller: location),
-                      SizedBox(height: 40,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          WhiteDatePicker(datePicker_Label: "Start Date", selectedDate: start_date,),
-                          WhiteDatePicker(datePicker_Label: "End Date", selectedDate: end_date,),
-                        ],
-                      ),
-                      SizedBox(height: 30,),
-                      SaveNextButton(onPress: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CreateItinerary()));
-                      }, buttonLabel: Text("Next",style: save_next_button,)),
-                    ],
-                  ),
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              ArrowBackButton(),
+              SizedBox(
+                height: 50,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      page_title,
+                      style: sub_heading,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    WhiteTextField(
+                        labelText: "Enter Trip Name", controller: trip_name),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    WhiteSearchBar(
+                        hintText: "Select Location", controller: location),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    WhiteDatePicker(),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    SaveNextButton(
+                        onPress: () {
+                          if (start_date != null &&
+                              end_date != null &&
+                              location.text.isNotEmpty &&
+                              trip_name.text.isNotEmpty) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CreateItinerary(
+                                        start_Date: start_date,
+                                        end_Date: end_date,
+                                        trip_name: trip_name.text,
+                                        location_name: location.text,)));
+                          }
+                        },
+                        buttonLabel: Text(
+                          "Next",
+                          style: save_next_button,
+                        )),
+                  ],
                 ),
-
-            ],),
+              ),
+            ],
           ),
+        ),
       ),
     );
   }
