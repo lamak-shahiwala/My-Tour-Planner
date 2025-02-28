@@ -45,13 +45,7 @@ class GenerateTrip extends StatelessWidget {
                     SizedBox(height: 25,),
                     WhiteSearchBar(hintText: "Select Location", controller: location),
                     SizedBox(height: 25,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        WhiteDatePicker(datePicker_Label: "Start Date", selectedDate: start_date,),
-                        WhiteDatePicker(datePicker_Label: "End Date", selectedDate: end_date,),
-                      ],
-                    ),
+                    WhiteDatePicker(),
                     SizedBox(height: 25,),
                     DropDownMenu(),
                     SizedBox(height: 25,),

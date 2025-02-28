@@ -9,6 +9,7 @@ class Create_or_Generate__Trip extends StatelessWidget {
   Create_or_Generate__Trip({super.key});
 
   final String userName = "Lamak Shahiwala";
+  final String image = "";
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +25,20 @@ class Create_or_Generate__Trip extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  IconButton(onPressed: () {}, icon: Icon(Icons.person)),
-                  Text(
-                    "Hello, " + userName + ".",
-                    style: hello_user,
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkImage(
+                      image,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(
+                      "Hello, " + userName + ".",
+                      style: hello_user,
+                    ),
                   ),
                 ],
               ),
@@ -40,7 +50,7 @@ class Create_or_Generate__Trip extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: mtp_BottomAppBar(),
+      bottomNavigationBar: mtp_BottomAppBar(selectedIndex: 1),
     );
   }
 }

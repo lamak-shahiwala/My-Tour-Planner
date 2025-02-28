@@ -111,16 +111,17 @@ class _DynamicItineraryDetailsState extends State<DynamicItineraryDetails> {
                 );
               },
             ),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: addDynamicItineraryDetail,
-                  icon: Icon(
-                    Icons.add_circle,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 14),
+              child: GestureDetector(
+                onTap: addDynamicItineraryDetail,
+                child: Icon(
+                    Icons.add,
                     color: const Color.fromRGBO(0, 151, 178, 1),
                     size: 24,
                   ),
-                )),
+              ),
+            ),
           ],
         ),
       ),

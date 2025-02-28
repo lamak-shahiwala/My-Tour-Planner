@@ -30,6 +30,13 @@ const active_button_text_white =  TextStyle(
   fontWeight: FontWeight.w400,
 );
 
+const sub_sub_heading =  TextStyle(
+  color: Color.fromRGBO(53, 50, 66, 1),
+  fontSize: 14,
+  fontFamily: 'Sofia_Sans',
+  fontWeight: FontWeight.w400,
+);
+
 const sub_heading =  TextStyle(
   color: Color.fromRGBO(53, 50, 66, 1),
   fontSize: 20,
@@ -37,18 +44,25 @@ const sub_heading =  TextStyle(
   fontWeight: FontWeight.w600,
 );
 
+const location =  TextStyle(
+  color: Color.fromRGBO(53, 50, 66, 1),
+  fontSize: 18,
+  fontFamily: 'Sofia_Sans',
+  fontWeight: FontWeight.w300,
+);
+
 const heading =  TextStyle(
   color: Color.fromRGBO(53, 50, 66, 1),
-  fontSize: 24,
+  fontSize: 32,
   fontFamily: 'Sofia_Sans',
-  fontWeight: FontWeight.w600,
+  fontWeight: FontWeight.w700,
 );
 
 const date_heading =  TextStyle(
   color: Color.fromRGBO(53, 50, 66, 1),
   fontSize: 18,
   fontFamily: 'Sofia_Sans',
-  fontWeight: FontWeight.w500,
+  fontWeight: FontWeight.w600,
 );
 
 const lightGrey_paragraph_text =  TextStyle(

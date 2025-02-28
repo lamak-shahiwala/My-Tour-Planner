@@ -71,7 +71,7 @@ class UserRegistration extends StatelessWidget {
                     password.text.trim(),
                   );
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Home()));
+                      MaterialPageRoute(builder: (context) => Home()));
                 },
                 buttonLabel: const Text(
                   "Create Account",

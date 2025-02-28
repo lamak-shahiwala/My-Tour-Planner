@@ -2,14 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_tour_planner/utilities/button/save_next_button.dart';
 import 'package:my_tour_planner/utilities/itinerary_screen_utilities/dynamic_itinerary_details.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 class DateWiseItineraries extends StatefulWidget {
 
-  DateTime? startDate;
-  DateTime? endDate;
-  DateTime? selectedDate;
+  DateWiseItineraries({
+    super.key,
+    required this.startDate,
+    required this.endDate,
+  });
+
+  final DateTime? startDate;
+  final DateTime? endDate;
   @override
   _DateWiseItinerariesState createState() => _DateWiseItinerariesState();
 }
@@ -18,15 +22,11 @@ class _DateWiseItinerariesState extends State<DateWiseItineraries> {
 
   List<DateTime> dateList = [];
 
-  // Function to pick a date
-  Future<DateTime?> _selectDate(BuildContext context) async {
-    DateTime now = DateTime.now();
-    return await showDatePicker(
-      context: context,
-      initialDate: widget.selectedDate ?? now,
-      firstDate: now,
-      lastDate: now.add(Duration(days: 365)),
-    );
+
+  @override
+  void initState() {
+    super.initState();
+    generateDateFields();
   }
 
   // Function to generate dates and create TextControllers
@@ -48,39 +48,6 @@ class _DateWiseItinerariesState extends State<DateWiseItineraries> {
     return SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    DateTime? picked = await _selectDate(context);
-                    if (picked != null) {
-                      setState(() {
-                        widget.startDate = picked;
-                      });
-                      generateDateFields();
-                    }
-                  },
-                  child: Text(widget.startDate == null
-                      ? "Start Date"
-                      : DateFormat("dd MMM yyyy").format(widget.startDate!)),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    DateTime? picked = await _selectDate(context);
-                    if (picked != null) {
-                      setState(() {
-                        widget.endDate = picked;
-                      });
-                      generateDateFields();
-                    }
-                  },
-                  child: Text(widget.endDate == null
-                      ? "Select End Date"
-                      : DateFormat("dd MMM yyyy").format(widget.endDate!)),
-                ),
-              ],
-            ),
             SizedBox(height: 20),
             ListView.builder(
               shrinkWrap: true,

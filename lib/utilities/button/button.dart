@@ -67,6 +67,7 @@ class active_button_white extends StatelessWidget {
   final double horizontalPadding;
   final double verticalPadding;
   final double height;
+  final double width;
   final double elevationValue;
   final Color backgroundColor;
   final Color borderColor;
@@ -79,6 +80,7 @@ class active_button_white extends StatelessWidget {
 
   const active_button_white({super.key, 
     this.height = 42.0,
+    this.width = double.infinity,
     this.horizontalMargin = 5.0,
     this.verticalMargin = 5.0,
     this.verticalPadding = 10,
@@ -98,7 +100,7 @@ class active_button_white extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: width,
       height: height,
       margin: EdgeInsets.symmetric(
           horizontal: horizontalMargin, vertical: verticalMargin),

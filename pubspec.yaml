@@ -76,8 +76,14 @@ flutter:
     - assets/images/welcome4_img.png
     - assets/images/goolge-icon.png
     - assets/images/MTP_App_Icon.png
+    - assets/images/icons/home-active-icon.svg
+    - assets/images/icons/home-notactive-icon.svg
     - assets/images/icons/home.svg
+    - assets/images/icons/create_generate-active-icon.svg
     - assets/images/icons/create_generate.svg
+    - assets/images/icons/create_generate-notactive-icon.svg
+    - assets/images/icons/my-trips-active-icon.svg
+    - assets/images/icons/my-trips-notactive-icon.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
