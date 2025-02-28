@@ -5,7 +5,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/itinerary_screen(s)/create_itinerary.dart';
-import 'package:my_tour_planner/screens/testing_screen.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';
 import 'package:my_tour_planner/utilities/date_picker/white_date_picker.dart';
