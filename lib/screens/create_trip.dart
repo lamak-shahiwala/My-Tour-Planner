@@ -7,20 +7,76 @@ import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/itinerary_screen(s)/create_itinerary.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';
-import 'package:my_tour_planner/utilities/date_picker/white_date_picker.dart';
+import 'package:my_tour_planner/utilities/button/white_date_picker_button.dart';
 import 'package:my_tour_planner/utilities/search_bar/white_search_bar.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
+import 'package:intl/intl.dart';
 
-class CreateTrip extends StatelessWidget {
-  CreateTrip({super.key, this.start_date, this.end_date});
+class CreateTrip extends StatefulWidget {
+  CreateTrip({super.key,});
 
+  @override
+  State<CreateTrip> createState() => _CreateTripState();
+}
+
+class _CreateTripState extends State<CreateTrip> {
   final String page_title = "Create your trip Itinerary\nwith us.";
+
   final TextEditingController trip_name = TextEditingController();
+
   final TextEditingController location = TextEditingController();
 
-  final DateTime? start_date;
-  final DateTime? end_date;
+  DateTime? startDate;
+  DateTime? endDate;
+
+  Future<void> _selectStartDate(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime? startDatePicked = await showDatePicker(
+      context: context,
+      initialDate: startDate ?? now,
+      firstDate: now,
+      lastDate: now.add(Duration(days: 365)),
+    );
+    if (startDatePicked != null && startDatePicked != startDate) {
+      setState(() {
+        startDate = startDatePicked;
+      });
+    }
+    if(startDate!.isAfter(endDate!)){
+      setState(() {
+        endDate = null;
+      });
+    }
+    if(startDatePicked != null && startDatePicked != startDate && endDate!.isAtSameMomentAs(startDatePicked)){
+      setState(() {
+        startDate = startDatePicked;
+      });
+    }
+  }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime? endDatePicked = await showDatePicker(
+      context: context,
+      initialDate: endDate ?? now,
+      firstDate: now,
+      lastDate: now.add(Duration(days: 365)),
+    );
+
+    if (endDatePicked != null && endDatePicked != endDate && startDate !=null && startDate!.isBefore(endDatePicked)) {
+      setState(() {
+        endDate = endDatePicked;
+      });
+    }else{
+      endDate = null;
+    }
+    if(endDatePicked != null && endDatePicked != endDate && startDate !=null && startDate!.isAtSameMomentAs(endDatePicked)){
+      setState(() {
+        endDate = endDatePicked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,24 +117,60 @@ class CreateTrip extends StatelessWidget {
                     SizedBox(
                       height: 40,
                     ),
-                    WhiteDatePicker(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        WhiteDatePicker_button(
+                          onPress: () => _selectStartDate(context),
+                          buttonLabel: Text(
+                            startDate == null
+                                ? "Start Date"
+                                : "${DateFormat("dd MMM, y").format(startDate ?? DateTime.now())}",
+                            style: TextStyle(
+                              color: Color(0xFF666666),
+                              fontSize: 18,
+                              fontFamily: "Sofia_Sans",
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        WhiteDatePicker_button(
+                          onPress: () => _selectEndDate(context),
+                          buttonLabel: Text(
+                            endDate == null
+                                ? "End Date"
+                                : "${DateFormat("dd MMM, y").format(endDate ?? DateTime.now())}",
+                            style: TextStyle(
+                              color: Color(0xFF666666),
+                              fontSize: 18,
+                              fontFamily: "Sofia_Sans",
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 30,
                     ),
                     SaveNextButton(
                         onPress: () {
-                          if (start_date != null &&
-                              end_date != null &&
+                          if (startDate != null &&
+                              endDate != null &&
                               location.text.isNotEmpty &&
                               trip_name.text.isNotEmpty) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => CreateItinerary(
-                                        start_Date: start_date,
-                                        end_Date: end_date,
+                                        start_Date: startDate,
+                                        end_Date: endDate,
                                         trip_name: trip_name.text,
-                                        location_name: location.text,)));
+                                        location_name: location.text,
+                                        trip_type: "none",)));
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Please fill all the fields")));
                           }
                         },
                         buttonLabel: Text(

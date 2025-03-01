@@ -41,6 +41,12 @@ class _DateWiseItinerariesState extends State<DateWiseItineraries> {
         }
       });
     }
+    if (widget.startDate != null && widget.endDate != null && widget.startDate!.isAtSameMomentAs(widget.endDate!)) {
+      setState(() {
+        dateList.clear();
+        dateList.add(widget.startDate!);
+      });
+    }
   }
 
   @override

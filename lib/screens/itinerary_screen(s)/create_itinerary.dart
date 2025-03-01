@@ -10,12 +10,14 @@ class CreateItinerary extends StatelessWidget {
       required this.start_Date,
       required this.end_Date,
       required this.trip_name,
-      required this.location_name});
+      required this.location_name,
+      required this.trip_type});
 
   final DateTime? start_Date;
   final DateTime? end_Date;
   final String trip_name;
   final String location_name;
+  final String trip_type;
 
   @override
   Widget build(BuildContext context) {
