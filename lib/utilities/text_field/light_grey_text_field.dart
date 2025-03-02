@@ -6,23 +6,26 @@ class LightGreyTextField extends StatelessWidget {
   final double topPadding;
   final double bottomPadding;
   final TextEditingController controller;
+  final bool obscureText;
 
-  const LightGreyTextField({super.key, 
+  LightGreyTextField({super.key,
     this.topPadding = 0,
     this.bottomPadding = 0,
     required this.hintText,
     required this.controller,
+    this.obscureText = false,
   });
 
 
   @override
   Widget build(BuildContext context) {
     const textFieldStyle = TextStyle(
-      fontSize: 15,
+      fontSize: 12,
       fontFamily: "Sofia_Sans",
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
     );
     return TextField(
+      obscureText: obscureText,
       controller: controller,
       style: textFieldStyle,
       decoration: InputDecoration(
@@ -30,25 +33,18 @@ class LightGreyTextField extends StatelessWidget {
         hintStyle: textField_placeholder,
         filled: true,
         fillColor: const Color(0xFFF4F4F4),
-        border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5),
-        borderSide: const BorderSide(
-        color: Color(0xFFF4F4F4),
-        width: 1.2,
-      ),
-        ),
           enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: const BorderSide(
             color: Color(0xFFC4C4C4),
-            width: 1.2,
+            width: .2,
           ),
         ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
             borderSide: const BorderSide(
               color: Color(0xFFF4F4F4),
-              width: 1.2,
+              width: .2,
             ),
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/utilities/auth/auth_gate.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'dart:async';
-import 'package:my_tour_planner/screens/welcome.dart';
 
 class AppStartWelcome extends StatefulWidget {
   const AppStartWelcome({super.key});
@@ -16,53 +16,52 @@ class _AppStartWelcomeState extends State<AppStartWelcome> {
   void initState() {
     super.initState();
 
-    // Set a delay for the welcome screen (e.g., 3 seconds)
-    Timer(const Duration(seconds: 1), () {
-      // Navigate to HomeScreen after 3 seconds
+    Timer(const Duration(milliseconds: 1400), () {
+      // Navigate to HomeScreen after 1 seconds
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const expand_welcome()),
+        MaterialPageRoute(builder: (context) => AuthGate()),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          'assets/images/MTP_Logo.png',
-          width: 320,
-          height: 239,
-        ),
-        const SizedBox(
-          height: 25,
-        ),
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "MY",
+    return Padding(
+      padding: const EdgeInsets.all(40.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/images/MTP_Logo.png',
+            width: 320,
+            height: 300,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              FittedBox(
+                child: Text(
+                  "MY",
+                  style: LogoNameStyle1,
+                ),
+              ),
+              FittedBox(
+                child: Text(
+                  "TOUR",
+                  style: LogoNameStyle2,
+                ),
+              ),
+            ],
+          ),
+          FittedBox(
+            child: Text(
+              "PLANNER",
               style: LogoNameStyle1,
             ),
-            SizedBox(
-              width: 18,
-            ),
-            Text(
-              "TOUR",
-              style: LogoNameStyle2,
-            ),
-          ],
-        ),
-        const Text(
-          "PLANNER",
-          style: LogoNameStyle1,
-        ),
-        const SizedBox(
-          height: 30,
-        )
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

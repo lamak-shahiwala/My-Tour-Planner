@@ -4,7 +4,6 @@ import 'package:my_tour_planner/utilities/search_bar/grey_search_bar.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
-
   final String image= ""; //var to store link of user profile icon
   final TextEditingController trip_template = TextEditingController(); // used for search bar
   final String home_page_title = "Discover your next \ndestination";
@@ -43,7 +42,7 @@ class Home extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                   height: 1.3,
                 ),
-              ),
+        ),
           ],),
         ),
       ),

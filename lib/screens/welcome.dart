@@ -23,19 +23,17 @@ class expand_welcome extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Spacer(),
             SizedBox(
               height: 500,
               child: page_view_for_features(),
             ),
-            Spacer(),
-            WelcomeAuthButtons(),
-            SizedBox(
-              height: 50,
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+              child: WelcomeAuthButtons(),
             ),
           ],
         ),

@@ -14,7 +14,9 @@ import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
 import 'package:intl/intl.dart';
 
 class CreateTrip extends StatefulWidget {
-  CreateTrip({super.key,});
+  CreateTrip({
+    super.key,
+  });
 
   @override
   State<CreateTrip> createState() => _CreateTripState();
@@ -43,12 +45,18 @@ class _CreateTripState extends State<CreateTrip> {
         startDate = startDatePicked;
       });
     }
-    if(startDate!.isAfter(endDate!)){
+    if (startDate!.isAfter(endDate!)) {
       setState(() {
         endDate = null;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Start Date can't be after End Date"),
+          duration: Duration(milliseconds: 400),
+        ));
       });
     }
-    if(startDatePicked != null && startDatePicked != startDate && endDate!.isAtSameMomentAs(startDatePicked)){
+    if (startDatePicked != null &&
+        startDatePicked != startDate &&
+        endDate!.isAtSameMomentAs(startDatePicked)) {
       setState(() {
         startDate = startDatePicked;
       });
@@ -64,14 +72,24 @@ class _CreateTripState extends State<CreateTrip> {
       lastDate: now.add(Duration(days: 365)),
     );
 
-    if (endDatePicked != null && endDatePicked != endDate && startDate !=null && startDate!.isBefore(endDatePicked)) {
+    if (endDatePicked != null &&
+        endDatePicked != endDate &&
+        startDate != null &&
+        startDate!.isBefore(endDatePicked)) {
       setState(() {
         endDate = endDatePicked;
       });
-    }else{
+    } else {
       endDate = null;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Start Date can't be after End Date"),
+        duration: Duration(milliseconds: 400),
+      ));
     }
-    if(endDatePicked != null && endDatePicked != endDate && startDate !=null && startDate!.isAtSameMomentAs(endDatePicked)){
+    if (endDatePicked != null &&
+        endDatePicked != endDate &&
+        startDate != null &&
+        startDate!.isAtSameMomentAs(endDatePicked)) {
       setState(() {
         endDate = endDatePicked;
       });
@@ -163,14 +181,17 @@ class _CreateTripState extends State<CreateTrip> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => CreateItinerary(
-                                        start_Date: startDate,
-                                        end_Date: endDate,
-                                        trip_name: trip_name.text,
-                                        location_name: location.text,
-                                        trip_type: "none",)));
-                          }else{
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Please fill all the fields")));
+                                          start_Date: startDate,
+                                          end_Date: endDate,
+                                          trip_name: trip_name.text,
+                                          location_name: location.text,
+                                          trip_type: "none",
+                                        )));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Please fill all the fields"),
+                              duration: Duration(milliseconds: 400),
+                            ));
                           }
                         },
                         buttonLabel: Text(

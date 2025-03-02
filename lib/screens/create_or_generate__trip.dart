@@ -4,12 +4,33 @@ import 'package:my_tour_planner/screens/generate_trip.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class Create_or_Generate__Trip extends StatelessWidget {
+class Create_or_Generate__Trip extends StatefulWidget {
   Create_or_Generate__Trip({super.key});
 
-  final String userName = "Lamak Shahiwala";
+  @override
+  State<Create_or_Generate__Trip> createState() => _Create_or_Generate__TripState();
+}
+
+class _Create_or_Generate__TripState extends State<Create_or_Generate__Trip> {
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  late String Name;
+
   final String image = "";
+
+  String? getDisplayName() {
+    final session = _supabase.auth.currentSession;
+    if (session == null) return null;
+    return session.user.userMetadata?['Display name'];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Name = getDisplayName() ?? "Guest";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +57,7 @@ class Create_or_Generate__Trip extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(
-                      "Hello, " + userName + ".",
+                      "Hello, " + Name + ".",
                       style: hello_user,
                     ),
                   ),
