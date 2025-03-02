@@ -46,7 +46,7 @@ const sub_heading =  TextStyle(
 
 const location =  TextStyle(
   color: Color.fromRGBO(53, 50, 66, 1),
-  fontSize: 18,
+  fontSize: 12,
   fontFamily: 'Sofia_Sans',
   fontWeight: FontWeight.w300,
 );

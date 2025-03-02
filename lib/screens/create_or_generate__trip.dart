@@ -20,16 +20,16 @@ class _Create_or_Generate__TripState extends State<Create_or_Generate__Trip> {
 
   final String image = "";
 
-  String? getDisplayName() {
+  String? getFullName() {
     final session = _supabase.auth.currentSession;
     if (session == null) return null;
-    return session.user.userMetadata?['Display name'];
+    return session.user.userMetadata?['full_name'];
   }
 
   @override
   void initState() {
     super.initState();
-    Name = getDisplayName() ?? "Guest";
+    Name = getFullName() ?? "Guest";
   }
 
   @override
