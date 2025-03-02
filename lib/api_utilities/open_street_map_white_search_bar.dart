@@ -54,6 +54,12 @@ class _OpenStreetMapWhiteSearchBarState extends State<OpenStreetMapWhiteSearchBa
     super.dispose();
   }
 
+  void _onSearchSubmitted(String query) {
+    setState(() {
+      _suggestions.clear(); // Close suggestion list
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const textFieldStyle = TextStyle(
@@ -101,6 +107,7 @@ class _OpenStreetMapWhiteSearchBarState extends State<OpenStreetMapWhiteSearchBa
             ),
             suffixIcon: Icon(Icons.location_pin, color: Color(0xFF0097B2),),
           ),
+          onSubmitted: _onSearchSubmitted,
           onChanged: _getSuggestions,
         ),
         if (_suggestions.isNotEmpty) // Show only if suggestions exist

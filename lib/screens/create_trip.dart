@@ -1,10 +1,4 @@
-/*
-* things to do: store start date and end date in a var
-*
-**/
-
 import 'package:flutter/material.dart';
-import 'package:my_tour_planner/api_utilities/open_street_map_white_search_bar';
 import 'package:my_tour_planner/api_utilities/open_street_map_white_search_bar.dart';
 import 'package:my_tour_planner/screens/itinerary_screen(s)/create_itinerary.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
@@ -34,30 +28,30 @@ class _CreateTripState extends State<CreateTrip> {
   DateTime? endDate;
 
   Future<void> _selectStartDate(BuildContext context) async {
-    DateTime now = DateTime.now();
     DateTime? startDatePicked = await showDatePicker(
       context: context,
-      initialDate: startDate ?? now,
-      firstDate: now,
-      lastDate: now.add(Duration(days: 365)),
+      initialDate: startDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 365)),
     );
-    if (startDatePicked != null && startDatePicked != startDate) {
-      setState(() {
-        startDate = startDatePicked;
-      });
-    }
-    if (startDate!.isAfter(endDate!)) {
+
+    if (startDatePicked == null) return; // Exit if no date is picked
+
+    setState(() {
+      startDate = startDatePicked;
+    });
+
+    if (endDate != null && startDatePicked.isAfter(endDate!)) {
       setState(() {
         endDate = null;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Start Date can't be after End Date"),
-          duration: Duration(milliseconds: 400),
-        ));
       });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Start Date can't be after End Date"),
+        duration: Duration(milliseconds: 400),
+      ));
     }
-    if (startDatePicked != null &&
-        startDatePicked != startDate &&
-        endDate!.isAtSameMomentAs(startDatePicked)) {
+
+    if (endDate != null && startDatePicked.isAtSameMomentAs(endDate!)) {
       setState(() {
         startDate = startDatePicked;
       });
@@ -65,37 +59,39 @@ class _CreateTripState extends State<CreateTrip> {
   }
 
   Future<void> _selectEndDate(BuildContext context) async {
-    DateTime now = DateTime.now();
+    if (startDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Please select a Start Date first"),
+        duration: Duration(milliseconds: 400),
+      ));
+      return;
+    }
+
     DateTime? endDatePicked = await showDatePicker(
       context: context,
-      initialDate: endDate ?? now,
-      firstDate: now,
-      lastDate: now.add(Duration(days: 365)),
+      initialDate: endDate ?? startDate!,
+      firstDate: startDate!,
+      lastDate: startDate!.add(Duration(days: 365)),
     );
 
-    if (endDatePicked != null &&
-        endDatePicked != endDate &&
-        startDate != null &&
-        startDate!.isBefore(endDatePicked)) {
+    if (endDatePicked == null) return; // Exit if no date is picked
+
+    if (startDate != null && startDate!.isBefore(endDatePicked)) {
       setState(() {
         endDate = endDatePicked;
       });
-    } else {
-      endDate = null;
+    } else if (startDate != null && startDate!.isAtSameMomentAs(endDatePicked)) {
+      setState(() {
+        endDate = endDatePicked;
+      });
+    }else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Start Date can't be after End Date"),
+        content: Text("End Date must be after Start Date"),
         duration: Duration(milliseconds: 400),
       ));
     }
-    if (endDatePicked != null &&
-        endDatePicked != endDate &&
-        startDate != null &&
-        startDate!.isAtSameMomentAs(endDatePicked)) {
-      setState(() {
-        endDate = endDatePicked;
-      });
-    }
   }
+
 
   @override
   Widget build(BuildContext context) {

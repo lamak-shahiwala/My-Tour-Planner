@@ -29,10 +29,10 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
 
   late String Name;
 
-  String? getDisplayName() {
+  String? getFullName(){
     final session = _supabase.auth.currentSession;
-    if (session == null) return null;
-    return session.user.userMetadata?['Display name'];
+    if(session == null) return null;
+    return session.user.userMetadata?['full_name'];
   }
 
   String? getUserName() {
@@ -50,7 +50,7 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    Name = getDisplayName() ?? "Guest";
+    Name = getFullName() ?? "Guest";
     UserName = getUserName() ?? "";
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
@@ -88,12 +88,10 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
             children: [
               DrawerHeader(
                 decoration: BoxDecoration(color: Color.fromRGBO(0, 151, 178, 1)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: ListView(
                   children: [
-                    ListTile(title: Text(Name, style: TextStyle(color: Colors.white, fontSize: 24))),
-                    active_button_white(onPress: (){}, buttonLabel: Text("Edit Profile"), circularBorderRadius: 50, width: 120,)
+                    ListTile(title: Text(Name, style: TextStyle(color: Colors.white, fontSize: 20))),
+                    active_button_white(onPress: (){}, buttonLabel: Text("Edit Profile"), circularBorderRadius: 50,)
                   ],
                 ),
               ),

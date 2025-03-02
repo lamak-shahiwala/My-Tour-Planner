@@ -3,7 +3,7 @@ AUTH GATE -
 
 ---------------------------------------------------------------------------------------------
 
-unauthenticated -> Login Screen
+unauthenticated -> expand_welcome
 authenticated   -> Home Screen
  */
 
