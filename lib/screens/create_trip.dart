@@ -4,11 +4,12 @@
 **/
 
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/api_utilities/open_street_map_white_search_bar';
+import 'package:my_tour_planner/api_utilities/open_street_map_white_search_bar.dart';
 import 'package:my_tour_planner/screens/itinerary_screen(s)/create_itinerary.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';
 import 'package:my_tour_planner/utilities/button/white_date_picker_button.dart';
-import 'package:my_tour_planner/utilities/search_bar/white_search_bar.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
 import 'package:intl/intl.dart';
@@ -130,8 +131,8 @@ class _CreateTripState extends State<CreateTrip> {
                     SizedBox(
                       height: 40,
                     ),
-                    WhiteSearchBar(
-                        hintText: "Select Location", controller: location),
+                    OpenStreetMapWhiteSearchBar(hintText: "Enter Location", controller: location),
+                    //WhiteSearchBar(hintText: "Select Location", controller: location),
                     SizedBox(
                       height: 40,
                     ),
