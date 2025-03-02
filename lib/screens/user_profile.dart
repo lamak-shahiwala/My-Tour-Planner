@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
+import 'package:my_tour_planner/utilities/auth/auth_gate.dart';
+import 'package:my_tour_planner/utilities/auth/auth_services.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 
 class UserProfile extends StatefulWidget {
@@ -13,17 +17,35 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> with SingleTickerProviderStateMixin {
-  final String image = "";
 
-  final String Name = "Lamak Shahiwala";
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  final String image = "";
 
   final String UserName = "traveller@2004";
 
   late TabController _tabController;
 
+  final authService = AuthService();
+
+  late String Name;
+
+  String? getDisplayName() {
+    final session = _supabase.auth.currentSession;
+    if (session == null) return null;
+    return session.user.userMetadata?['Display name'];
+  }
+
+  void logout() async {
+    await authService.logOut();
+    await GoogleSignIn().signOut();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthGate()));
+  }
+
   @override
   void initState() {
     super.initState();
+    Name = getDisplayName() ?? "Guest";
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {});  // Rebuild UI when tab index changes
@@ -71,7 +93,9 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
               ),
               ListTile(leading: Icon(Icons.toggle_on_outlined), title: Text('Theme'), onTap: () {}),
               ListTile(leading: Icon(Icons.settings), title: Text('Settings'), onTap: () {}),
-              ListTile(leading: Icon(Icons.logout), title: Text('Logout'), onTap: () {}),
+              ListTile(leading: Icon(Icons.logout), title: Text('Logout'), onTap: () {
+                logout();
+              }),
             ],
           ),
         ),

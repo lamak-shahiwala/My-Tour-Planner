@@ -16,31 +16,34 @@ class _WelcomeAuthButtonsState extends State<WelcomeAuthButtons> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        active_button_blue(
-          onPress: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => UserRegistration()), // Navigate to Login
-            );
-          },
-          buttonLabel: const Text(
-            "Create Account",
-            style: active_button_text_blue,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          child: active_button_blue(
+            onPress: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserRegistration()), // Navigate to Login
+              );
+            },
+            buttonLabel: const Text(
+              "Create Account",
+              style: active_button_text_blue,
+            ),
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        active_button_white(
-          onPress: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>  UserLogin()), // Navigate to Login
-            );
-          },
-          buttonLabel: const Text(
-            "Login",
-            style: active_button_text_white,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          child: active_button_white(
+            onPress: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  UserLogin()), // Navigate to Login
+              );
+            },
+            buttonLabel: const Text(
+              "Login",
+              style: active_button_text_white,
+            ),
           ),
         ),
       ],

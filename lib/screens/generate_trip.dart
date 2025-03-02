@@ -60,6 +60,10 @@ class _GenerateTripState extends State<GenerateTrip> {
     if(startDate!.isAfter(endDate!)){
       setState(() {
         endDate = null;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Start Date can't be after End Date"),
+          duration: Duration(milliseconds: 400),
+        ));
       });
     }
     if(startDatePicked != null && startDatePicked != startDate && endDate!.isAtSameMomentAs(startDatePicked)){
@@ -84,6 +88,10 @@ class _GenerateTripState extends State<GenerateTrip> {
       });
     }else{
       endDate = null;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Start Date can't be after End Date"),
+        duration: Duration(milliseconds: 400),
+      ));
     }
     if(endDatePicked != null && endDatePicked != endDate && startDate !=null && startDate!.isAtSameMomentAs(endDatePicked)){
       setState(() {
@@ -209,7 +217,7 @@ class _GenerateTripState extends State<GenerateTrip> {
                                   trip_type: selectedValue!,)));
                       }else{
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Please fill all the fields")));
+                            SnackBar(content: Text("Please fill all the fields"),duration: Duration(milliseconds: 400),));
                       }
                     }, buttonLabel: Text("Next",style: save_next_button,)),
                   ],

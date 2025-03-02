@@ -32,27 +32,24 @@ class welcome1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(children: [
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
         Image.asset(
           'assets/images/welcome1_img.png',
           width: 300,
           height: 300,
         ),
-        const SizedBox(
-          height: 60,
-        ),
         Text(
           sub_heading1,
           style: sub_heading,
         ),
-        const SizedBox(
-          height: 10,
-        ),
+
         Text(
           para1, textAlign: TextAlign.justify,
           style: lightGrey_paragraph_text,
         ),
-        const Spacer(),
         const dot_1(),
       ],),
     );
@@ -71,27 +68,23 @@ class welcome2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(children: [
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
         Image.asset(
           'assets/images/welcome2_img.png',
           width: 299,
           height: 299,
         ),
-        const SizedBox(
-          height: 60,
-        ),
         Text(
           sub_heading1,
           style: sub_heading,
-        ),
-        const SizedBox(
-          height: 10,
         ),
         Text(
           para1, textAlign: TextAlign.justify,
           style: lightGrey_paragraph_text,
         ),
-        const Spacer(),
         const dot_2(),
       ],),
     );
@@ -111,27 +104,23 @@ class welcome3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(children: [
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
         Image.asset(
           'assets/images/welcome3_img.png',
           width: 299,
           height: 257,
         ),
-        const SizedBox(
-          height: 60,
-        ),
         Text(
           sub_heading1,
           style: sub_heading,
-        ),
-        const SizedBox(
-          height: 10,
         ),
         Text(
           para1, textAlign: TextAlign.justify,
           style: lightGrey_paragraph_text,
         ),
-        const Spacer(),
         const dot_3(),
       ],),
     );
@@ -151,27 +140,23 @@ class welcome4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(children: [
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
         Image.asset(
           'assets/images/welcome4_img.png',
           width: 236,
           height: 265,
         ),
-        const SizedBox(
-          height: 60,
-        ),
         Text(
           sub_heading1,
           style: sub_heading,
-        ),
-        const SizedBox(
-          height: 10,
         ),
         Text(
           para1, textAlign: TextAlign.justify,
           style: lightGrey_paragraph_text,
         ),
-        const Spacer(),
         const dot_4(),
       ],),
     );
