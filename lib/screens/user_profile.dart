@@ -22,8 +22,7 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
 
   final String image = "";
 
-  final String UserName = "traveller@2004";
-
+  late String UserName;
   late TabController _tabController;
 
   final authService = AuthService();
@@ -36,6 +35,12 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
     return session.user.userMetadata?['Display name'];
   }
 
+  String? getUserName() {
+    final session = _supabase.auth.currentSession;
+    if (session == null) return null;
+    return session.user.email;
+  }
+
   void logout() async {
     await authService.logOut();
     await GoogleSignIn().signOut();
@@ -46,6 +51,7 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
   void initState() {
     super.initState();
     Name = getDisplayName() ?? "Guest";
+    UserName = getUserName() ?? "";
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {});  // Rebuild UI when tab index changes
