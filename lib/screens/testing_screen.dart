@@ -1,3 +1,9 @@
+
+// Make internet connection status checker
+// supabase database
+
+
+
 /*
  ** Contains code that shows how to implement pre-filled textFields...
 */
