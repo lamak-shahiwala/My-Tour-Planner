@@ -8,6 +8,7 @@ import 'package:my_tour_planner/utilities/auth/auth_gate.dart';
 import 'package:my_tour_planner/utilities/auth/auth_services.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
+import 'package:my_tour_planner/utilities/internet_connection/internet_connectivity.dart';
 import 'package:my_tour_planner/utilities/text_field/light_grey_text_field.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 
@@ -19,7 +20,6 @@ class UserLogin extends StatefulWidget {
 }
 
 class _UserLoginState extends State<UserLogin> {
-
   final authService = AuthService();
 
   final email_controller = TextEditingController();
@@ -29,20 +29,31 @@ class _UserLoginState extends State<UserLogin> {
   void login() async {
     final email = email_controller.text;
     final password = password_controller.text;
-
-    try{
+    bool hasInternet = await getInternetStatus();
+    try {
       await authService.logInWithEmailPassword(email, password);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthGate()));
-    }catch(e){
-      if(mounted){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: Invalid Credentials : + $e"),duration: Duration(seconds: 1),));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => AuthGate()));
+    } catch (e) {
+      if (mounted) {
+        if (!hasInternet) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Internet Connection not Found."),
+            duration: Duration(seconds: 1),
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Error: Invalid Credentials : + $e"),
+            duration: Duration(seconds: 1),
+          ));
+        }
       }
     }
   }
-
   void google_login() async {
     final res = await authService.nativeGoogleSignIn();
-    if(res != null) {
+
+    if (res != null) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => AuthGate()));
     }
@@ -53,7 +64,13 @@ class _UserLoginState extends State<UserLogin> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: ArrowBackButton(),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ArrowBackButton(),
+            InternetConnectivity(),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -74,32 +91,45 @@ class _UserLoginState extends State<UserLogin> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: LightGreyTextField(hintText: "Email", controller: email_controller),
+                child: LightGreyTextField(
+                    hintText: "Email", controller: email_controller),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: LightGreyTextField(hintText: "Password", controller: password_controller, obscureText: true,),
+                child: LightGreyTextField(
+                  hintText: "Password",
+                  controller: password_controller,
+                  obscureText: true,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text( "Don't have an account? ",style: TextStyle(
-                      color: Color.fromRGBO(53, 50, 66, 1),
-                      fontSize: 14,
-                      fontFamily: 'Sofia_Sans',
-                      fontWeight: FontWeight.w300,
-                    ),),
-                    GestureDetector(
-                      onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => UserRegistration())),
-                      child: Text( "Register Now",style: TextStyle(
-                        color: Colors.indigoAccent,
+                    Text(
+                      "Don't have an account? ",
+                      style: TextStyle(
+                        color: Color.fromRGBO(53, 50, 66, 1),
                         fontSize: 14,
                         fontFamily: 'Sofia_Sans',
-                        fontWeight: FontWeight.w600,
-                      ),),
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserRegistration())),
+                      child: Text(
+                        "Register Now",
+                        style: TextStyle(
+                          color: Colors.indigoAccent,
+                          fontSize: 14,
+                          fontFamily: 'Sofia_Sans',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -107,13 +137,14 @@ class _UserLoginState extends State<UserLogin> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: active_button_blue(
-                  onPress: (){
-                    if(email_controller.text.isEmpty || password_controller.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Please fill all the fields."),
-                            duration: Duration(milliseconds: 400),)
-                      );
-                    }else{
+                  onPress: () {
+                    if (email_controller.text.isEmpty ||
+                        password_controller.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Please fill all the fields."),
+                        duration: Duration(milliseconds: 400),
+                      ));
+                    } else {
                       login();
                     }
                   },
@@ -124,8 +155,16 @@ class _UserLoginState extends State<UserLogin> {
                 ),
               ),
               active_button_white(
-                onPress: () {
+                onPress: () async {
+                  bool hasInternet = await getInternetStatus();
+                  if (!hasInternet) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Internet Connection not Found."),
+                      duration: Duration(seconds: 1),
+                    ));
+                  }else{
                     google_login();
+                  }
                 },
                 buttonLabel: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -149,3 +188,5 @@ class _UserLoginState extends State<UserLogin> {
     );
   }
 }
+
+
