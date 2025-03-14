@@ -11,6 +11,8 @@ import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:my_tour_planner/utilities/text_field/light_grey_text_field.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 
+import '../utilities/internet_connection/internet_connectivity.dart';
+
 class UserRegistration extends StatefulWidget {
   UserRegistration({super.key});
 
@@ -30,6 +32,8 @@ class _UserRegistrationState extends State<UserRegistration> {
   bool isChecked = false;
 
   void signUp() async {
+    bool hasInternet = await getInternetStatus();
+
     final email = email_controller.text;
     final password = password_controller.text;
     final name = name_controller.text;
@@ -39,8 +43,17 @@ class _UserRegistrationState extends State<UserRegistration> {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthGate()));
     } catch (e){
       if(mounted){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: +$e"),duration: Duration(seconds: 1),));
-      }
+        if (!hasInternet) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Internet Connection not Found."),
+            duration: Duration(seconds: 1),
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Error: Invalid Credentials : + $e"),
+            duration: Duration(seconds: 1),
+          ));
+        } }
     }
   }
 
@@ -57,7 +70,13 @@ class _UserRegistrationState extends State<UserRegistration> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: ArrowBackButton(),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ArrowBackButton(),
+            InternetConnectivity(),
+          ],
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
@@ -141,8 +160,16 @@ class _UserRegistrationState extends State<UserRegistration> {
                       ),
                     ),
                     active_button_white(
-                      onPress: () async{
+                      onPress: () async {
+                        bool hasInternet = await getInternetStatus();
+                        if (!hasInternet) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Internet Connection not Found."),
+                            duration: Duration(seconds: 1),
+                          ));
+                        }else{
                           google_login();
+                        }
                       },
                       buttonLabel: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
