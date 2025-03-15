@@ -1,0 +1,2 @@
+C:/Users/Nauman Saiyed/Documents/GitHub/My-Tour-Planner/android/app/.cxx/Debug/2zs603r3/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Nauman Saiyed/Documents/GitHub/My-Tour-Planner/android/app/.cxx/Debug/2zs603r3/x86_64/CMakeFiles/rebuild_cache.dir

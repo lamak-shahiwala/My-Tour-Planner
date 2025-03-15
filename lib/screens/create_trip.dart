@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/api_utilities/open_street_map_white_search_bar.dart';
+import 'package:my_tour_planner/backend/trip.dart';
+import 'package:my_tour_planner/backend/trip_database.dart';
 import 'package:my_tour_planner/screens/itinerary_screen(s)/create_itinerary.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';
@@ -7,6 +9,7 @@ import 'package:my_tour_planner/utilities/button/white_date_picker_button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CreateTrip extends StatefulWidget {
   CreateTrip({
@@ -20,12 +23,17 @@ class CreateTrip extends StatefulWidget {
 class _CreateTripState extends State<CreateTrip> {
   final String page_title = "Create your trip Itinerary\nwith us.";
 
-  final TextEditingController trip_name = TextEditingController();
+  final trip_db = TripDatabase();
 
+  final TextEditingController trip_name = TextEditingController();
   final TextEditingController location = TextEditingController();
 
   DateTime? startDate;
   DateTime? endDate;
+
+  String? FormatStartDate;
+  String? FormatEndDate;
+
 
   Future<void> _selectStartDate(BuildContext context) async {
     DateTime? startDatePicked = await showDatePicker(
@@ -80,18 +88,18 @@ class _CreateTripState extends State<CreateTrip> {
       setState(() {
         endDate = endDatePicked;
       });
-    } else if (startDate != null && startDate!.isAtSameMomentAs(endDatePicked)) {
+    } else if (startDate != null &&
+        startDate!.isAtSameMomentAs(endDatePicked)) {
       setState(() {
         endDate = endDatePicked;
       });
-    }else {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("End Date must be after Start Date"),
         duration: Duration(milliseconds: 400),
       ));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +135,8 @@ class _CreateTripState extends State<CreateTrip> {
                     SizedBox(
                       height: 40,
                     ),
-                    OpenStreetMapWhiteSearchBar(hintText: "Enter Location", controller: location),
+                    OpenStreetMapWhiteSearchBar(
+                        hintText: "Enter Location", controller: location),
                     //WhiteSearchBar(hintText: "Select Location", controller: location),
                     SizedBox(
                       height: 40,
@@ -169,11 +178,28 @@ class _CreateTripState extends State<CreateTrip> {
                       height: 30,
                     ),
                     SaveNextButton(
-                        onPress: () {
+                        onPress: ()  {
+                          // Retrieving User ID
+                          final supabase = Supabase.instance.client;
+                          final user = supabase.auth.currentUser;
+                          String? userId = user?.id;
+
+                          if (userId == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("User not logged in!"),
+                              duration: Duration(milliseconds: 400),
+                            ));
+                            return;
+                          }
+
                           if (startDate != null &&
                               endDate != null &&
                               location.text.isNotEmpty &&
                               trip_name.text.isNotEmpty) {
+
+                            FormatStartDate = startDate != null ? DateFormat('dd-MM-yyyy').format(startDate!) : null;
+                            FormatEndDate = endDate != null ? DateFormat('dd-MM-yyyy').format(endDate!) : null;
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -190,6 +216,18 @@ class _CreateTripState extends State<CreateTrip> {
                               duration: Duration(milliseconds: 400),
                             ));
                           }
+
+
+                          // Database
+                          final newTrip = Trip(
+                              trip_name: trip_name.text,
+                              city_location: location.text,
+                              start_date: FormatStartDate,
+                              end_date: FormatEndDate,
+                              user_id : userId,
+                              );
+
+                          trip_db.createTrip(newTrip);
                         },
                         buttonLabel: Text(
                           "Next",
