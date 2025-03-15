@@ -7,16 +7,20 @@ import 'package:my_tour_planner/utilities/button/white_date_picker_button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
 import 'package:intl/intl.dart';
+import 'package:my_tour_planner/backend/trip_database.dart';
+import 'package:my_tour_planner/backend/trip.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GenerateTrip extends StatefulWidget {
-  GenerateTrip({super.key,});
+  GenerateTrip({
+    super.key,
+  });
 
   @override
   State<GenerateTrip> createState() => _GenerateTripState();
 }
 
 class _GenerateTripState extends State<GenerateTrip> {
-
   String? selectedValue;
   final types = [
     "Historical",
@@ -29,7 +33,10 @@ class _GenerateTripState extends State<GenerateTrip> {
     "Food"
   ]; // for dropdown menu
 
-  final String page_title = "Generate your trip Itinerary.\nProvide details for your\nIdeal Trip.";
+  final String page_title =
+      "Generate your trip Itinerary.\nProvide details for your\nIdeal Trip.";
+
+  final trip_db = GenerateTripDatabase();
 
   final TextEditingController trip_name = TextEditingController();
 
@@ -38,6 +45,9 @@ class _GenerateTripState extends State<GenerateTrip> {
   DateTime? startDate;
 
   DateTime? endDate;
+
+  String? FormatStartDate;
+  String? FormatEndDate;
 
   Future<void> _selectStartDate(BuildContext context) async {
     DateTime? startDatePicked = await showDatePicker(
@@ -92,11 +102,12 @@ class _GenerateTripState extends State<GenerateTrip> {
       setState(() {
         endDate = endDatePicked;
       });
-    } else if (startDate != null && startDate!.isAtSameMomentAs(endDatePicked)) {
+    } else if (startDate != null &&
+        startDate!.isAtSameMomentAs(endDatePicked)) {
       setState(() {
         endDate = endDatePicked;
       });
-    }else {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("End Date must be after Start Date"),
         duration: Duration(milliseconds: 400),
@@ -113,20 +124,36 @@ class _GenerateTripState extends State<GenerateTrip> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
               ArrowBackButton(),
-              SizedBox(height: 50,),
+              SizedBox(
+                height: 50,
+              ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(page_title, style: sub_heading, textAlign: TextAlign.center,),
-                    SizedBox(height: 40,),
-                    WhiteTextField(labelText: "Enter Trip Name", controller: trip_name),
-                    SizedBox(height: 25,),
-                    OpenStreetMapWhiteSearchBar(hintText: "Select Location", controller: location),
-                    SizedBox(height: 25,),
+                    Text(
+                      page_title,
+                      style: sub_heading,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    WhiteTextField(
+                        labelText: "Enter Trip Name", controller: trip_name),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    OpenStreetMapWhiteSearchBar(
+                        hintText: "Select Location", controller: location),
+                    SizedBox(
+                      height: 25,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -159,7 +186,10 @@ class _GenerateTripState extends State<GenerateTrip> {
                           ),
                         ),
                       ],
-                    ),                    SizedBox(height: 25,),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
                     Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: 10,
@@ -184,7 +214,8 @@ class _GenerateTripState extends State<GenerateTrip> {
                           fontWeight: FontWeight.w400,
                         ),
                         // Text styling
-                        icon: Icon(Icons.keyboard_arrow_down, color: Color(0xFF666666)),
+                        icon: Icon(Icons.keyboard_arrow_down,
+                            color: Color(0xFF666666)),
                         // Custom icon
                         dropdownColor: Colors.grey[200],
                         // Background color of dropdown
@@ -204,31 +235,70 @@ class _GenerateTripState extends State<GenerateTrip> {
                         }).toList(),
                       ),
                     ),
-                    SizedBox(height: 25,),
-                    SaveNextButton(onPress: (){
-                      if (startDate != null &&
-                          endDate != null &&
-                          location.text.isNotEmpty &&
-                          trip_name.text.isNotEmpty) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CreateItinerary(
-                                  start_Date: startDate,
-                                  end_Date: endDate,
-                                  trip_name: trip_name.text,
-                                  location_name: location.text,
-                                  trip_type: selectedValue!,)));
-                      }else{
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Please fill all the fields"),duration: Duration(milliseconds: 400),));
-                      }
-                    }, buttonLabel: Text("Next",style: save_next_button,)),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    SaveNextButton(
+                        onPress: () {
+                          // Retrieving User ID
+                          final supabase = Supabase.instance.client;
+                          final user = supabase.auth.currentUser;
+                          String? userId = user?.id;
+
+                          if (userId == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("User not logged in!"),
+                              duration: Duration(milliseconds: 400),
+                            ));
+                            return;
+                          }
+
+
+                          if (startDate != null &&
+                              endDate != null &&
+                              location.text.isNotEmpty &&
+                              trip_name.text.isNotEmpty) {
+
+                            FormatStartDate = startDate != null ? DateFormat('dd-MM-yyyy').format(startDate!) : null;
+                            FormatEndDate = endDate != null ? DateFormat('dd-MM-yyyy').format(endDate!) : null;
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CreateItinerary(
+                                          start_Date: startDate,
+                                          end_Date: endDate,
+                                          trip_name: trip_name.text,
+                                          location_name: location.text,
+                                          trip_type: selectedValue!,
+                                        )));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Please fill all the fields"),
+                              duration: Duration(milliseconds: 400),
+                            ));
+                          }
+
+                          // Database
+                          final newTrip = Generate_Trip(
+                              trip_name: trip_name.text,
+                              start_date: FormatStartDate,
+                              end_date: FormatEndDate,
+                              city_location: location.text,
+                              trip_type: selectedValue!,
+                              user_id: userId);
+
+                          trip_db.generateTrip(newTrip);
+                        },
+                        buttonLabel: Text(
+                          "Next",
+                          style: save_next_button,
+                        )),
                   ],
                 ),
               ),
-
-            ],),
+            ],
+          ),
         ),
       ),
     );
