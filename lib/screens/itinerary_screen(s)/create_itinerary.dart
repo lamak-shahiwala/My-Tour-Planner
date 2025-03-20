@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/screens/itinerary_screen(s)/add_things_to_carry.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';
 import 'package:my_tour_planner/utilities/itinerary_screen_utilities/date_wise_itineraries.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
+//import 'package:intl/intl.dart';
 
 class CreateItinerary extends StatelessWidget {
   CreateItinerary(
@@ -26,33 +28,41 @@ class CreateItinerary extends StatelessWidget {
         automaticallyImplyLeading: false,
         toolbarHeight: 140,
         title: Column(
-              children: [
-                Align(alignment: Alignment.topLeft ,child: ArrowBackButton()),
-                Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      trip_name,
-                      style: heading,
-                    )),
-                Align(
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          location_name,
-                          style: location,
-                        ),
-                        Icon(
-                          Icons.location_pin,
-                          color: Color.fromRGBO(178, 60, 50, 1),
-                          size: 18,
-                        )
-                      ],
-                    )),
-              ],
-            ),
+          children: [
+            Align(alignment: Alignment.topLeft, child: ArrowBackButton()),
+            Align(
+                alignment: Alignment.center,
+                child: Text(
+                  trip_name,
+                  style: heading,
+                )),
+            Align(
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      location_name,
+                      style: location,
+                    ),
+                    Icon(
+                      Icons.location_pin,
+                      color: Color.fromRGBO(178, 60, 50, 1),
+                      size: 18,
+                    )
+                  ],
+                )),
+            SizedBox(height: 2,),
+            /*Align(
+                alignment: Alignment.center,
+                child: Text(
+                  DateFormat("dd/MM/yyyy").format(start_Date!)+ " to "+ DateFormat("dd/MM/yyyy").format(end_Date!),
+                  style: location,
+                )),*/
+          ],
         ),
+        elevation: 4,
+      ),
       body: SingleChildScrollView(
           child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
@@ -62,9 +72,19 @@ class CreateItinerary extends StatelessWidget {
             height: 20,
           ),
           SaveNextButton(
-              onPress: () {},
+              onPress: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddThingsToCarry(
+                            //start_Date: start_Date,
+                            //end_Date: end_Date,
+                            trip_name: trip_name,
+                            location_name: location_name,
+                            trip_type: trip_type)));
+              },
               buttonLabel: Text(
-                "Save",
+                "Next",
                 style: save_next_button,
               )),
           SizedBox(

@@ -1,7 +1,5 @@
 
-// Make internet connection status checker
 // supabase database
-
 
 
 /*
