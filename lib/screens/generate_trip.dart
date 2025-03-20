@@ -7,8 +7,8 @@ import 'package:my_tour_planner/utilities/button/white_date_picker_button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
 import 'package:intl/intl.dart';
-import 'package:my_tour_planner/backend/trip_database.dart';
-import 'package:my_tour_planner/backend/trip.dart';
+import 'package:my_tour_planner/backend/database_connection.dart';
+import 'package:my_tour_planner/backend/classes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GenerateTrip extends StatefulWidget {

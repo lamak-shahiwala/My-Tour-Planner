@@ -100,7 +100,7 @@ class _DynamicItineraryDetailsState extends State<DynamicItineraryDetails> {
                             ),
                           ),
                           SizedBox(width: 5),
-                          WhiteTimePicker(),
+                        WhiteTimePicker(),
                         ],
                       ),
                       SizedBox(height: 10),

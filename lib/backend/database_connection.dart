@@ -1,4 +1,4 @@
-import 'package:my_tour_planner/backend/trip.dart';
+import 'package:my_tour_planner/backend/classes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TripDatabase {
