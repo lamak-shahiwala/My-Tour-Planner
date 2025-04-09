@@ -1,8 +1,8 @@
 // retrieve trip template id and pass it to next page that is view trip template page
 // then show trip template page and give user options to get trip and bookmark option.
-/*
+
 import 'package:flutter/material.dart';
-import 'package:my_tour_planner/screens/browsing_screen/trip_template_view.dart';
+import 'package:my_tour_planner/screens/home/trip_template_view.dart';
 
 class HomeGrid extends StatelessWidget {
   final List<Map<String, String>> tripDetails = [
@@ -184,4 +184,3 @@ class HomeGridSection extends StatelessWidget {
     );
   }
 }
-*/

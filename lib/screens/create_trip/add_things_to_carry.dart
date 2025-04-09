@@ -8,11 +8,13 @@ class AddThingsToCarry extends StatelessWidget {
       {super.key,
         required this.trip_name,
         required this.location_name,
-        required this.trip_type});
+        required this.trip_type,
+        required this.trip_id});
 
   final String trip_name;
   final String location_name;
   final String trip_type;
+  final int trip_id;
 
   @override
   Widget build(BuildContext context) {
