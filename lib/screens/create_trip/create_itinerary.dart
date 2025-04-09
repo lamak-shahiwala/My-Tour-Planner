@@ -7,14 +7,16 @@ pending work:
 
  */
 
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_tour_planner/backend/database_connection.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/Itinerary_detail_name__textfield.dart';
 import 'package:my_tour_planner/utilities/text_field/expandable_custom_itinerary_note__textfield.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../utilities/button/save_next_button.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
+import 'package:my_tour_planner/backend/classes.dart';
 import 'add_things_to_carry.dart';
 
 class ItineraryDetail {
@@ -33,6 +35,7 @@ class CreateItinerary extends StatefulWidget {
     required this.trip_name,
     required this.location_name,
     required this.trip_type,
+    required this.trip_id,
   }) : super(key: key);
 
   final DateTime? startDate;
@@ -40,6 +43,7 @@ class CreateItinerary extends StatefulWidget {
   final String trip_name;
   final String location_name;
   final String trip_type;
+  final int trip_id;
 
   @override
   State<CreateItinerary> createState() => _CreateItineraryState();
@@ -49,6 +53,9 @@ class _CreateItineraryState extends State<CreateItinerary> {
   List<DateTime> dateList = [];
   List<List<ItineraryDetail>> itineraryPerDate = [];
   final _formKey = GlobalKey<FormState>();
+
+  final itinerary_db = ItineraryDatabase();
+  final tripID = Trip_ID();
 
   @override
   void initState() {
@@ -62,8 +69,8 @@ class _CreateItineraryState extends State<CreateItinerary> {
       final end = widget.endDate!;
 
       for (DateTime date = start;
-      !date.isAfter(end);
-      date = date.add(Duration(days: 1))) {
+          !date.isAfter(end);
+          date = date.add(Duration(days: 1))) {
         dateList.add(date);
         itineraryPerDate.add([ItineraryDetail()]);
       }
@@ -84,7 +91,8 @@ class _CreateItineraryState extends State<CreateItinerary> {
     });
   }
 
-  Future<void> _pickTime(BuildContext context, int dateIndex, int detailIndex) async {
+  Future<void> _pickTime(
+      BuildContext context, int dateIndex, int detailIndex) async {
     final selected = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: 0, minute: 0),
@@ -101,7 +109,7 @@ class _CreateItineraryState extends State<CreateItinerary> {
     if (time == null) return null;
     final now = DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
-    return DateFormat.jm().format(dt);
+    return DateFormat.Hm().format(dt);
   }
 
   @override
@@ -177,7 +185,7 @@ class _CreateItineraryState extends State<CreateItinerary> {
                                 children: [
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "${detailIndex + 1}.",
@@ -188,8 +196,8 @@ class _CreateItineraryState extends State<CreateItinerary> {
                                       ),
                                       IconButton(
                                         icon: const Icon(Icons.delete,
-                                            color: Color.fromRGBO(
-                                                178, 60, 50, 1),
+                                            color:
+                                                Color.fromRGBO(178, 60, 50, 1),
                                             size: 20),
                                         onPressed: () => _removeItineraryDetail(
                                             dateIndex, detailIndex),
@@ -204,28 +212,31 @@ class _CreateItineraryState extends State<CreateItinerary> {
                                           decoration: const InputDecoration(
                                             labelText: "Enter Detail Name",
                                           ),
-                                          onChanged: (val) =>
-                                          detail.name = val,
+                                          onChanged: (val) => detail.name = val,
                                           validator: (val) =>
-                                          val == null || val.trim().isEmpty
-                                              ? 'Required'
-                                              : null,
+                                              val == null || val.trim().isEmpty
+                                                  ? 'Required'
+                                                  : null,
                                         ),
                                       ),
                                       const SizedBox(width: 5),
                                       SizedBox(
                                         child: GestureDetector(
-                                          onTap: () => _pickTime(context, dateIndex, detailIndex),
+                                          onTap: () => _pickTime(
+                                              context, dateIndex, detailIndex),
                                           child: AbsorbPointer(
                                             child: TextFormField(
                                               decoration: InputDecoration(
                                                 labelText: 'Time',
                                               ),
-                                              validator: (_) => detail.time == null
-                                                  ? 'Required'
-                                                  : null,
+                                              validator: (_) =>
+                                                  detail.time == null
+                                                      ? 'Required'
+                                                      : null,
                                               controller: TextEditingController(
-                                                text: _formatTime(detail.time) ?? '',
+                                                text:
+                                                    _formatTime(detail.time) ??
+                                                        '',
                                               ),
                                             ),
                                           ),
@@ -243,11 +254,14 @@ class _CreateItineraryState extends State<CreateItinerary> {
                                       labelText: "Custom Note",
                                     ),
                                     onChanged: (val) => detail.note = val,
-                                    validator: (val) => val == null || val.trim().isEmpty
-                                        ? 'Required'
-                                        : null,
+                                    validator: (val) =>
+                                        val == null || val.trim().isEmpty
+                                            ? 'Required'
+                                            : null,
                                   ),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                 ],
                               ),
                             );
@@ -269,8 +283,74 @@ class _CreateItineraryState extends State<CreateItinerary> {
                   },
                 ),
                 SaveNextButton(
-                  onPress: () {
+                  onPress: () async {
+                    // print("Next button pressed");
+
                     if (_formKey.currentState!.validate()) {
+                      // print("Form Validated");
+
+                      int tripId = widget.trip_id;
+                      print("Trip ID received in CreateItinerary: $tripId");
+
+                      final itineraryDb = ItineraryDatabase();
+
+                      // Step 1: Fetch all itinerary entries for the trip
+                      final response = await Supabase.instance.client
+                          .from('Itinerary')
+                          .select('itinerary_id, itinerary_date')
+                          .eq('trip_id', tripId);
+
+                      final List<Map<String, dynamic>> itineraryRows =
+                          List<Map<String, dynamic>>.from(response);
+
+                      print("Fetched Itineraries: $itineraryRows");
+
+                      // Step 2: Map itinerary_date -> itinerary_id
+                      final Map<String, int> itineraryIdByDate = {
+                        for (var row in itineraryRows)
+                          row['itinerary_date'] as String:
+                              row['itinerary_id'] as int
+                      };
+
+                      // Step 3: Insert itinerary details
+                      for (int i = 0; i < dateList.length; i++) {
+                        final formattedDate =
+                            DateFormat('yyyy-MM-dd').format(dateList[i]);
+
+                        if (!itineraryIdByDate.containsKey(formattedDate)) {
+                          print("No itinerary found for $formattedDate");
+                          continue;
+                        }
+
+                        int itineraryId = itineraryIdByDate[formattedDate]!;
+
+                        for (var detail in itineraryPerDate[i]) {
+                          final itineraryDetail = ItineraryDetails(
+                            itinerary_id: itineraryId,
+                            details_name: detail.name,
+                            custom_notes: detail.note,
+                            preferred_time: detail.time != null
+                                ? _formatTime(detail.time!)
+                                : '',
+                          );
+
+                          try {
+                            print("Saving detail: ${itineraryDetail.toMap()}");
+                            await itineraryDb
+                                .addItineraryDetails(itineraryDetail);
+                            print("Saved detail for $formattedDate");
+                          } catch (e) {
+                            print("ERROR saving detail for $formattedDate: $e");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      "Failed to save detail for $formattedDate")),
+                            );
+                          }
+                        }
+                      }
+
+                      // Step 4: Navigate to next screen (unchanged)
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -278,10 +358,12 @@ class _CreateItineraryState extends State<CreateItinerary> {
                             trip_name: widget.trip_name,
                             location_name: widget.location_name,
                             trip_type: widget.trip_type,
+                            trip_id: tripId,
                           ),
                         ),
                       );
                     } else {
+                      // print("FORM VALIDATION FAILED");
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Please complete all fields."),
