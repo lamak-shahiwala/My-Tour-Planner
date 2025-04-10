@@ -18,7 +18,7 @@ class AuthService {
         email: email,
         password: password,
         data: {
-        'full_name': displayName, // Store display name in metadata
+        'full_name': displayName,
       },
     );
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/screens/preferences/trip_type_preference.dart';
+import 'package:my_tour_planner/screens/user_details/new_user_details.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/utilities/search_bar/grey_search_bar.dart';
 
@@ -48,6 +50,9 @@ class Home extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+        child: ElevatedButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewUserDetails()));
+        }, child: Text("User Detail Form")),
         //child: Expanded(child: HomeGrid()),
       ),
       bottomNavigationBar: mtp_BottomAppBar(
