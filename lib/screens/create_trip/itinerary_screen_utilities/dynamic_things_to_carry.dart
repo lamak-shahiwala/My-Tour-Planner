@@ -134,7 +134,8 @@ class _DynamicThingsToCarryState extends State<DynamicThingsToCarry> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditItinerary(),
+                        builder: (context) =>
+                            EditItinerary(trip_id: trip_Id!),
                       ),
                     );
                   },
