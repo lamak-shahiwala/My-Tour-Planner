@@ -74,7 +74,7 @@ class _UserLoginState extends State<UserLogin> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
           child: Column(
             children: [
               Image.asset(
@@ -86,7 +86,12 @@ class _UserLoginState extends State<UserLogin> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                 child: Text(
                   "Login",
-                  style: sub_heading,
+                  style: TextStyle(
+                    color: Color.fromRGBO(53, 50, 66, 1),
+                    fontSize: 22,
+                    fontFamily: 'Sofia_Sans',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               Padding(
@@ -102,36 +107,21 @@ class _UserLoginState extends State<UserLogin> {
                   obscureText: true,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account? ",
-                      style: TextStyle(
-                        color: Color.fromRGBO(53, 50, 66, 1),
-                        fontSize: 14,
-                        fontFamily: 'Sofia_Sans',
-                        fontWeight: FontWeight.w300,
-                      ),
+              GestureDetector(
+                onTap: (){
+
+                },
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Text(
+                    "Forgot password?",
+                    style: TextStyle(
+                      color: Color.fromRGBO(0, 151, 178, 1),
+                      fontSize: 14,
+                      fontFamily: 'Sofia_Sans',
+                      fontWeight: FontWeight.w600,
                     ),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserRegistration())),
-                      child: Text(
-                        "Register Now",
-                        style: TextStyle(
-                          color: Colors.indigoAccent,
-                          fontSize: 14,
-                          fontFamily: 'Sofia_Sans',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
               Padding(
@@ -177,6 +167,38 @@ class _UserLoginState extends State<UserLogin> {
                     Text(
                       "Continue with Google",
                       style: active_button_text_white,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account? ",
+                      style: TextStyle(
+                        color: Color.fromRGBO(53, 50, 66, 1),
+                        fontSize: 14,
+                        fontFamily: 'Sofia_Sans',
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserRegistration())),
+                      child: Text(
+                        "Register Now",
+                        style: TextStyle(
+                          color: Color.fromRGBO(0, 151, 178, 1),
+                          fontSize: 14,
+                          fontFamily: 'Sofia_Sans',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),

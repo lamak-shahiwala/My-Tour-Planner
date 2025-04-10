@@ -39,7 +39,7 @@ const sub_sub_heading =  TextStyle(
 
 const sub_heading =  TextStyle(
   color: Color.fromRGBO(53, 50, 66, 1),
-  fontSize: 20,
+  fontSize: 18,
   fontFamily: 'Sofia_Sans',
   fontWeight: FontWeight.w600,
 );

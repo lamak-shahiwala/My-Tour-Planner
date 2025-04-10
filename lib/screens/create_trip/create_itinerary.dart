@@ -5,7 +5,7 @@ This file contains code of create Itinerary
 pending work:
 - custom TextFormFields and Time Fields
 
- */
+*/
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

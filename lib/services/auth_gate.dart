@@ -10,6 +10,8 @@ authenticated   -> Home Screen
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/home/home.dart';
 import 'package:my_tour_planner/screens/intro/welcome.dart';
+import 'package:my_tour_planner/screens/preferences/preferences_intro_screen.dart';
+import 'package:my_tour_planner/screens/user_details/new_user_details.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthGate extends StatelessWidget {
@@ -31,7 +33,15 @@ class AuthGate extends StatelessWidget {
 
           // check if there's valid session currently
           final session = snapshot.hasData? snapshot.data!.session : null;
-          if(session != null){
+          final user = session?.user;
+          final createdAt = DateTime.tryParse(user?.createdAt ?? '');
+          final now = DateTime.now();
+          final isNew = createdAt != null && now.difference(createdAt).inMinutes < 5;
+
+          if(isNew){
+            return PreferencesIntroScreen();
+          }
+          else if(session != null){
             return Home();
           }else{
             return expand_welcome();
