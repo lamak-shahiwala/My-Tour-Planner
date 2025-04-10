@@ -38,6 +38,7 @@ class _GenerateTripState extends State<GenerateTrip> {
       "Generate your trip Itinerary.\nProvide details for your\nIdeal Trip.";
 
   final trip_db = GenerateTripDatabase();
+  final tripID = Trip_ID();
 
   final TextEditingController trip_name = TextEditingController();
 
@@ -240,7 +241,7 @@ class _GenerateTripState extends State<GenerateTrip> {
                       height: 25,
                     ),
                     SaveNextButton(
-                        onPress: () {
+                        onPress: () async {
                           // Retrieving User ID
                           final supabase = Supabase.instance.client;
                           final user = supabase.auth.currentUser;
@@ -253,6 +254,8 @@ class _GenerateTripState extends State<GenerateTrip> {
                             ));
                             return;
                           }
+
+                          int? tripId = await tripID.getTripId();
 
 
                           if (startDate != null &&
@@ -272,6 +275,7 @@ class _GenerateTripState extends State<GenerateTrip> {
                                           trip_name: trip_name.text,
                                           location_name: location.text,
                                           trip_type: selectedValue!,
+                                          trip_id: tripId!,
                                         )));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(

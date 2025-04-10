@@ -24,6 +24,7 @@ class _CreateTripState extends State<CreateTrip> {
   final String page_title = "Create your trip Itinerary\nwith us.";
 
   final trip_db = TripDatabase();
+  final tripID = Trip_ID();
 
   final TextEditingController trip_name = TextEditingController();
   final TextEditingController location = TextEditingController();
@@ -33,7 +34,6 @@ class _CreateTripState extends State<CreateTrip> {
 
   String? FormatStartDate;
   String? FormatEndDate;
-
 
   Future<void> _selectStartDate(BuildContext context) async {
     DateTime? startDatePicked = await showDatePicker(
@@ -178,17 +178,16 @@ class _CreateTripState extends State<CreateTrip> {
                       height: 30,
                     ),
                     SaveNextButton(
-                        onPress: ()  {
-                          // Retrieving User ID
+                        onPress: () async {
                           final supabase = Supabase.instance.client;
                           final user = supabase.auth.currentUser;
                           String? userId = user?.id;
 
                           if (userId == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("User not logged in!"),
-                              duration: Duration(milliseconds: 400),
-                            ));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("User not logged in!")),
+                            );
                             return;
                           }
 
@@ -196,38 +195,65 @@ class _CreateTripState extends State<CreateTrip> {
                               endDate != null &&
                               location.text.isNotEmpty &&
                               trip_name.text.isNotEmpty) {
+                            final formattedStartDate =
+                                DateFormat('yyyy-MM-dd').format(startDate!);
+                            final formattedEndDate =
+                                DateFormat('yyyy-MM-dd').format(endDate!);
 
-                            FormatStartDate = startDate != null ? DateFormat('dd-MM-yyyy').format(startDate!) : null;
-                            FormatEndDate = endDate != null ? DateFormat('dd-MM-yyyy').format(endDate!) : null;
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CreateItinerary(
-                                          startDate: startDate,
-                                          endDate: endDate,
-                                          trip_name: trip_name.text,
-                                          location_name: location.text,
-                                          trip_type: "none",
-                                        )));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("Please fill all the fields"),
-                              duration: Duration(milliseconds: 400),
-                            ));
-                          }
-
-
-                          // Database
-                          final newTrip = Trip(
+                            final newTrip = Trip(
                               trip_name: trip_name.text,
                               city_location: location.text,
-                              start_date: FormatStartDate,
-                              end_date: FormatEndDate,
-                              user_id : userId,
+                              start_date: formattedStartDate,
+                              end_date: formattedEndDate,
+                              user_id: userId,
+                            );
+
+                            // Insert Trip and get trip_id
+                            final insertedTrip = await supabase
+                                .from('Trip')
+                                .insert(newTrip.toMap())
+                                .select()
+                                .single();
+
+                            int tripId = insertedTrip['trip_id'];
+
+                            // Insert itinerary rows (1 per day)
+                            final itineraryDb = ItineraryDatabase();
+
+                            for (DateTime date = startDate!;
+                                !date.isAfter(endDate!);
+                                date = date.add(const Duration(days: 1))) {
+                              final formattedDate =
+                                  DateFormat('yyyy-MM-dd').format(date);
+
+                              final itinerary = Itinerary(
+                                trip_id: tripId,
+                                itinerary_date: formattedDate,
                               );
 
-                          trip_db.createTrip(newTrip);
+                              await itineraryDb.addItinerary(itinerary);
+                            }
+
+                            // Navigate to CreateItinerary screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CreateItinerary(
+                                  startDate: startDate,
+                                  endDate: endDate,
+                                  trip_name: trip_name.text,
+                                  location_name: location.text,
+                                  trip_type: "none",
+                                  trip_id: tripId,
+                                ),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Please fill all the fields")),
+                            );
+                          }
                         },
                         buttonLabel: Text(
                           "Next",
