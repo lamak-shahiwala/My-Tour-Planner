@@ -51,10 +51,14 @@ class Home extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
 
-        child: ElevatedButton(onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewUserDetails()));
-        }, child: Text("User Detail Form")),
-        child: Expanded(child: HomeGrid()),
+        child: Column(
+          children: [
+            ElevatedButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>NewUserDetails()));
+            }, child: Text("User Detail Form")),
+            Expanded(child: HomeGrid()),
+          ],
+        ),
       ),
       bottomNavigationBar: mtp_BottomAppBar(
         selectedIndex: 0,
