@@ -48,7 +48,7 @@ class Home extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-        //child: Expanded(child: HomeGrid()),
+        child: Expanded(child: HomeGrid()),
       ),
       bottomNavigationBar: mtp_BottomAppBar(
         selectedIndex: 0,

@@ -107,7 +107,7 @@ class Itinerary {
   }
 }
 
-class ItineraryDetails {
+class ItineraryDetails{
   int? details_id;
   String? details_name;
   String? custom_notes;

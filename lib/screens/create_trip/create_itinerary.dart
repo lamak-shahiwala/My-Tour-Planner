@@ -36,6 +36,7 @@ class CreateItinerary extends StatefulWidget {
     required this.location_name,
     required this.trip_type,
     required this.trip_id,
+    this.isEditing,
   }) : super(key: key);
 
   final DateTime? startDate;
@@ -44,6 +45,7 @@ class CreateItinerary extends StatefulWidget {
   final String location_name;
   final String trip_type;
   final int trip_id;
+  final bool? isEditing;
 
   @override
   State<CreateItinerary> createState() => _CreateItineraryState();
