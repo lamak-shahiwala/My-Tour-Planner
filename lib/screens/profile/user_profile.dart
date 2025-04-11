@@ -8,7 +8,6 @@ import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
 
@@ -16,8 +15,8 @@ class UserProfile extends StatefulWidget {
   State<UserProfile> createState() => _UserProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> with SingleTickerProviderStateMixin {
-
+class _UserProfileState extends State<UserProfile>
+    with SingleTickerProviderStateMixin {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   final String image = "";
@@ -29,9 +28,9 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
 
   late String Name;
 
-  String? getFullName(){
+  String? getFullName() {
     final session = _supabase.auth.currentSession;
-    if(session == null) return null;
+    if (session == null) return null;
     return session.user.userMetadata?['full_name'];
   }
 
@@ -44,7 +43,8 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
   void logout() async {
     await authService.logOut();
     await GoogleSignIn().signOut();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthGate()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => AuthGate()));
   }
 
   @override
@@ -54,7 +54,7 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
     UserName = getUserName() ?? "";
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
-      setState(() {});  // Rebuild UI when tab index changes
+      setState(() {}); // Rebuild UI when tab index changes
     });
   }
 
@@ -87,19 +87,36 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                decoration: BoxDecoration(color: Color.fromRGBO(0, 151, 178, 1)),
+                decoration:
+                    BoxDecoration(color: Color.fromRGBO(0, 151, 178, 1)),
                 child: ListView(
                   children: [
-                    ListTile(title: Text(Name, style: TextStyle(color: Colors.white, fontSize: 20))),
-                    active_button_white(onPress: (){}, buttonLabel: Text("Edit Profile"), circularBorderRadius: 50,)
+                    ListTile(
+                        title: Text(Name,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20))),
+                    active_button_white(
+                      onPress: () {},
+                      buttonLabel: Text("Edit Profile"),
+                      circularBorderRadius: 50,
+                    )
                   ],
                 ),
               ),
-              ListTile(leading: Icon(Icons.toggle_on_outlined), title: Text('Theme'), onTap: () {}),
-              ListTile(leading: Icon(Icons.settings), title: Text('Settings'), onTap: () {}),
-              ListTile(leading: Icon(Icons.logout), title: Text('Logout'), onTap: () {
-                logout();
-              }),
+              ListTile(
+                  leading: Icon(Icons.toggle_on_outlined),
+                  title: Text('Theme'),
+                  onTap: () {}),
+              ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text('Settings'),
+                  onTap: () {}),
+              ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text('Logout'),
+                  onTap: () {
+                    logout();
+                  }),
             ],
           ),
         ),
@@ -118,9 +135,16 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
                     ),
                   ),
 
-                  SizedBox(height: 10,),
-                  Text(Name, style: sub_heading,),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    Name,
+                    style: sub_heading,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Text(UserName, style: sub_sub_heading),
                 ],
               ),
@@ -131,8 +155,18 @@ class _UserProfileState extends State<UserProfile> with SingleTickerProviderStat
             TabBar(
               controller: _tabController,
               tabs: [
-                Tab(icon: SvgPicture.asset( _tabController.index == 0 ? "assets/images/icons/my-trips-active-icon.svg" : "assets/images/icons/my-trips-notactive-icon.svg"),),
-                Tab(icon: Icon(Icons.bookmark_outline_rounded, color: _tabController.index == 1 ? Color.fromRGBO(0, 151, 178, 1) : Color.fromRGBO(211, 211, 211, 1),size: 24), ),
+                Tab(
+                  icon: SvgPicture.asset(_tabController.index == 0
+                      ? "assets/images/icons/my-trips-active-icon.svg"
+                      : "assets/images/icons/my-trips-notactive-icon.svg"),
+                ),
+                Tab(
+                  icon: Icon(Icons.bookmark_outline_rounded,
+                      color: _tabController.index == 1
+                          ? Color.fromRGBO(0, 151, 178, 1)
+                          : Color.fromRGBO(211, 211, 211, 1),
+                      size: 24),
+                ),
               ],
             ),
 

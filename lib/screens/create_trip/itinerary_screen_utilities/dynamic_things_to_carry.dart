@@ -7,6 +7,7 @@ import 'package:my_tour_planner/backend/classes.dart';
 
 import '../../../utilities/button/save_next_button.dart';
 import '../../../utilities/text/text_styles.dart';
+import '../testing_edit_itinerary.dart';
 
 class DynamicThingsToCarry extends StatefulWidget {
   @override
@@ -127,7 +128,7 @@ class _DynamicThingsToCarryState extends State<DynamicThingsToCarry> {
 
                     final carry_item = Things_Carry(
                         trip_id: trip_Id,
-                        carry_item: things_to_carry_controller.text);
+                        carry_item: things_to_carry);
 
                     await things_carry_db.addCarryItem(carry_item);
 
@@ -135,7 +136,7 @@ class _DynamicThingsToCarryState extends State<DynamicThingsToCarry> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            EditItinerary(trip_id: trip_Id!),
+                            TestingEditItineraryScreen(trip_id: trip_Id!),
                       ),
                     );
                   },
