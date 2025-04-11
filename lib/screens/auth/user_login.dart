@@ -127,7 +127,14 @@ class _UserLoginState extends State<UserLogin> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: active_button_blue(
-                  onPress: () {
+                  onPress: () async {
+                    bool hasInternet = await getInternetStatus();
+                    if (!hasInternet) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Internet Connection not Found."),
+                        duration: Duration(seconds: 1),
+                      ));
+                    }
                     if (email_controller.text.isEmpty ||
                         password_controller.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -160,7 +167,7 @@ class _UserLoginState extends State<UserLogin> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "assets/images/goolge-icon.png",
+                      "assets/images/google-icon.png",
                       width: 30,
                       height: 30,
                     ),

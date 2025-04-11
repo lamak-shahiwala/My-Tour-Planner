@@ -141,6 +141,13 @@ class _UserRegistrationState extends State<UserRegistration> {
                   children: [
                     active_button_blue(
                       onPress: () async {
+                        bool hasInternet = await getInternetStatus();
+                        if (!hasInternet) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Internet Connection not Found."),
+                            duration: Duration(seconds: 1),
+                          ));
+                        }
                         if(email_controller.text.isEmpty || name_controller.text.isEmpty || password_controller.text.isEmpty){
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Please fill all the fields."), duration: Duration(milliseconds: 400),)
@@ -175,7 +182,7 @@ class _UserRegistrationState extends State<UserRegistration> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            "assets/images/goolge-icon.png",
+                            "assets/images/google-icon.png",
                             width: 30,
                             height: 30,
                           ),

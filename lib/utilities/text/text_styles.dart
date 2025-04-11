@@ -75,6 +75,7 @@ const lightGrey_paragraph_text =  TextStyle(
 
 const textField_placeholder = TextStyle(
   color: Color(0xFFC4C4C4),
+  fontSize: 16,
   fontFamily: "Sofia_Sans",
   fontWeight: FontWeight.w400,
 );

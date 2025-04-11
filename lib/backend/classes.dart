@@ -244,14 +244,14 @@ class Profile {
   String? user_name;
   String? date_of_birth;
   String? gender;
-  String? profile_phot_url;
+  String? profile_photo_url;
 
   Profile({
     required this.user_id,
     required this.user_name,
     required this.date_of_birth,
     required this.gender,
-    this.profile_phot_url,
+    this.profile_photo_url,
   });
 
   factory Profile.fromMap(Map<String, dynamic> map) {
@@ -260,7 +260,7 @@ class Profile {
       user_name: map['user_name'] as String,
       date_of_birth: map['date_of_birth'] as String,
       gender: map['gender'] as String,
-      profile_phot_url: map['profile_photo_url'] as String,
+      profile_photo_url: map['profile_photo_url'] as String,
     );
   }
 
@@ -270,7 +270,7 @@ class Profile {
       'user_name': user_name,
       'date_of_birth': date_of_birth,
       'gender': gender,
-      'profile_phot_url': profile_phot_url,
+      'profile_photo_url': profile_photo_url,
     };
   }
 }
