@@ -169,8 +169,8 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
     );
 
     //  Navigate back to Home 
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: (context) => Home()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   Widget _tripTemplate(int index) {
