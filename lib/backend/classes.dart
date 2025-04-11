@@ -107,7 +107,7 @@ class Itinerary {
   }
 }
 
-class ItineraryDetails{
+class ItineraryDetails {
   int? details_id;
   String? details_name;
   String? custom_notes;
@@ -145,7 +145,7 @@ class ItineraryDetails{
 class Things_Carry {
   int? things_carry_id;
   int? trip_id;
-  String? carry_item ;
+  List<String> carry_item;
 
   Things_Carry({
     this.things_carry_id,
@@ -157,7 +157,7 @@ class Things_Carry {
     return Things_Carry(
       things_carry_id: map['things_carry_id'] as int,
       trip_id: map['trip_id'] as int,
-      carry_item: map['carry_item'] as String,
+      carry_item: map['carry_item'] as List<String>,
     );
   }
 
@@ -169,7 +169,113 @@ class Things_Carry {
   }
 }
 
-//  For Retrieving ID
+class Template {
+  int? template_id;
+  int? trip_id;
+  String? template_name;
+  String? template_description;
+  bool? isPublic;
+  int? popularity_score;
+
+  Template({
+    this.trip_id,
+    this.template_name,
+    this.template_description,
+    this.isPublic,
+    this.popularity_score,
+    this.template_id,
+  });
+
+  factory Template.fromMap(Map<String, dynamic> map) {
+    return Template(
+      template_id: map['template_id'] as int,
+      trip_id: map['trip_id'] as int,
+      template_description: map['template_description'] as String,
+      isPublic: map['isPublic'] as bool,
+      popularity_score: map['popularity_score'] as int,
+      template_name: map['template_name'] as String,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'trip_id': trip_id,
+      'template_name': template_name,
+      'template_description': template_description,
+      'isPublic': isPublic,
+      'popularity_score': popularity_score,
+    };
+  }
+}
+
+class Bookmark {
+  int? bookmark_id;
+  int? user_id;
+  int? template_id;
+  String? date_boomarked;
+
+  Bookmark({
+    required this.user_id,
+    required this.template_id,
+    this.bookmark_id,
+    this.date_boomarked,
+  });
+
+  factory Bookmark.fromMap(Map<String, dynamic> map) {
+    return Bookmark(
+      bookmark_id: map['bookmark_id'] as int,
+      template_id: map['template_id'] as int,
+      user_id: map['user_id'] as int,
+      date_boomarked: map['date_bookmarked'] as String,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'user_id': user_id,
+      'template_id': template_id,
+      'date_boomarked': date_boomarked,
+    };
+  }
+}
+
+class Profile {
+  int? user_id;
+  String? user_name;
+  String? date_of_birth;
+  String? gender;
+  String? profile_phot_url;
+
+  Profile({
+    required this.user_id,
+    required this.user_name,
+    required this.date_of_birth,
+    required this.gender,
+    this.profile_phot_url,
+  });
+
+  factory Profile.fromMap(Map<String, dynamic> map) {
+    return Profile(
+      user_id: map['user_id'] as int,
+      user_name: map['user_name'] as String,
+      date_of_birth: map['date_of_birth'] as String,
+      gender: map['gender'] as String,
+      profile_phot_url: map['profile_photo_url'] as String,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'user_id': user_id,
+      'user_name': user_name,
+      'date_of_birth': date_of_birth,
+      'gender': gender,
+      'profile_phot_url': profile_phot_url,
+    };
+  }
+}
+
+//  For Retrieving ID's
 class Trip_ID {
   final supabase = Supabase.instance.client;
 
