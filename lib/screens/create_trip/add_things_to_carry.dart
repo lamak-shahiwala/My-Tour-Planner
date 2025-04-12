@@ -39,7 +39,7 @@ class AddThingsToCarry extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: Text(
                       location_name,
                       style: location,

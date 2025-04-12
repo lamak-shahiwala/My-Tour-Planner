@@ -64,7 +64,7 @@ class _OpenStreetMapWhiteSearchBarState extends State<OpenStreetMapWhiteSearchBa
   Widget build(BuildContext context) {
     const textFieldStyle = TextStyle(
       color: Color(0xFF666666), //Color(0xFF000000),
-      fontSize: 20,
+      fontSize: 16,
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w400,
     );
@@ -72,7 +72,7 @@ class _OpenStreetMapWhiteSearchBarState extends State<OpenStreetMapWhiteSearchBa
       color: Color(0xFF666666),
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w400,
-      fontSize: 20,
+      fontSize: 16,
     );
     return Column(
       children: [
