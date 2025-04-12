@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_tour_planner/utilities/button/open_street_map_white_search_bar.dart';
+import 'package:my_tour_planner/utilities/text_field/open_street_map_white_search_bar.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';
 import 'package:my_tour_planner/utilities/button/white_date_picker_button.dart';
@@ -32,7 +32,7 @@ class _GenerateTripState extends State<GenerateTrip> {
     "Relaxation",
     "Shopping",
     "Food"
-  ]; // for dropdown menu
+  ];
 
   final String page_title =
       "Generate your trip Itinerary.\nProvide details for your\nIdeal Trip.";
@@ -122,7 +122,7 @@ class _GenerateTripState extends State<GenerateTrip> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -211,7 +211,7 @@ class _GenerateTripState extends State<GenerateTrip> {
                         underline: SizedBox(),
                         style: TextStyle(
                           color: Color(0xFF666666), //Color(0xFF000000),
-                          fontSize: 20,
+                          fontSize: 16,
                           fontFamily: "Sofia_Sans",
                           fontWeight: FontWeight.w400,
                         ),

@@ -18,7 +18,7 @@ class WhiteTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     const textFieldStyle = TextStyle(
       color: Color(0xFF666666), //Color(0xFF000000),
-      fontSize: 20,
+      fontSize: 16,
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w400,
     );
@@ -26,7 +26,7 @@ class WhiteTextField extends StatelessWidget {
       color: Color(0xFF666666),
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w400,
-      fontSize: 20,
+      fontSize: 16,
     );
 
     return TextField(

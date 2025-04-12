@@ -129,7 +129,7 @@ class _CreateItineraryState extends State<CreateItinerary> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: Text(
                       widget.location_name,
                       style: location,

@@ -20,7 +20,6 @@ class _UserProfileState extends State<UserProfile>
   final SupabaseClient _supabase = Supabase.instance.client;
 
   final String image = "";
-
   late String UserName;
   late TabController _tabController;
 
