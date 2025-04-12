@@ -66,55 +66,61 @@ class _TripTypePreferenceState extends State<TripTypePreference> {
                 )),
               ],
             ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                    child: Wrap(
-                      children: selectionsMap.keys.map((label) {
-                        return BlueInsideTextCheckbox(
-                          label: label,
-                          value: selectionsMap[label]!,
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectionsMap[label] = newValue;
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                child: Wrap(
+                  children: selectionsMap.keys.map((label) {
+                    return BlueInsideTextCheckbox(
+                      label: label,
+                      value: selectionsMap[label]!,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectionsMap[label] = newValue;
+                        });
+                      },
+                    );
+                  }).toList(),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      active_button_white(
-                          onPress: () {
-                            Navigator.pushReplacement(context,
-                                MaterialPageRoute(builder: (context) => Home()));
-                          },
-                          buttonLabel: Text(
-                            "Skip Settings",
-                            style: active_button_text_white,
-                          )),
-                      active_button_blue(
-                          onPress: () {
-                            if (hasAtLeastFiveSelected()) {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => BudgetPreference()));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text("Please select atleast five things."), duration: Duration(milliseconds: 400),));
-                            }
-                          },
-                          buttonLabel: Text(
-                            "Continue",
-                            style: active_button_text_blue,
-                          )),
-                    ],
-                  ),
-                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  active_button_white(
+                      onPress: () {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Home()));
+                      },
+                      buttonLabel: Text(
+                        "Skip Settings",
+                        style: active_button_text_white,
+                      )),
+                  active_button_blue(
+                      onPress: () {
+                        if (hasAtLeastFiveSelected()) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BudgetPreference(
+                                        selectedTripTypes: getSelectedCategories(),
+                                      )));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Please select atleast five things."),
+                            duration: Duration(milliseconds: 400),
+                          ));
+                        }
+                      },
+                      buttonLabel: Text(
+                        "Continue",
+                        style: active_button_text_blue,
+                      )),
+                ],
+              ),
+            ),
           ],
         ),
       ),

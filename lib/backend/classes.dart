@@ -259,15 +259,16 @@ class Bookmark {
 }
 
 class Profile {
-  int? user_id;
-  String? user_name;
+  final user_id;
+  String? username;
   String? date_of_birth;
   String? gender;
   String? profile_photo_url;
 
   Profile({
+    // this.profile_id,
     required this.user_id,
-    required this.user_name,
+    required this.username,
     required this.date_of_birth,
     required this.gender,
     this.profile_photo_url,
@@ -275,8 +276,9 @@ class Profile {
 
   factory Profile.fromMap(Map<String, dynamic> map) {
     return Profile(
-      user_id: map['user_id'] as int,
-      user_name: map['user_name'] as String,
+      // profile_id: map['profile_id'] as int,
+      user_id: map['user_id'],
+      username: map['username'] as String,
       date_of_birth: map['date_of_birth'] as String,
       gender: map['gender'] as String,
       profile_photo_url: map['profile_photo_url'] as String,
@@ -286,7 +288,7 @@ class Profile {
   Map<String, dynamic> toMap() {
     return {
       'user_id': user_id,
-      'user_name': user_name,
+      'username': username,
       'date_of_birth': date_of_birth,
       'gender': gender,
       'profile_photo_url': profile_photo_url,
@@ -296,29 +298,29 @@ class Profile {
 
 class Preferences {
   int? preferences_id;
-  int? user_id;
-  String? trip_type_preferences;
-  String? climate_preferences;
-  String? month_preferences;
+  final user_id;
+  List<String> trip_type_preference;
+  List<String> climate_preference;
+  List<String> month_preference;
   String? budget_preference;
 
   Preferences({
     required this.user_id,
     this.preferences_id,
-    this.budget_preference,
-    this.climate_preferences,
-    this.month_preferences,
-    this.trip_type_preferences,
+    required this.budget_preference,
+    required this.climate_preference,
+    required this.month_preference,
+    required this.trip_type_preference,
   });
 
   factory Preferences.fromMap(Map<String, dynamic> map) {
     return Preferences(
-      user_id: map['user_id'] as int,
+      user_id: map['user_id'] ,
       preferences_id: map['preferences_id'] as int,
       budget_preference: map['budget_preference'] as String,
-      climate_preferences: map['climate_preferences'] as String,
-      month_preferences: map['month_preferences'] as String,
-      trip_type_preferences: map['trip_type_preferences'] as String,
+      climate_preference : map['climate_preference'] as List<String>,
+      month_preference: map['month_preference'] as List<String>,
+      trip_type_preference: map['trip_type_preference'] as List<String>,
     );
   }
 
@@ -326,9 +328,9 @@ class Preferences {
     return {
       'user_id': user_id,
       'budget_preference': budget_preference,
-      'climate_preferences': climate_preferences,
-      'month_preferences': month_preferences,
-      'trip_type_preferences': trip_type_preferences,
+      'climate_preference': climate_preference,
+      'month_preference': month_preference,
+      'trip_type_preference': trip_type_preference,
     };
   }
 }

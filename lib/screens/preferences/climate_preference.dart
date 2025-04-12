@@ -7,7 +7,14 @@ import '../../utilities/text/text_styles.dart';
 import '../home/home.dart';
 
 class ClimatePreference extends StatefulWidget {
-  const ClimatePreference({super.key});
+  final List<String> selectedTripTypes;
+  final String selectedBudget;
+
+  const ClimatePreference({
+    super.key,
+    required this.selectedBudget,
+    required this.selectedTripTypes,
+  });
 
   @override
   State<ClimatePreference> createState() => _ClimatePreferenceState();
@@ -75,9 +82,13 @@ class _ClimatePreferenceState extends State<ClimatePreference> {
                             data: CheckboxThemeData(
                               side: WidgetStateBorderSide.resolveWith((states) {
                                 if (states.contains(WidgetState.selected)) {
-                                  return BorderSide(color: Color.fromRGBO(0, 157, 192, 1), width: 2); // border when checked
+                                  return BorderSide(
+                                      color: Color.fromRGBO(0, 157, 192, 1),
+                                      width: 2); // border when checked
                                 }
-                                return BorderSide(color: Color.fromRGBO(211, 211, 211, 1), width: 2); // border when unchecked
+                                return BorderSide(
+                                    color: Color.fromRGBO(211, 211, 211, 1),
+                                    width: 2); // border when unchecked
                               }),
                               fillColor: WidgetStateProperty.resolveWith<Color>(
                                   (states) {
@@ -133,8 +144,14 @@ class _ClimatePreferenceState extends State<ClimatePreference> {
                 active_button_blue(
                   onPress: () {
                     if (hasAtLeastOneSelected()) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MonthPreference()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MonthPreference(
+                                    selectedBudget: widget.selectedBudget,
+                                    selectedClimates: getSelectedCategories(),
+                                    selectedTripTypes: widget.selectedTripTypes,
+                                  )));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text("Please select atleast one option."),
