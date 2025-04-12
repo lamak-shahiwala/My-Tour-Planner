@@ -8,23 +8,31 @@ class Trip {
   String? end_date;
   String city_location;
   String user_id;
+  String? trip_budget;
+  String? cover_photo_url;
 
-  Trip(
-      {this.trip_id,
-      required this.trip_name,
-      required this.city_location,
-      this.start_date,
-      this.end_date,
-      required this.user_id});
+  Trip({
+    this.trip_id,
+    required this.trip_name,
+    required this.city_location,
+    this.start_date,
+    this.end_date,
+    required this.user_id,
+    this.cover_photo_url,
+    this.trip_budget,
+  });
 
   factory Trip.fromMap(Map<String, dynamic> map) {
     return Trip(
-        trip_id: map['trip_id'] as int,
-        trip_name: map['trip_name'] as String,
-        city_location: map['city_location'] as String,
-        start_date: map['start_date'] as String,
-        end_date: map['end_date'] as String,
-        user_id: map['user_id'] as String);
+      trip_id: map['trip_id'] as int,
+      trip_name: map['trip_name'] as String,
+      city_location: map['city_location'] as String,
+      start_date: map['start_date'] as String,
+      end_date: map['end_date'] as String,
+      user_id: map['user_id'] as String,
+      trip_budget: map['trip_budget'] as String?,
+      cover_photo_url: map['cover_photo_url'] as String?,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -33,7 +41,9 @@ class Trip {
       'city_location': city_location,
       'start_date': start_date,
       'end_date': end_date,
-      'user_id': user_id
+      'user_id': user_id,
+      'trip_budget': trip_budget,
+      'cover_photo_url': cover_photo_url,
     };
   }
 }
@@ -46,15 +56,20 @@ class Generate_Trip {
   String city_location;
   String trip_type;
   String user_id;
+  String? trip_budget;
+  String? cover_photo_url;
 
-  Generate_Trip(
-      {this.trip_id,
-      required this.trip_name,
-      required this.city_location,
-      this.start_date,
-      this.end_date,
-      required this.trip_type,
-      required this.user_id});
+  Generate_Trip({
+    this.trip_id,
+    required this.trip_name,
+    required this.city_location,
+    this.start_date,
+    this.end_date,
+    required this.trip_type,
+    required this.user_id,
+    this.cover_photo_url,
+    this.trip_budget,
+  });
 
   factory Generate_Trip.fromMap(Map<String, dynamic> map) {
     return Generate_Trip(
@@ -65,6 +80,8 @@ class Generate_Trip {
       end_date: map['end_date'] as String,
       trip_type: map['trip_type'] as String,
       user_id: map['user_id'] as String,
+      trip_budget: map['trip_budget'] as String?,
+      cover_photo_url: map['cover_photo_url'] as String?,
     );
   }
 
@@ -76,6 +93,8 @@ class Generate_Trip {
       'end_date': end_date,
       'trip_type': trip_type,
       'user_id': user_id,
+      'trip_budget': trip_budget,
+      'cover_photo_url': cover_photo_url,
     };
   }
 }
@@ -271,6 +290,45 @@ class Profile {
       'date_of_birth': date_of_birth,
       'gender': gender,
       'profile_photo_url': profile_photo_url,
+    };
+  }
+}
+
+class Preferences {
+  int? preferences_id;
+  int? user_id;
+  String? trip_type_preferences;
+  String? climate_preferences;
+  String? month_preferences;
+  String? budget_preference;
+
+  Preferences({
+    required this.user_id,
+    this.preferences_id,
+    this.budget_preference,
+    this.climate_preferences,
+    this.month_preferences,
+    this.trip_type_preferences,
+  });
+
+  factory Preferences.fromMap(Map<String, dynamic> map) {
+    return Preferences(
+      user_id: map['user_id'] as int,
+      preferences_id: map['preferences_id'] as int,
+      budget_preference: map['budget_preference'] as String,
+      climate_preferences: map['climate_preferences'] as String,
+      month_preferences: map['month_preferences'] as String,
+      trip_type_preferences: map['trip_type_preferences'] as String,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'user_id': user_id,
+      'budget_preference': budget_preference,
+      'climate_preferences': climate_preferences,
+      'month_preferences': month_preferences,
+      'trip_type_preferences': trip_type_preferences,
     };
   }
 }
