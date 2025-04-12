@@ -31,12 +31,14 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   internet_connection_checker_plus: ^2.7.0
   flutter_svg: ^2.0.9
   supabase_flutter: ^2.8.4
   google_sign_in: ^6.2.2
   http: ^1.0.0
+  permission_handler: ^11.0.0
+  image_picker: ^1.1.2
+  uuid: ^4.5.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -79,8 +81,8 @@ flutter:
     - assets/images/welcome2_img.png
     - assets/images/welcome3_img.png
     - assets/images/welcome4_img.png
-    - assets/images/preferences_settings.png
-    - assets/images/goolge-icon.png
+    - assets/images/preferences_intro.png
+    - assets/images/google-icon.png
     - assets/images/MTP_App_Icon.png
     - assets/images/icons/home-active-icon.svg
     - assets/images/icons/home-notactive-icon.svg

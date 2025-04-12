@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:my_tour_planner/screens/create_or_generate__trip.dart';
-import 'package:my_tour_planner/screens/home.dart';
-import 'package:my_tour_planner/screens/user_profile.dart';
+import 'package:my_tour_planner/screens/create_generate_trip/create_or_generate__trip.dart';
+import 'package:my_tour_planner/screens/home/home.dart';
+import 'package:my_tour_planner/screens/profile/user_profile.dart';
 
 
 class mtp_BottomAppBar extends StatefulWidget {
