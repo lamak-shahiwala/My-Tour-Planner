@@ -24,11 +24,11 @@ class ItineraryDetailNameTextField extends StatelessWidget {
       color: Color(0xFF666666),
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w400,
-      fontSize: 18,
+      fontSize: 16,
     );
     const textFieldStyle = TextStyle(
       color: Color(0xFF000000),
-      fontSize: 18,
+      fontSize: 16,
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w400,
     );

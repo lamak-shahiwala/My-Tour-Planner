@@ -62,6 +62,7 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                   setState(() {
                     _imageUrl = imageUrl;
                   });
+                  //
                 },
               ),
               const SizedBox(height: 30),
@@ -180,6 +181,7 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                     if (!_usernameError &&
                         !_dobError &&
                         !_genderError) {
+                      //
                       Navigator.push(
                         context,
                         MaterialPageRoute(
