@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/utilities/text_field/open_street_map_white_search_bar.dart';
 import 'package:my_tour_planner/backend/classes.dart';
-import 'package:my_tour_planner/backend/database_connection.dart';
+import 'package:my_tour_planner/backend/db_methods.dart';
 import 'package:my_tour_planner/screens/create_trip//create_itinerary.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';

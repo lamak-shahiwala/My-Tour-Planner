@@ -1,5 +1,4 @@
 import 'package:my_tour_planner/backend/classes.dart';
-import 'package:my_tour_planner/screens/create_trip/create_itinerary.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TripDatabase {
@@ -64,5 +63,33 @@ class ThingsCarryDB {
 
   Future<void> addCarryItem(Things_Carry carry_item) async {
     await things_carry.insert(carry_item.toMap());
+  }
+}
+
+class ProfileDB {
+  final profile_db = Supabase.instance.client.from('Profile');
+
+  Future<void> addNewUser(Profile new_user) async {
+    try {
+      print("Inserting user: ${new_user.toMap()}");
+
+      final result = await profile_db.insert(new_user.toMap()).select();
+    } catch (e) {
+      print("Insert error: $e");
+    }
+  }
+}
+
+class PreferencesDB {
+  final preference_db = Supabase.instance.client.from('Preferences');
+
+  Future<void> addPreferences(Preferences new_preferences) async {
+    try {
+      final response =
+          await preference_db.insert(new_preferences.toMap()).select();
+      print("Preferences Added : $response");
+    } catch (e) {
+      print("Insert/Update Error : $e");
+    }
   }
 }

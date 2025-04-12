@@ -1,5 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_tour_planner/backend/classes.dart';
+import 'package:my_tour_planner/backend/db_methods.dart';
 import 'package:my_tour_planner/screens/preferences/preferences_intro_screen.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
@@ -18,6 +22,7 @@ class NewUserDetails extends StatefulWidget {
 class _NewUserDetailsState extends State<NewUserDetails> {
   String? _imageUrl;
   final SupabaseClient supabase = Supabase.instance.client;
+  final profile_db = ProfileDB();
 
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
@@ -49,7 +54,7 @@ class _NewUserDetailsState extends State<NewUserDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:
-      AppBar(automaticallyImplyLeading: false, title: ArrowBackButton()),
+          AppBar(automaticallyImplyLeading: false, title: ArrowBackButton()),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -62,11 +67,9 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                   setState(() {
                     _imageUrl = imageUrl;
                   });
-                  //
                 },
               ),
               const SizedBox(height: 30),
-
               TextFormField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
@@ -86,7 +89,6 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                   ),
                 ),
               const SizedBox(height: 20),
-
               Row(
                 children: [
                   Text("Select Date of Birth: ",
@@ -118,7 +120,6 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                   ),
                 ),
               const SizedBox(height: 20),
-
               Row(
                 children: [
                   Text("Select Gender: ",
@@ -130,7 +131,7 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                   ToggleButtons(
                     isSelected: List.generate(
                       _genderOptions.length,
-                          (index) => _selectedGenderIndex == index,
+                      (index) => _selectedGenderIndex == index,
                     ),
                     onPressed: (int index) {
                       setState(() {
@@ -143,17 +144,17 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                     fillColor: const Color.fromRGBO(0, 157, 192, 1),
                     color: Colors.black,
                     constraints:
-                    const BoxConstraints(minHeight: 46, minWidth: 0),
+                        const BoxConstraints(minHeight: 46, minWidth: 0),
                     children: _genderOptions
                         .map((gender) => Padding(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 7.0),
-                      child: Text(
-                        gender,
-                        style: const TextStyle(
-                            fontSize: 15, fontFamily: 'Sofia_Sans'),
-                      ),
-                    ))
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 7.0),
+                              child: Text(
+                                gender,
+                                style: const TextStyle(
+                                    fontSize: 15, fontFamily: 'Sofia_Sans'),
+                              ),
+                            ))
                         .toList(),
                   ),
                 ],
@@ -167,21 +168,35 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                   ),
                 ),
               const SizedBox(height: 20),
-
               Center(
                 child: active_button_blue(
-                  onPress: () {
+                  onPress: () async {
                     setState(() {
-                      _usernameError =
-                          _usernameController.text.trim().isEmpty;
+                      _usernameError = _usernameController.text.trim().isEmpty;
                       _dobError = _selectedDate == null;
                       _genderError = _selectedGenderIndex == null;
                     });
 
-                    if (!_usernameError &&
-                        !_dobError &&
-                        !_genderError) {
-                      //
+                    if (!_usernameError && !_dobError && !_genderError) {
+                      // Database
+                      final userId = supabase.auth.currentUser!.id;
+                      final formattedDOB =
+                          DateFormat('dd MMM yyyy').format(_selectedDate!);
+                      // For storing profile_url
+                      // await supabase
+                      //     .from('Profile')
+                      //     .upsert({'profile_photo_url': _imageUrl}).eq(
+                      //         'user_id', userId);
+
+                      final newUser = Profile(
+                          user_id: userId,
+                          username: _usernameController.text,
+                          date_of_birth: formattedDOB,
+                          gender: _genderOptions[_selectedGenderIndex!],
+                          profile_photo_url: _imageUrl);
+
+                      await profile_db.addNewUser(newUser);
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(

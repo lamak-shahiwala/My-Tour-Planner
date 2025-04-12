@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/backend/classes.dart';
-import 'package:my_tour_planner/backend/database_connection.dart';
+import 'package:my_tour_planner/backend/db_methods.dart';
 import 'package:my_tour_planner/screens/create_trip/edit_itinerary.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:my_tour_planner/backend/classes.dart';

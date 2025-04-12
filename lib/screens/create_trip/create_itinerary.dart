@@ -9,7 +9,7 @@ pending work:
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_tour_planner/backend/database_connection.dart';
+import 'package:my_tour_planner/backend/db_methods.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/Itinerary_detail_name__textfield.dart';
 import 'package:my_tour_planner/utilities/text_field/expandable_custom_itinerary_note__textfield.dart';

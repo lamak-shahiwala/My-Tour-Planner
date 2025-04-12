@@ -7,7 +7,9 @@ import '../../utilities/text/text_styles.dart';
 import '../home/home.dart';
 
 class BudgetPreference extends StatefulWidget {
-  const BudgetPreference({super.key});
+  final List<String> selectedTripTypes;
+
+  const BudgetPreference({super.key, required this.selectedTripTypes});
 
   @override
   State<BudgetPreference> createState() => _BudgetPreferenceState();
@@ -23,35 +25,36 @@ class _BudgetPreferenceState extends State<BudgetPreference> {
   Widget customRadio(String value, String label) {
     final isSelected = selectedOption == value;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          RadioTheme(
-            data: RadioThemeData(
-              fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-                if (states.contains(WidgetState.selected)) {
-                  return const Color.fromRGBO(0, 157, 192, 1); // Active
-                }
-                return const Color.fromRGBO(211, 211, 211, 1); // Inactive
-              }),
-            ), child: Radio<String>(
-            value: value,
-            groupValue: selectedOption,
-            onChanged: (val) => setState(() => selectedOption = val!),
-          ),),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: isSelected
-                  ? Color.fromRGBO(0, 157, 192, 1)
-                  : Color.fromRGBO(211, 211, 211, 1),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            RadioTheme(
+              data: RadioThemeData(
+                fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return const Color.fromRGBO(0, 157, 192, 1); // Active
+                  }
+                  return const Color.fromRGBO(211, 211, 211, 1); // Inactive
+                }),
+              ),
+              child: Radio<String>(
+                value: value,
+                groupValue: selectedOption,
+                onChanged: (val) => setState(() => selectedOption = val!),
+              ),
             ),
-          )
-        ],
-      )
-    );
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: isSelected
+                    ? Color.fromRGBO(0, 157, 192, 1)
+                    : Color.fromRGBO(211, 211, 211, 1),
+              ),
+            )
+          ],
+        ));
   }
 
   @override
@@ -67,8 +70,8 @@ class _BudgetPreferenceState extends State<BudgetPreference> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: Wrap(
-                children: [Text(
+              child: Wrap(children: [
+                Text(
                   "What is your typical budget for a trip?",
                   style: sub_heading,
                   textAlign: TextAlign.center,
@@ -77,7 +80,9 @@ class _BudgetPreferenceState extends State<BudgetPreference> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30,),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 30,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -105,19 +110,24 @@ class _BudgetPreferenceState extends State<BudgetPreference> {
                 active_button_blue(
                   onPress: selectedOption.isNotEmpty
                       ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ClimatePreference()),
-                    );
-                  }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ClimatePreference(
+                                      selectedBudget: selectedOption,
+                                      selectedTripTypes:
+                                          widget.selectedTripTypes,
+                                    )),
+                          );
+                        }
                       : () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Please select a Budget option."),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  },
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Please select a Budget option."),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
                   buttonLabel: Text(
                     "Continue",
                     style: active_button_text_blue,
@@ -131,4 +141,3 @@ class _BudgetPreferenceState extends State<BudgetPreference> {
     );
   }
 }
-
