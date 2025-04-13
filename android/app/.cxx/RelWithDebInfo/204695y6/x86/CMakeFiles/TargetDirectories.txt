@@ -1,0 +1,2 @@
+C:/Users/SHAHI COMPUTERS/OneDrive/Documents/GitHub/My-Tour-Planner/android/app/.cxx/RelWithDebInfo/204695y6/x86/CMakeFiles/edit_cache.dir
+C:/Users/SHAHI COMPUTERS/OneDrive/Documents/GitHub/My-Tour-Planner/android/app/.cxx/RelWithDebInfo/204695y6/x86/CMakeFiles/rebuild_cache.dir
