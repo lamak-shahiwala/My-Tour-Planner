@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/create_trip/create_trip.dart';
 import 'package:my_tour_planner/screens/generate_trip/generate_trip.dart';
+import 'package:my_tour_planner/services/fetch_profile_photo.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
@@ -17,8 +18,6 @@ class _Create_or_Generate__TripState extends State<Create_or_Generate__Trip> {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   late String Name;
-
-  final String image = "";
 
   String? getFullName() {
     final session = _supabase.auth.currentSession;
@@ -48,12 +47,7 @@ class _Create_or_Generate__TripState extends State<Create_or_Generate__Trip> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(
-                      image,
-                    ),
-                  ),
+                  FetchProfilePhoto(avatarRadius: 20),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(

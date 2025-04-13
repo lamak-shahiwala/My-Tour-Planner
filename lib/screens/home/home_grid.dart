@@ -65,12 +65,17 @@ class HomeGrid extends StatelessWidget {
               ),
             ),
           ),
-          HomeGridSection(Categorytitle: 'Trending Now', tripDetails: tripDetails),
-          HomeGridSection(Categorytitle: 'Recommended For You', tripDetails: tripDetails),
-          HomeGridSection(Categorytitle: 'Adventurous', tripDetails: tripDetails),
+          HomeGridSection(
+              Categorytitle: 'Trending Now', tripDetails: tripDetails),
+          HomeGridSection(
+              Categorytitle: 'Recommended For You', tripDetails: tripDetails),
+          HomeGridSection(
+              Categorytitle: 'Adventurous', tripDetails: tripDetails),
           HomeGridSection(Categorytitle: 'Popular', tripDetails: tripDetails),
-          HomeGridSection(Categorytitle: 'Relaxation', tripDetails: tripDetails),
-          HomeGridSection(Categorytitle: 'Family Friendly', tripDetails: tripDetails),
+          HomeGridSection(
+              Categorytitle: 'Relaxation', tripDetails: tripDetails),
+          HomeGridSection(
+              Categorytitle: 'Family Friendly', tripDetails: tripDetails),
         ],
       ),
     );
@@ -116,10 +121,12 @@ class HomeGridSection extends StatelessWidget {
 
               // Padding for first and last items
               double leftPadding = index == 0 ? 20.0 : 0.0;
-              double rightPadding = index == tripDetails.length - 1 ? 20.0 : 0.0;
+              double rightPadding =
+                  index == tripDetails.length - 1 ? 20.0 : 0.0;
 
               return Padding(
-                padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
+                padding:
+                    EdgeInsets.only(left: leftPadding, right: rightPadding),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -141,15 +148,30 @@ class HomeGridSection extends StatelessWidget {
                     ),
                     child: Stack(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            trip_template['image']!,
-                            height: 370,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                        trip_template['image'] != ''
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  trip_template['image']!,
+                                  height: 370,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color.fromRGBO(111, 111, 111, 1),
+                                ),
+                                height: 370,
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  "[No Image]",
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(50, 50, 50, 1)),
+                                ),
+                              ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 0, 30),
                           child: Column(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_tour_planner/services/fetch_profile_photo.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/services/auth_gate.dart';
 import 'package:my_tour_planner/services/auth_services.dart';
@@ -19,7 +20,6 @@ class _UserProfileState extends State<UserProfile>
     with SingleTickerProviderStateMixin {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  final String image = "";
   late String UserName;
   late TabController _tabController;
 
@@ -126,14 +126,7 @@ class _UserProfileState extends State<UserProfile>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Profile Picture
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundImage: NetworkImage(
-                      image,
-                    ),
-                  ),
-
+                  FetchProfilePhoto(avatarRadius: 60),
                   SizedBox(
                     height: 10,
                   ),
@@ -168,8 +161,7 @@ class _UserProfileState extends State<UserProfile>
                 ),
               ],
             ),
-
-            // Tab Bar Views (Post Grid & Reels Grid)
+            
             Expanded(
               child: TabBarView(
                 controller: _tabController,

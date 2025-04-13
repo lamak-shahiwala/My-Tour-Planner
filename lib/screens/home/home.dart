@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/services/fetch_profile_photo.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/utilities/search_bar/grey_search_bar.dart';
 
@@ -7,7 +8,6 @@ import 'home_grid.dart';
 class Home extends StatelessWidget {
   Home({super.key});
 
-  final String image = ""; //var to store link of user profile icon
   final TextEditingController trip_template =
       TextEditingController(); // used for search bar
 
@@ -22,12 +22,7 @@ class Home extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundImage: NetworkImage(
-                image,
-              ),
-            ),
+            FetchProfilePhoto(avatarRadius: 24),
             SizedBox(
               width: 7,
             ),
