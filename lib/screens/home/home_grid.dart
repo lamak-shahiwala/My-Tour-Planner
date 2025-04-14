@@ -3,6 +3,10 @@ import 'package:my_tour_planner/screens/home/trip_template_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeGrid extends StatefulWidget {
+  final String searchQuery;
+
+  const HomeGrid({super.key, this.searchQuery = ''});
+
   @override
   _HomeGridState createState() => _HomeGridState();
 }
@@ -15,6 +19,14 @@ class _HomeGridState extends State<HomeGrid> {
   void initState() {
     super.initState();
     fetchTripTemplates();
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.searchQuery != widget.searchQuery) {
+      fetchTripTemplates();
+    }
   }
 
   // Mapping function for trip types
@@ -43,11 +55,24 @@ class _HomeGridState extends State<HomeGrid> {
       for (final item in response as List) {
         final trip = item['Trip'];
         final type = mapTripType(trip['trip_type'] as String?);
+        final cityLocation = (trip['city_location'] ?? '').toString();
+
+        // 🔍 Normalize and match against user input
+        if (widget.searchQuery.isNotEmpty) {
+          final queryWords = widget.searchQuery.toLowerCase().split(RegExp(r'\s+'));
+          final locationWords = cityLocation.toLowerCase();
+
+          // check if any word in query matches anywhere in location
+          bool matches = queryWords.any((word) => locationWords.contains(word));
+          if (!matches) continue;
+        }
 
         final tripData = {
           'title': (trip['trip_name'] ?? '').toString(),
           'image': (trip['cover_photo_url'] ?? '').toString(),
-          'location': (trip['city_location'] ?? '').toString(),
+          'location': cityLocation,
+          'trip_id': item['trip_id'].toString(),
+          'template_id': item['template_id'].toString(),
         };
 
         if (!groupedData.containsKey(type)) {
@@ -159,6 +184,8 @@ class HomeGridSection extends StatelessWidget {
                           title: trip['title']!,
                           location: trip['location']!,
                           image: trip['image']!,
+                          templateID: int.parse(trip['template_id']!),
+                          tripID: int.parse(trip['trip_id']!),
                         ),
                       ),
                     );
@@ -174,7 +201,7 @@ class HomeGridSection extends StatelessWidget {
                         trip['image'] != ''
                             ? ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
+                          child: Image.asset(
                             trip['image']!,
                             height: 370,
                             width: double.infinity,
