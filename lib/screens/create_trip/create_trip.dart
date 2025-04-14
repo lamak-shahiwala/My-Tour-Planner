@@ -90,6 +90,15 @@ class _CreateTripState extends State<CreateTrip> {
     }
   }
 
+  String? _getSelectedBudget() {
+    if (selectedValue == "Enter Custom Range") {
+      return customRange;
+    } else {
+      return selectedValue;
+    }
+  }
+
+
   Future<void> _selectEndDate(BuildContext context) async {
     if (startDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -152,11 +161,12 @@ class _CreateTripState extends State<CreateTrip> {
                       height: 30,
                     ),
                     TemplateCoverPicker(
-                        imageUrl: _imageUrl, onUpload: (imageUrl) async {
+                        imageUrl: _imageUrl,
+                        onUpload: (imageUrl) async {
                           setState(() {
                             _imageUrl = imageUrl;
                           });
-                    }),
+                        }),
                     SizedBox(
                       height: 30,
                     ),
@@ -179,8 +189,7 @@ class _CreateTripState extends State<CreateTrip> {
                           buttonLabel: Text(
                             startDate == null
                                 ? "Start Date"
-                                : "${DateFormat("dd MMM, y").format(
-                                startDate ?? DateTime.now())}",
+                                : "${DateFormat("dd MMM, y").format(startDate ?? DateTime.now())}",
                             style: TextStyle(
                               color: Color(0xFF666666),
                               fontSize: 18,
@@ -194,8 +203,7 @@ class _CreateTripState extends State<CreateTrip> {
                           buttonLabel: Text(
                             endDate == null
                                 ? "End Date"
-                                : "${DateFormat("dd MMM, y").format(
-                                endDate ?? DateTime.now())}",
+                                : "${DateFormat("dd MMM, y").format(endDate ?? DateTime.now())}",
                             style: TextStyle(
                               color: Color(0xFF666666),
                               fontSize: 18,
@@ -220,7 +228,9 @@ class _CreateTripState extends State<CreateTrip> {
                         ),
                       ),
                       child: DropdownButton<String>(
-                        value: selectedValue == "Enter Custom Range" ? null : selectedValue,
+                        value: selectedValue == "Enter Custom Range"
+                            ? null
+                            : selectedValue,
                         hint: Text(customRange ?? "Select Budget Range"),
                         isExpanded: true,
                         underline: SizedBox(),
@@ -230,7 +240,8 @@ class _CreateTripState extends State<CreateTrip> {
                           fontFamily: "Sofia_Sans",
                           fontWeight: FontWeight.w400,
                         ),
-                        icon: Icon(Icons.keyboard_arrow_down, color: Color(0xFF666666)),
+                        icon: Icon(Icons.keyboard_arrow_down,
+                            color: Color(0xFF666666)),
                         dropdownColor: Colors.grey[200],
                         onChanged: (newValue) {
                           if (newValue == "Enter Custom Range") {
@@ -248,12 +259,14 @@ class _CreateTripState extends State<CreateTrip> {
                                       TextField(
                                         controller: minController,
                                         keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(labelText: "Min Budget"),
+                                        decoration: InputDecoration(
+                                            labelText: "Min Budget"),
                                       ),
                                       TextField(
                                         controller: maxController,
                                         keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(labelText: "Max Budget"),
+                                        decoration: InputDecoration(
+                                            labelText: "Max Budget"),
                                       ),
                                     ],
                                   ),
@@ -270,7 +283,8 @@ class _CreateTripState extends State<CreateTrip> {
                                         if (min.isNotEmpty && max.isNotEmpty) {
                                           setState(() {
                                             customRange = "₹$min - ₹$max";
-                                            selectedValue = "Enter Custom Range"; // Not in the list, so Dropdown won't try to match
+                                            selectedValue =
+                                                "Enter Custom Range"; // Not in the list, so Dropdown won't try to match
                                           });
                                         }
                                         Navigator.pop(context);
@@ -284,7 +298,8 @@ class _CreateTripState extends State<CreateTrip> {
                           } else {
                             setState(() {
                               selectedValue = newValue;
-                              customRange = null; // clear custom text if predefined selected
+                              customRange =
+                                  null; // clear custom text if predefined selected
                             });
                           }
                         },
@@ -299,7 +314,9 @@ class _CreateTripState extends State<CreateTrip> {
                         }).toList(),
                       ),
                     ),
-                    SizedBox(height: 30,),
+                    SizedBox(
+                      height: 30,
+                    ),
                     SaveNextButton(
                         onPress: () async {
                           final supabase = Supabase.instance.client;
@@ -320,9 +337,9 @@ class _CreateTripState extends State<CreateTrip> {
                               trip_name.text.isNotEmpty &&
                               selectedValue != null) {
                             final formattedStartDate =
-                            DateFormat('yyyy-MM-dd').format(startDate!);
+                                DateFormat('yyyy-MM-dd').format(startDate!);
                             final formattedEndDate =
-                            DateFormat('yyyy-MM-dd').format(endDate!);
+                                DateFormat('yyyy-MM-dd').format(endDate!);
 
                             final newTrip = Trip(
                               trip_name: trip_name.text,
@@ -330,6 +347,8 @@ class _CreateTripState extends State<CreateTrip> {
                               start_date: formattedStartDate,
                               end_date: formattedEndDate,
                               user_id: userId,
+                              trip_budget: _getSelectedBudget(),
+                              cover_photo_url: _imageUrl,
                             );
 
                             // Insert Trip and get trip_id
@@ -345,10 +364,10 @@ class _CreateTripState extends State<CreateTrip> {
                             final itineraryDb = ItineraryDatabase();
 
                             for (DateTime date = startDate!;
-                            !date.isAfter(endDate!);
-                            date = date.add(const Duration(days: 1))) {
+                                !date.isAfter(endDate!);
+                                date = date.add(const Duration(days: 1))) {
                               final formattedDate =
-                              DateFormat('yyyy-MM-dd').format(date);
+                                  DateFormat('yyyy-MM-dd').format(date);
 
                               final itinerary = Itinerary(
                                 trip_id: tripId,
@@ -362,15 +381,14 @@ class _CreateTripState extends State<CreateTrip> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateItinerary(
-                                      startDate: startDate,
-                                      endDate: endDate,
-                                      trip_name: trip_name.text,
-                                      location_name: location.text,
-                                      trip_type: "none",
-                                      trip_id: tripId,
-                                    ),
+                                builder: (context) => CreateItinerary(
+                                  startDate: startDate,
+                                  endDate: endDate,
+                                  trip_name: trip_name.text,
+                                  location_name: location.text,
+                                  trip_type: "none",
+                                  trip_id: tripId,
+                                ),
                               ),
                             );
                           } else {

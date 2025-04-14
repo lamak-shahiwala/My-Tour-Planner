@@ -8,7 +8,7 @@ class Trip {
   String? end_date;
   String city_location;
   String user_id;
-  String? trip_budget;
+  final trip_budget;
   String? cover_photo_url;
 
   Trip({

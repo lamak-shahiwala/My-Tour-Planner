@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_tour_planner/screens/profile/my_trip_screens/my_trips.dart';
 import 'package:my_tour_planner/services/fetch_profile_photo.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/services/auth_gate.dart';
@@ -141,9 +142,7 @@ class _UserProfileState extends State<UserProfile>
                 ],
               ),
             ),
-
             SizedBox(height: 10),
-
             TabBar(
               controller: _tabController,
               tabs: [
@@ -161,12 +160,14 @@ class _UserProfileState extends State<UserProfile>
                 ),
               ],
             ),
-            
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: [
-
+                  MyTripsScreen(),
+                  // First tab: My Trips
+                  Center(child: Text("Bookmarks will go here")),
+                  // Second tab placeholder
                 ],
               ),
             ),
