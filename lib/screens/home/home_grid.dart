@@ -1,59 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/screens/home/trip_template_view.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class HomeGrid extends StatelessWidget {
-  final List<Map<String, String>> tripDetails = [
-    {
-      'title': 'Trip Template 1',
-      'image': '',
-      'location': 'New York',
-    },
-    {
-      'title': 'Trip Template 2',
-      'image': '',
-      'location': 'Los Angeles',
-    },
-    {
-      'title': 'Trip Template 3',
-      'image': '',
-      'location': 'Paris',
-    },
-    {
-      'title': 'Trip Template 4',
-      'image': '',
-      'location': 'Tokyo',
-    },
-    {
-      'title': 'Trip Template 5',
-      'image': '',
-      'location': 'London',
-    },
-    {
-      'title': 'Trip Template 6',
-      'image': '',
-      'location': 'London',
-    },
-    {
-      'title': 'Trip Template 7',
-      'image': '',
-      'location': 'London',
-    },
-    {
-      'title': 'Trip Template 8',
-      'image': '',
-      'location': 'London',
-    },
-  ];
+class HomeGrid extends StatefulWidget {
+  @override
+  _HomeGridState createState() => _HomeGridState();
+}
+
+class _HomeGridState extends State<HomeGrid> {
+  bool isLoading = true;
+  Map<String, List<Map<String, String>>> categorizedTrips = {};
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTripTemplates();
+  }
+
+  // Mapping function for trip types
+  String mapTripType(String? originalType) {
+    switch (originalType) {
+      case 'Historical':
+      case 'Cultural':
+        return 'Historical and Cultural';
+      case 'Family':
+      case 'Friends':
+        return 'Family Friendly';
+      default:
+        return originalType ?? 'Other';
+    }
+  }
+
+  Future<void> fetchTripTemplates() async {
+    try {
+      final response = await Supabase.instance.client
+          .from('Template')
+          .select('template_id, trip_id, Trip(trip_name, cover_photo_url, city_location, trip_type)')
+          .eq('isPublic', true);
+
+      final Map<String, List<Map<String, String>>> groupedData = {};
+
+      for (final item in response as List) {
+        final trip = item['Trip'];
+        final type = mapTripType(trip['trip_type'] as String?);
+
+        final tripData = {
+          'title': (trip['trip_name'] ?? '').toString(),
+          'image': (trip['cover_photo_url'] ?? '').toString(),
+          'location': (trip['city_location'] ?? '').toString(),
+        };
+
+        if (!groupedData.containsKey(type)) {
+          groupedData[type] = [];
+        }
+
+        groupedData[type]!.add(tripData);
+      }
+
+      setState(() {
+        categorizedTrips = groupedData;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching templates: $e');
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               "Discover your next \ndestination",
               style: TextStyle(
@@ -65,17 +91,13 @@ class HomeGrid extends StatelessWidget {
               ),
             ),
           ),
-          HomeGridSection(
-              Categorytitle: 'Trending Now', tripDetails: tripDetails),
-          HomeGridSection(
-              Categorytitle: 'Recommended For You', tripDetails: tripDetails),
-          HomeGridSection(
-              Categorytitle: 'Adventurous', tripDetails: tripDetails),
-          HomeGridSection(Categorytitle: 'Popular', tripDetails: tripDetails),
-          HomeGridSection(
-              Categorytitle: 'Relaxation', tripDetails: tripDetails),
-          HomeGridSection(
-              Categorytitle: 'Family Friendly', tripDetails: tripDetails),
+          const SizedBox(height: 10),
+          ...categorizedTrips.entries.map((entry) {
+            return HomeGridSection(
+              Categorytitle: entry.key,
+              tripDetails: entry.value,
+            );
+          }).toList(),
         ],
       ),
     );
@@ -86,56 +108,57 @@ class HomeGridSection extends StatelessWidget {
   final String Categorytitle;
   final List<Map<String, String>> tripDetails;
 
-  HomeGridSection({required this.Categorytitle, required this.tripDetails});
+  const HomeGridSection({
+    required this.Categorytitle,
+    required this.tripDetails,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             Categorytitle,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Container(
+        const SizedBox(height: 10),
+        SizedBox(
           height: 370,
           child: GridView.builder(
             scrollDirection: Axis.horizontal,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
               childAspectRatio: 1.35,
               mainAxisSpacing: 10,
             ),
             itemCount: tripDetails.length,
             itemBuilder: (context, index) {
-              final trip_template = tripDetails[index];
+              final trip = tripDetails[index];
 
-              // Padding for first and last items
               double leftPadding = index == 0 ? 20.0 : 0.0;
               double rightPadding =
-                  index == tripDetails.length - 1 ? 20.0 : 0.0;
+              index == tripDetails.length - 1 ? 20.0 : 0.0;
 
               return Padding(
-                padding:
-                    EdgeInsets.only(left: leftPadding, right: rightPadding),
+                padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => TripTemplateView(
-                          title: trip_template['title']!,
-                          location: trip_template['location']!,
-                          image: trip_template['image']!,
+                          title: trip['title']!,
+                          location: trip['location']!,
+                          image: trip['image']!,
                         ),
                       ),
                     );
@@ -148,30 +171,31 @@ class HomeGridSection extends StatelessWidget {
                     ),
                     child: Stack(
                       children: [
-                        trip_template['image'] != ''
+                        trip['image'] != ''
                             ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  trip_template['image']!,
-                                  height: 370,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            trip['image']!,
+                            height: 370,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        )
                             : Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color.fromRGBO(111, 111, 111, 1),
-                                ),
-                                height: 370,
-                                width: double.infinity,
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  "[No Image]",
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(50, 50, 50, 1)),
-                                ),
-                              ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromRGBO(111, 111, 111, 1),
+                          ),
+                          height: 370,
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          child: const Text(
+                            "[No Image]",
+                            style: TextStyle(
+                              color: Color.fromRGBO(50, 50, 50, 1),
+                            ),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 0, 30),
                           child: Column(
@@ -179,18 +203,18 @@ class HomeGridSection extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                trip_template['title']!,
-                                style: TextStyle(
+                                trip['title']!,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
-                                trip_template['location']!,
-                                style: TextStyle(
+                                trip['location']!,
+                                style: const TextStyle(
                                   color: Colors.white70,
                                   fontSize: 12,
                                 ),

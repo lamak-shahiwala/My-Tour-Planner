@@ -16,36 +16,68 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
+  Future<bool> getUserName() async {
+    final SupabaseClient _supabase = Supabase.instance.client;
+
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return false;
+
+    final data = await _supabase
+        .from('Profile')
+        .select('username')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    if (data != null && data['username'] != null && data['username'].toString().isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      // Listen to auth state changes
-        stream: Supabase.instance.client.auth.onAuthStateChange,
-      // Build  Screens based on auth state changes
-        builder: (context, snapshot){
-          // loading...
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return Scaffold(
-              body: Center(child: CircularProgressIndicator(),),
-            );
-          }
-
-          // check if there's valid session currently
-          final session = snapshot.hasData? snapshot.data!.session : null;
-          final user = session?.user;
-          final createdAt = DateTime.tryParse(user?.createdAt ?? '');
-          final now = DateTime.now();
-          final isNew = createdAt != null && now.difference(createdAt).inMinutes < 5;
-          // instead of isNew check whether the username is there or not!!
-          if(isNew){
-            return NewUserDetails();
-          }
-          else if(session != null){
-            return Home();
-          }else{
-            return expand_welcome();
-          }
+    return StreamBuilder<AuthState>(
+      stream: Supabase.instance.client.auth.onAuthStateChange,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
+
+        final session = snapshot.data?.session;
+
+        // If not authenticated, go to welcome screen
+        if (session == null) {
+          return expand_welcome();
+        }
+
+        // If authenticated, check if user is new
+        return FutureBuilder<bool>(
+          future: getUserName(),
+          builder: (context, asyncSnapshot) {
+            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            if (asyncSnapshot.hasError) {
+              return Scaffold(
+                body: Center(child: Text("Error: ${asyncSnapshot.error}")),
+              );
+            }
+
+            final isNew = asyncSnapshot.data == false;
+
+            if (isNew) {
+              return NewUserDetails();
+            } else {
+              return Home();
+            }
+          },
+        );
+      },
     );
   }
 }

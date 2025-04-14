@@ -21,12 +21,13 @@ class _UserProfileState extends State<UserProfile>
     with SingleTickerProviderStateMixin {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  late String UserName;
+  String userName = "";
   late TabController _tabController;
 
   final authService = AuthService();
 
   late String Name;
+  late String Email;
 
   String? getFullName() {
     final session = _supabase.auth.currentSession;
@@ -34,10 +35,36 @@ class _UserProfileState extends State<UserProfile>
     return session.user.userMetadata?['full_name'];
   }
 
-  String? getUserName() {
+  String? getEmail() {
     final session = _supabase.auth.currentSession;
     if (session == null) return null;
     return session.user.email;
+  }
+
+  String? getUserEmail() {
+    final session = _supabase.auth.currentSession;
+    if (session == null) return null;
+    return session.user.email;
+  }
+
+  Future<String?> getUserName() async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return null;
+
+    final data = await _supabase
+        .from('Profile')
+        .select('username')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    return data?['username'] as String?;
+  }
+
+  void _loadUserName() async {
+    final username = await getUserName();
+    setState(() {
+      userName = username ?? "";
+    });
   }
 
   void logout() async {
@@ -51,7 +78,8 @@ class _UserProfileState extends State<UserProfile>
   void initState() {
     super.initState();
     Name = getFullName() ?? "Guest";
-    UserName = getUserName() ?? "";
+    Email = getUserEmail() ?? "";
+    _loadUserName();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {}); // Rebuild UI when tab index changes
@@ -92,20 +120,38 @@ class _UserProfileState extends State<UserProfile>
                 child: ListView(
                   children: [
                     ListTile(
-                        title: Text(Name,
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 5,),
+                        Text(Name,
                             style:
-                                TextStyle(color: Colors.white, fontSize: 20))),
-                    active_button_white(
-                      onPress: () {},
-                      buttonLabel: Text("Edit Profile"),
-                      circularBorderRadius: 50,
-                    )
+                                TextStyle(color: Colors.white, fontSize: 20)),
+                        SizedBox(height: 2,),
+                        Text(Email,
+                            style: TextStyle(color: Colors.white, fontSize: 14)),
+                        SizedBox(height: 10,),
+                        active_button_white(
+                          onPress: () {},
+                          buttonLabel: Text("Edit Profile"),
+                          circularBorderRadius: 50,
+                          horizontalMargin: 0,
+                          verticalPadding: 10,
+                          horizontalPadding: 15,
+                          width: 120,
+                        ),
+                      ],
+                    )),
                   ],
                 ),
               ),
               ListTile(
                   leading: Icon(Icons.toggle_on_outlined),
                   title: Text('Theme'),
+                  onTap: () {}),
+              ListTile(
+                  leading: Icon(Icons.room_preferences_sharp),
+                  title: Text('Edit Preferences'),
                   onTap: () {}),
               ListTile(
                   leading: Icon(Icons.settings),
@@ -138,7 +184,7 @@ class _UserProfileState extends State<UserProfile>
                   SizedBox(
                     height: 5,
                   ),
-                  Text(UserName, style: sub_sub_heading),
+                  Text(userName, style: sub_sub_heading),
                 ],
               ),
             ),

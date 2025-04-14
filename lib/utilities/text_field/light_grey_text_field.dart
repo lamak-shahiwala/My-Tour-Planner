@@ -20,7 +20,7 @@ class LightGreyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const textFieldStyle = TextStyle(
-      fontSize: 12,
+      fontSize: 16,
       fontFamily: "Sofia_Sans",
       fontWeight: FontWeight.w500,
     );

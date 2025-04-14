@@ -31,6 +31,37 @@ class _UserRegistrationState extends State<UserRegistration> {
 
   bool isChecked = false;
 
+  final List<String> allowedEmailDomains = [
+    // Popular Providers
+    'gmail.com',
+    'outlook.com',
+    'hotmail.com',
+    'live.com',
+    'yahoo.com',
+    'icloud.com',
+    'me.com',
+    'aol.com',
+
+    // Privacy-Focused
+    'protonmail.com',
+    'tutanota.com',
+    'mailfence.com',
+    'posteo.de',
+
+    // Other Free Providers
+    'zoho.com',
+    'gmx.com',
+    'gmx.net',
+    'mail.com',
+    'yandex.com',
+    'yandex.ru',
+  ];
+
+  bool isValidEmailDomain(String email) {
+    final domain = email.split('@').last.toLowerCase();
+    return allowedEmailDomains.contains(domain);
+  }
+
   void signUp() async {
     bool hasInternet = await getInternetStatus();
 
@@ -38,22 +69,31 @@ class _UserRegistrationState extends State<UserRegistration> {
     final password = password_controller.text;
     final name = name_controller.text;
 
-    try{
-      await authService.signUpWithEmailPassword(email, password, name);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthGate()));
-    } catch (e){
-      if(mounted){
-        if (!hasInternet) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Internet Connection not Found."),
-            duration: Duration(seconds: 1),
-          ));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Error: Invalid Credentials : + $e"),
-            duration: Duration(seconds: 1),
-          ));
-        } }
+    if (isValidEmailDomain(email)) {
+      try {
+        await authService.signUpWithEmailPassword(email, password, name);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => AuthGate()));
+      } catch (e) {
+        if (mounted) {
+          if (!hasInternet) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Internet Connection not Found."),
+              duration: Duration(seconds: 1),
+            ));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Error: Invalid Credentials : + $e"),
+              duration: Duration(seconds: 1),
+            ));
+          }
+        }
+      }
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Invalid Email"),
+          duration: Duration(seconds: 1),
+      ));
     }
   }
 

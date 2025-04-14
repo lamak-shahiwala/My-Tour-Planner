@@ -27,19 +27,20 @@ class ProfileImagePicker extends StatelessWidget {
         final userId = supabase.auth.currentUser!.id;
         final imagePath = "$userId/profile";
 
-          await supabase.storage.from("profiles").uploadBinary(
-            imagePath,
-            imageBytes,
-            fileOptions: FileOptions(
-              upsert: true,
-              contentType: "image/$imageExtension",),
-          );
-          String imageUrl =
-          supabase.storage.from("profiles").getPublicUrl(imagePath);
-          imageUrl = Uri.parse(imageUrl).replace(queryParameters: {
-            't': DateTime.now().millisecondsSinceEpoch.toString()
-          }).toString();
-          onUpload(imageUrl);
+        await supabase.storage.from("profiles").uploadBinary(
+              imagePath,
+              imageBytes,
+              fileOptions: FileOptions(
+                upsert: true,
+                contentType: "image/$imageExtension",
+              ),
+            );
+        String imageUrl =
+            supabase.storage.from("profiles").getPublicUrl(imagePath);
+        imageUrl = Uri.parse(imageUrl).replace(queryParameters: {
+          't': DateTime.now().millisecondsSinceEpoch.toString()
+        }).toString();
+        onUpload(imageUrl);
       },
       child: Column(
         children: [
