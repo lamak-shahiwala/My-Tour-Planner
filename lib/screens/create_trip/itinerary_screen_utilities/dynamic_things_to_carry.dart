@@ -3,11 +3,8 @@ import 'package:my_tour_planner/backend/classes.dart';
 import 'package:my_tour_planner/backend/db_methods.dart';
 import 'package:my_tour_planner/screens/create_trip/edit_itinerary.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:my_tour_planner/backend/classes.dart';
-
 import '../../../utilities/button/save_next_button.dart';
 import '../../../utilities/text/text_styles.dart';
-import '../testing_edit_itinerary.dart';
 
 class DynamicThingsToCarry extends StatefulWidget {
   @override
@@ -127,8 +124,7 @@ class _DynamicThingsToCarryState extends State<DynamicThingsToCarry> {
                     }
 
                     final carry_item = Things_Carry(
-                        trip_id: trip_Id,
-                        carry_item: things_to_carry);
+                        trip_id: trip_Id, carry_item: things_to_carry);
 
                     await things_carry_db.addCarryItem(carry_item);
 
@@ -136,7 +132,7 @@ class _DynamicThingsToCarryState extends State<DynamicThingsToCarry> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            TestingEditItineraryScreen(trip_id: trip_Id!),
+                            EditItineraryScreen(trip_id: trip_Id!),
                       ),
                     );
                   },

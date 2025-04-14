@@ -20,10 +20,10 @@ class TripTemplateView extends StatefulWidget {
 }
 
 class _TripTemplateViewState extends State<TripTemplateView> {
-
   double _sheetExtent = 0.4;
   String budgetRange = "₹30,000 - ₹50,000";
-  String templateDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+  String templateDescription =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
       "Tortor vulputate enim netus ac. Lectus tristique accumsan, "
       "cras mauris est, lorem nec feugiat. Sed rhoncus viverra "
       "mattis pellentesque feugiat.";
@@ -127,9 +127,11 @@ class _TripTemplateViewState extends State<TripTemplateView> {
                           children: [
                             const Text("Trip Budget",
                                 style: TextStyle(
-                                    fontSize: 14, color: Colors.black54, fontFamily: "Sofia_Sans")),
+                                    fontSize: 14,
+                                    color: Colors.black54,
+                                    fontFamily: "Sofia_Sans")),
                             IconButton(
-                              onPressed: (){},
+                              onPressed: () {},
                               icon: Icon(Icons.bookmark_border,
                                   color: Color.fromRGBO(0, 157, 192, 1)),
                             ),
