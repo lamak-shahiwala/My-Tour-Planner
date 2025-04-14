@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TripTemplateView extends StatefulWidget {
   const TripTemplateView({
@@ -9,8 +10,12 @@ class TripTemplateView extends StatefulWidget {
     required this.title,
     required this.image,
     required this.location,
+    required this.tripID,
+    required this.templateID,
   });
 
+  final tripID;
+  final templateID;
   final String title;
   final String image;
   final String location;
@@ -21,22 +26,61 @@ class TripTemplateView extends StatefulWidget {
 
 class _TripTemplateViewState extends State<TripTemplateView> {
   double _sheetExtent = 0.4;
-  String budgetRange = "₹30,000 - ₹50,000";
-  String templateDescription =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-      "Tortor vulputate enim netus ac. Lectus tristique accumsan, "
-      "cras mauris est, lorem nec feugiat. Sed rhoncus viverra "
-      "mattis pellentesque feugiat.";
+  String budgetRange = "";
+  String templateDescription = "";
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTripDetails();
+  }
+
+  Future<void> _fetchTripDetails() async {
+    try {
+      final supabase = Supabase.instance.client;
+
+      // Fetch Template Description
+      final templateResponse = await supabase
+          .from('Template')
+          .select('template_description')
+          .eq('template_id', widget.templateID)
+          .single();
+
+      // Fetch Trip Budget
+      final tripResponse = await supabase
+          .from('Trip')
+          .select('trip_budget')
+          .eq('trip_id', widget.tripID)
+          .single();
+
+      setState(() {
+        templateDescription = templateResponse['template_description'] ?? '';
+        budgetRange = tripResponse['trip_budget'] ?? 'Budget not available';
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching trip details: $e');
+      setState(() {
+        templateDescription = "Unable to load description.";
+        budgetRange = "Unavailable";
+        isLoading = false;
+      });
+    }
+  }
+
+  double? lerpDouble(double a, double b, double t) {
+    return a + (b - a) * t.clamp(0.0, 1.0);
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Dynamically calculate top offset for title based on sheet position
-    final double minTop = screenHeight * 0.4 + 50; // at initial extent
-    final double maxTop = screenHeight * 0.15; // how far up it can go
+    final double minTop = screenHeight * 0.4 + 50;
+    final double maxTop = screenHeight * 0.15;
     final double topOffset =
-        lerpDouble(minTop, maxTop, (_sheetExtent - 0.4) / (0.85 - 0.4))!;
+    lerpDouble(minTop, maxTop, (_sheetExtent - 0.4) / (0.85 - 0.4))!;
 
     return Scaffold(
       body: Stack(
@@ -46,12 +90,12 @@ class _TripTemplateViewState extends State<TripTemplateView> {
             height: 500,
             width: double.infinity,
             child: widget.image.isNotEmpty
-                ? Image.network(widget.image, fit: BoxFit.cover)
+                ? Image.asset(widget.image, fit: BoxFit.cover)
                 : Container(
-                    color: const Color.fromRGBO(111, 111, 111, 1),
-                    alignment: Alignment.center,
-                    child: const Text("No Image"),
-                  ),
+              color: const Color.fromRGBO(111, 111, 111, 1),
+              alignment: Alignment.center,
+              child: const Text("No Image"),
+            ),
           ),
 
           // Back Button
@@ -61,7 +105,7 @@ class _TripTemplateViewState extends State<TripTemplateView> {
             child: ArrowBackButton(),
           ),
 
-          // Title and Location (scroll upward with the sheet)
+          // Title and Location
           Positioned(
             left: 30,
             top: topOffset,
@@ -97,7 +141,7 @@ class _TripTemplateViewState extends State<TripTemplateView> {
             ),
           ),
 
-          // Scroll Sheet with NotificationListener
+          // Scroll Sheet
           NotificationListener<DraggableScrollableNotification>(
             onNotification: (notification) {
               setState(() {
@@ -115,15 +159,18 @@ class _TripTemplateViewState extends State<TripTemplateView> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(24)),
+                    BorderRadius.vertical(top: Radius.circular(24)),
                   ),
-                  child: SingleChildScrollView(
+                  child: isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : SingleChildScrollView(
                     controller: scrollController,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                           children: [
                             const Text("Trip Budget",
                                 style: TextStyle(
@@ -132,15 +179,16 @@ class _TripTemplateViewState extends State<TripTemplateView> {
                                     fontFamily: "Sofia_Sans")),
                             IconButton(
                               onPressed: () {},
-                              icon: Icon(Icons.bookmark_border,
-                                  color: Color.fromRGBO(0, 157, 192, 1)),
+                              icon: const Icon(Icons.bookmark_border,
+                                  color:
+                                  Color.fromRGBO(0, 157, 192, 1)),
                             ),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Text(
                           budgetRange,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color.fromRGBO(53, 50, 66, 1),
                             fontSize: 20,
                             fontFamily: 'Sofia_Sans',
@@ -163,21 +211,21 @@ class _TripTemplateViewState extends State<TripTemplateView> {
 
           // Fixed Bottom Button
           Positioned(
-              left: 20,
-              right: 20,
-              bottom: 20,
-              child: active_button_blue(
-                  onPress: () {},
-                  buttonLabel: Text(
-                    "Get Trip Itinerary",
-                    style: active_button_text_blue,
-                  ))),
+            left: 20,
+            right: 20,
+            bottom: 20,
+            child: active_button_blue(
+              onPress: () {},
+              buttonLabel: Text(
+                "Get Trip Itinerary",
+                style: active_button_text_blue,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
-
-  double? lerpDouble(double a, double b, double t) {
-    return a + (b - a) * t.clamp(0.0, 1.0);
-  }
 }
+
+
