@@ -28,13 +28,12 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
   late final budgetRange;
   bool isLoading = true;
 
-
-  String templateDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+  String templateDescription =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
       "Tortor vulputate enim netus ac. Lectus tristique accumsan, "
       "cras mauris est, lorem nec feugiat. Sed rhoncus viverra "
       "mattis pellentesque feugiat.";
 
-  @override
   @override
   void initState() {
     // TODO: implement initState
@@ -63,6 +62,18 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
     }
   }
 
+  Future<void> _deleteTrip(final tripId) async {
+    try {
+      final response = await Supabase.instance.client
+          .from('Trip')
+          .delete()
+          .eq('trip_id', tripId);
+
+      print("Trip deleted successfully");
+    } catch (e) {
+      print("Error deleting trip: $e");
+    }
+  }
 
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -166,10 +177,62 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
                                     color: Colors.black54,
                                     fontFamily: "Sofia_Sans")),
                             IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.bookmark_border,
-                                  color: Color.fromRGBO(0, 157, 192, 1)),
-                            ),
+                              onPressed: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Delete Trip"),
+                                    content: const Text(
+                                        "Are you sure you want to delete this trip? This action cannot be undone."),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, false),
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, true),
+                                        child: const Text(
+                                          "Delete",
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  178, 60, 50, 1)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+
+                                if (confirm == true) {
+                                  try {
+                                    // Delete the trip (and related records if needed)
+                                    await Supabase.instance.client
+                                        .from('Trip')
+                                        .delete()
+                                        .eq('trip_id', widget.tripID);
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content:
+                                            Text("Trip deleted successfully"),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    print("Delete error: $e");
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Failed to delete trip"),
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Color.fromRGBO(178, 60, 50, 1),
+                              ),
+                            )
                           ],
                         ),
                         const SizedBox(height: 4),
@@ -184,7 +247,6 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-
                         const SizedBox(height: 20),
                         Text(
                           templateDescription,
