@@ -6,7 +6,7 @@ class TripDatabase {
 
   // Create
   Future createTrip(Trip newTrip) async {
-    await database.insert(newTrip.toMap());
+    await database.upsert(newTrip.toMap());
   }
 
   // Read

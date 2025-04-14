@@ -1,12 +1,9 @@
-// testing is completed , but only save button is remaining
+// // testing is completed , but only save button is remaining
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_tour_planner/screens/home/home.dart';
-import 'package:my_tour_planner/screens/profile/user_profile.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../profile/my_trip_screens/my_trips.dart';
 
 class ItineraryDetail {
   int? itinerary_id;
@@ -35,17 +32,17 @@ class ItineraryDetail {
   }
 }
 
-class TestingEditItineraryScreen extends StatefulWidget {
+class MyTripEditItineraryScreen extends StatefulWidget {
   final trip_id;
 
-  const TestingEditItineraryScreen({super.key, required this.trip_id});
+  const MyTripEditItineraryScreen({super.key, required this.trip_id});
 
   @override
-  State<TestingEditItineraryScreen> createState() =>
-      _EditItineraryScreenState();
+  State<MyTripEditItineraryScreen> createState() =>
+      _MyTripEditItineraryScreenState ();
 }
 
-class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
+class _MyTripEditItineraryScreenState extends State<MyTripEditItineraryScreen> {
   final List<DateTime> dateList = [];
   final List<List<ItineraryDetail>> itineraryPerDate = [];
   bool isEditMode = false;
@@ -91,9 +88,9 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
       for (var d in day['ItineraryDetails']) {
         final time = d['preferred_time'] != null
             ? TimeOfDay(
-                hour: int.parse(d['preferred_time'].split(":")[0]),
-                minute: int.parse(d['preferred_time'].split(":")[1]),
-              )
+          hour: int.parse(d['preferred_time'].split(":")[0]),
+          minute: int.parse(d['preferred_time'].split(":")[1]),
+        )
             : null;
 
         details.add(ItineraryDetail(
@@ -137,7 +134,7 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
       await Supabase.instance.client
           .from('Trip')
           .update({'trip_name': _tripNameController.text.trim()}).eq(
-              'trip_id', widget.trip_id);
+          'trip_id', widget.trip_id);
       setState(() {
         tripName = _tripNameController.text.trim();
       });
@@ -164,11 +161,7 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
     );
 
     //  Navigate back to Home
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => UserProfile()),
-          (route) => false,
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   Widget _tripTemplate(int index) {
@@ -259,31 +252,31 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
                               : '',
                         ),
                         decoration:
-                            const InputDecoration(labelText: 'Preferred Time'),
+                        const InputDecoration(labelText: 'Preferred Time'),
                         onTap: isEditMode
                             ? () async {
-                                final picked = await showTimePicker(
-                                  context: context,
-                                  initialTime: detail.time ?? TimeOfDay.now(),
-                                );
-                                if (picked != null) {
-                                  setState(() => detail.time = picked);
-                                }
-                              }
+                          final picked = await showTimePicker(
+                            context: context,
+                            initialTime: detail.time ?? TimeOfDay.now(),
+                          );
+                          if (picked != null) {
+                            setState(() => detail.time = picked);
+                          }
+                        }
                             : null,
                       ),
                       TextFormField(
                         initialValue: detail.name,
                         readOnly: !isEditMode,
                         decoration:
-                            const InputDecoration(labelText: 'Detail Name'),
+                        const InputDecoration(labelText: 'Detail Name'),
                         onChanged: (val) => detail.name = val,
                       ),
                       TextFormField(
                         initialValue: detail.note,
                         readOnly: !isEditMode,
                         decoration:
-                            const InputDecoration(labelText: 'Custom Notes'),
+                        const InputDecoration(labelText: 'Custom Notes'),
                         onChanged: (val) => detail.note = val,
                       ),
                     ],
@@ -299,8 +292,8 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
                       : null;
 
                   setState(() => itineraryPerDate[index].add(
-                        ItineraryDetail(itinerary_id: itineraryId),
-                      ));
+                    ItineraryDetail(itinerary_id: itineraryId),
+                  ));
                 },
                 icon: const Icon(Icons.add),
                 label: const Text("Add Detail"),
@@ -361,7 +354,7 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
                       content: TextField(
                         autofocus: true,
                         decoration:
-                            const InputDecoration(hintText: "Enter item name"),
+                        const InputDecoration(hintText: "Enter item name"),
                         onChanged: (value) {
                           inputText = value;
                         },
@@ -391,10 +384,10 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
 
                     final currentData = currentResponse as Map<String, dynamic>;
                     final List<dynamic> currentItems =
-                        currentData['carry_item'] != null
-                            ? jsonDecode(currentData['carry_item'])
-                                as List<dynamic>
-                            : [];
+                    currentData['carry_item'] != null
+                        ? jsonDecode(currentData['carry_item'])
+                    as List<dynamic>
+                        : [];
 
                     // Add the new item
                     currentItems.add(newItem.trim());
@@ -403,7 +396,7 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
                     await Supabase.instance.client
                         .from('things_to_carry')
                         .update({'carry_item': jsonEncode(currentItems)}).eq(
-                            'trip_id', widget.trip_id);
+                        'trip_id', widget.trip_id);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Item added!")),
@@ -434,20 +427,20 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
         title: Center(
           child: isEditMode
               ? SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: _tripNameController,
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                      labelText: "Enter Trip Name : ",
-                      border: InputBorder.none,
-                    ),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
+            width: 200,
+            child: TextField(
+              controller: _tripNameController,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                labelText: "Enter Trip Name : ",
+                border: InputBorder.none,
+              ),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
               : Text(tripName),
         ),
       ),
@@ -477,3 +470,148 @@ class _EditItineraryScreenState extends State<TestingEditItineraryScreen> {
     );
   }
 }
+
+// GPT Code
+// edit_trip_itinerary.dart
+// import 'package:flutter/material.dart';
+// import 'package:supabase_flutter/supabase_flutter.dart';
+//
+// class EditTripItineraryScreen extends StatefulWidget {
+//   final tripId;
+//
+//   const EditTripItineraryScreen({super.key, required this.tripId});
+//
+//   @override
+//   State<EditTripItineraryScreen> createState() =>
+//       _EditTripItineraryScreenState();
+// }
+//
+// class _EditTripItineraryScreenState extends State<EditTripItineraryScreen> {
+//   final SupabaseClient _supabase = Supabase.instance.client;
+//
+//   List<Map<String, dynamic>> itineraryItems = [];
+//   bool isLoading = true;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     fetchItinerary();
+//   }
+//
+//   Future<void> fetchItinerary() async {
+//     final response = await _supabase
+//         .from('Itinerary')
+//         .select()
+//         .eq('trip_id', widget.tripId)
+//         .order('day', ascending: true);
+//
+//     setState(() {
+//       itineraryItems = List<Map<String, dynamic>>.from(response);
+//       isLoading = false;
+//     });
+//   }
+//
+//   Future<void> saveItinerary() async {
+//     // Remove old itinerary
+//     await _supabase.from('Itinerary').delete().eq('trip_id', widget.tripId);
+//
+//     // Insert updated itinerary
+//     for (final item in itineraryItems) {
+//       await _supabase.from('Itinerary').insert({
+//         'trip_id': widget.tripId,
+//         'day': item['day'],
+//         'time': item['time'],
+//         'note': item['note'],
+//       });
+//     }
+//
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(content: Text('Itinerary updated successfully')),
+//     );
+//     Navigator.pop(context);
+//   }
+//
+//   void addNewItem() {
+//     setState(() {
+//       itineraryItems.add({"day": "", "time": "", "note": ""});
+//     });
+//   }
+//
+//   void updateItem(int index, String key, String value) {
+//     setState(() {
+//       itineraryItems[index][key] = value;
+//     });
+//   }
+//
+//   void deleteItem(int index) {
+//     setState(() {
+//       itineraryItems.removeAt(index);
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text("Edit Trip Itinerary")),
+//       body: isLoading
+//           ? const Center(child: CircularProgressIndicator())
+//           : Column(
+//               children: [
+//                 Expanded(
+//                   child: ListView.builder(
+//                     itemCount: itineraryItems.length,
+//                     itemBuilder: (context, index) {
+//                       final item = itineraryItems[index];
+//                       return ListTile(
+//                         title: TextFormField(
+//                           initialValue: item['note'],
+//                           decoration: const InputDecoration(labelText: 'Note'),
+//                           onChanged: (value) =>
+//                               updateItem(index, 'note', value),
+//                         ),
+//                         subtitle: Row(
+//                           children: [
+//                             Expanded(
+//                               child: TextFormField(
+//                                 initialValue: item['day'],
+//                                 decoration:
+//                                     const InputDecoration(labelText: 'Day'),
+//                                 onChanged: (value) =>
+//                                     updateItem(index, 'day', value),
+//                               ),
+//                             ),
+//                             const SizedBox(width: 10),
+//                             Expanded(
+//                               child: TextFormField(
+//                                 initialValue: item['time'],
+//                                 decoration:
+//                                     const InputDecoration(labelText: 'Time'),
+//                                 onChanged: (value) =>
+//                                     updateItem(index, 'time', value),
+//                               ),
+//                             ),
+//                             IconButton(
+//                               onPressed: () => deleteItem(index),
+//                               icon: const Icon(Icons.delete, color: Colors.red),
+//                             ),
+//                           ],
+//                         ),
+//                       );
+//                     },
+//                   ),
+//                 ),
+//                 ElevatedButton(
+//                   onPressed: addNewItem,
+//                   child: const Text("Add Item"),
+//                 ),
+//                 const SizedBox(height: 10),
+//                 ElevatedButton(
+//                   onPressed: saveItinerary,
+//                   child: const Text("Save Itinerary"),
+//                 ),
+//                 const SizedBox(height: 20),
+//               ],
+//             ),
+//     );
+//   }
+// }
