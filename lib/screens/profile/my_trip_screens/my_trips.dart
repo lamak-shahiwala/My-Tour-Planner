@@ -38,6 +38,10 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (userTrips.isEmpty) {
+      return const Center(child: Text("No Trips Created yet."));
+    }
+
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : GridView.builder(
@@ -52,7 +56,7 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
             itemBuilder: (context, index) {
               final trip = userTrips[index];
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -61,6 +65,7 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                         image: trip['cover_photo_url'] ?? '',
                         location: trip['city_location'] ?? 'Unknown',
                         tripID: trip['trip_id'],
+                        // templateID: templateId,
                       ),
                     ),
                   );

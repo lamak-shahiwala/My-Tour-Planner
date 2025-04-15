@@ -1,4 +1,3 @@
-// testing is completed , but only save button is remaining
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -112,7 +111,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
   Future<void> _fetchThingsToCarry() async {
     try {
       final response = await Supabase.instance.client
-          .from('ThingsToCarry')
+          .from('things_to_carry')
           .select('*')
           .eq('trip_id', widget.trip_id);
 

@@ -27,19 +27,37 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
   double _sheetExtent = 0.4;
   late final budgetRange;
   bool isLoading = true;
-
-  String templateDescription =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-      "Tortor vulputate enim netus ac. Lectus tristique accumsan, "
-      "cras mauris est, lorem nec feugiat. Sed rhoncus viverra "
-      "mattis pellentesque feugiat.";
+  // late String templateDescription;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _fetchBudget(widget.tripID);
+    // _fetchTemplateDescription(widget.tripID);
   }
+
+  // Future<void> _fetchTemplateDescription(final tripId) async {
+  //   try {
+  //     final response = await Supabase.instance.client
+  //         .from('Template')
+  //         .select('template_description')
+  //         .eq('trip_id', tripId)
+  //         .single();
+  //
+  //     setState(() {
+  //       templateDescription =
+  //           response['template_description'] ?? 'No Description';
+  //       isLoading = false;
+  //     });
+  //   } catch (e) {
+  //     print("Error fetching Template Description: $e");
+  //     setState(() {
+  //       templateDescription = "Error loading description ";
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
 
   Future<void> _fetchBudget(final tripId) async {
     try {
@@ -218,6 +236,8 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
                                             Text("Trip deleted successfully"),
                                       ),
                                     );
+
+                                    setState(() {});
                                   } catch (e) {
                                     print("Delete error: $e");
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -247,12 +267,12 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                        const SizedBox(height: 20),
-                        Text(
-                          templateDescription,
-                          style: lightGrey_paragraph_text,
-                        ),
-                        const SizedBox(height: 40),
+                      //   const SizedBox(height: 20),
+                      //   Text(
+                      //     templateDescription,
+                      //     style: lightGrey_paragraph_text,
+                      //   ),
+                      //   const SizedBox(height: 40),
                       ],
                     ),
                   ),
