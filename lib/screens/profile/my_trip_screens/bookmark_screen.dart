@@ -89,30 +89,33 @@ class _BookmarkTabState extends State<BookmarkTab> {
             );
           },
           child: Container(
+            height: 500,
+            width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Stack(
+              fit: StackFit.expand,
               children: [
                 template['image'] != ''
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          template['image'],
-                          width: double.infinity,
-                          height: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color.fromRGBO(111, 111, 111, 1),
-                        ),
-                        alignment: Alignment.center,
-                        child: const Text("No Image"),
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        template['image'],
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
                       ),
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color.fromRGBO(111, 111, 111, 1),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text("No Image"),
+                    ),
                 Positioned(
                   bottom: 10,
                   left: 10,

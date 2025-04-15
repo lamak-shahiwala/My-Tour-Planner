@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/services/fetch_profile_photo.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/utilities/search_bar/grey_search_bar.dart';
 import 'home_grid.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
