@@ -71,13 +71,14 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                   );
                 },
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(10),
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
                       trip['cover_photo_url'] != null &&
                               trip['cover_photo_url'] != ''
-                          ? Image.network(
+                          ? trip['cover_photo_url'].contains("assets/images/template_covers/")
+                          ? Image.asset(trip['cover_photo_url'], fit: BoxFit.cover) :Image.network(
                               trip['cover_photo_url'],
                               fit: BoxFit.cover,
                             )
@@ -91,7 +92,7 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                           gradient: LinearGradient(
                             colors: [
                               Colors.transparent,
-                              Colors.black.withOpacity(0.6)
+                              Colors.black.withValues(alpha: 0.6)
                             ],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,

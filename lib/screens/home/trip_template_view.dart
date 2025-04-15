@@ -1,13 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../backend/classes.dart';
-import '../../backend/db_methods.dart';
 import '../profile/my_trip_screens/my_trip_template.dart';
 
 class TripTemplateView extends StatefulWidget {
@@ -226,7 +221,7 @@ class _TripTemplateViewState extends State<TripTemplateView> {
         ),
       );
     } catch (e, stack) {
-      print("❌ Error during trip cloning: $e");
+      print("Error during trip cloning: $e");
       print(stack);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Failed to get trip itinerary.")),
@@ -317,14 +312,19 @@ class _TripTemplateViewState extends State<TripTemplateView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Sofia_Sans',
+                Container(
+                  child: Text(
+                    widget.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sofia_Sans',
+                    ),
                   ),
+                  width: 320,
                 ),
                 const SizedBox(height: 4),
                 Row(

@@ -27,6 +27,7 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
   double _sheetExtent = 0.4;
   late final budgetRange;
   bool isLoading = true;
+
   // late String templateDescription;
 
   @override
@@ -110,7 +111,9 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
             height: 500,
             width: double.infinity,
             child: widget.image.isNotEmpty
-                ? Image.network(widget.image, fit: BoxFit.cover)
+                ? widget.image.contains("assets/images/template_covers/")
+                    ? Image.asset(widget.image, fit: BoxFit.cover)
+                    : Image.network(widget.image, fit: BoxFit.cover)
                 : Container(
                     color: const Color.fromRGBO(111, 111, 111, 1),
                     alignment: Alignment.center,
@@ -125,21 +128,25 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
             child: ArrowBackButton(),
           ),
 
-          // Title and Location (scroll upward with the sheet)
           Positioned(
             left: 30,
             top: topOffset,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Sofia_Sans',
+                Container(
+                  child: Text(
+                    widget.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sofia_Sans',
+                    ),
                   ),
+                  width: 320,
                 ),
                 const SizedBox(height: 4),
                 Row(
@@ -267,12 +274,12 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                      //   const SizedBox(height: 20),
-                      //   Text(
-                      //     templateDescription,
-                      //     style: lightGrey_paragraph_text,
-                      //   ),
-                      //   const SizedBox(height: 40),
+                        //   const SizedBox(height: 20),
+                        //   Text(
+                        //     templateDescription,
+                        //     style: lightGrey_paragraph_text,
+                        //   ),
+                        //   const SizedBox(height: 40),
                       ],
                     ),
                   ),
