@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_tour_planner/screens/preferences/trip_type_preference.dart';
+import 'package:my_tour_planner/screens/profile/my_trip_screens/bookmark_screen.dart';
 import 'package:my_tour_planner/screens/profile/my_trip_screens/my_trips.dart';
+import 'package:my_tour_planner/screens/user_details/new_user_details.dart';
 import 'package:my_tour_planner/services/fetch_profile_photo.dart';
 import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/services/auth_gate.dart';
@@ -28,6 +31,11 @@ class _UserProfileState extends State<UserProfile>
 
   late String Name;
   late String Email;
+
+  Future<void> getUserId() async {
+    final user_id = _supabase.auth.currentUser?.id;
+    if (user_id == null) return null;
+  }
 
   String? getFullName() {
     final session = _supabase.auth.currentSession;
@@ -121,18 +129,30 @@ class _UserProfileState extends State<UserProfile>
                   children: [
                     ListTile(
                         title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 5,),
+                        SizedBox(
+                          height: 5,
+                        ),
                         Text(Name,
                             style:
                                 TextStyle(color: Colors.white, fontSize: 20)),
-                        SizedBox(height: 2,),
+                        SizedBox(
+                          height: 2,
+                        ),
                         Text(Email,
-                            style: TextStyle(color: Colors.white, fontSize: 14)),
-                        SizedBox(height: 10,),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 14)),
+                        SizedBox(
+                          height: 10,
+                        ),
                         active_button_white(
-                          onPress: () {},
+                          onPress: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NewUserDetails()));
+                          },
                           buttonLabel: Text("Edit Profile"),
                           circularBorderRadius: 50,
                           horizontalMargin: 0,
@@ -152,7 +172,12 @@ class _UserProfileState extends State<UserProfile>
               ListTile(
                   leading: Icon(Icons.room_preferences_sharp),
                   title: Text('Edit Preferences'),
-                  onTap: () {}),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TripTypePreference()));
+                  }),
               ListTile(
                   leading: Icon(Icons.settings),
                   title: Text('Settings'),
@@ -211,9 +236,9 @@ class _UserProfileState extends State<UserProfile>
                 controller: _tabController,
                 children: [
                   MyTripsScreen(),
-                  // First tab: My Trips
-                  Center(child: Text("Bookmarks will go here")),
-                  // Second tab placeholder
+                  // First tab: My Trips'
+                  BookmarkTab()
+                  // Second tab : Bookmark Tab
                 ],
               ),
             ),
