@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_tour_planner/backend/classes.dart';
@@ -178,22 +176,32 @@ class _NewUserDetailsState extends State<NewUserDetails> {
                     });
 
                     if (!_usernameError && !_dobError && !_genderError) {
-                      // Database
+                      final username = _usernameController.text.trim();
+
+                      final usernameTaken =
+                          await profile_db.doesUsernameExist(username);
+
+                      if (usernameTaken) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('This username is already taken'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+
                       final userId = supabase.auth.currentUser!.id;
                       final formattedDOB =
                           DateFormat('dd MMM yyyy').format(_selectedDate!);
-                      // For storing profile_url
-                      // await supabase
-                      //     .from('Profile')
-                      //     .upsert({'profile_photo_url': _imageUrl}).eq(
-                      //         'user_id', userId);
 
                       final newUser = Profile(
-                          user_id: userId,
-                          username: _usernameController.text,
-                          date_of_birth: formattedDOB,
-                          gender: _genderOptions[_selectedGenderIndex!],
-                          profile_photo_url: _imageUrl);
+                        user_id: userId,
+                        username: username,
+                        date_of_birth: formattedDOB,
+                        gender: _genderOptions[_selectedGenderIndex!],
+                        profile_photo_url: _imageUrl,
+                      );
 
                       await profile_db.addNewUser(newUser);
 

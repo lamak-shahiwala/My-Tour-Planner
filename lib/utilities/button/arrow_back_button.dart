@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class ArrowBackButton extends StatelessWidget {
   ArrowBackButton(
-      {super.key, this.color = const Color.fromRGBO(214, 214, 214, 1)});
+      {super.key, this.color = const Color.fromRGBO(214, 214, 214, 1), this.iconSize = 30});
 
   final Color color;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {

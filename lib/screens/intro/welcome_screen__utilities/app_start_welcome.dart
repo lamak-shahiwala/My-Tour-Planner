@@ -37,27 +37,25 @@ class _AppStartWelcomeState extends State<AppStartWelcome> {
             width: 320,
             height: 300,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              FittedBox(
-                child: Text(
+          Center(
+            child: Wrap(
+              spacing: 10,
+              runSpacing: -10,
+              runAlignment: WrapAlignment.center,
+              children: [
+                Text(
                   "MY",
                   style: LogoNameStyle1,
                 ),
-              ),
-              FittedBox(
-                child: Text(
+                Text(
                   "TOUR",
                   style: LogoNameStyle2,
                 ),
-              ),
-            ],
-          ),
-          FittedBox(
-            child: Text(
-              "PLANNER",
-              style: LogoNameStyle1,
+                Text(
+                  "PLANNER",
+                  style: LogoNameStyle1,
+                ),
+              ],
             ),
           ),
         ],

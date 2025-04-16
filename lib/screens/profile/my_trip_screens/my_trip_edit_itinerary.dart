@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_tour_planner/screens/home/home.dart';
 import 'package:my_tour_planner/screens/profile/my_trip_screens/my_trip_things_to_carry.dart';
+import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ItineraryDetail {
@@ -171,7 +172,8 @@ class _MyTripEditItineraryScreenState extends State<MyTripEditItineraryScreen> {
     final details = itineraryPerDate[index];
 
     return Card(
-      elevation: 4,
+      color: Color.fromRGBO(0, 157, 192, .2),
+      elevation: 1,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -197,74 +199,79 @@ class _MyTripEditItineraryScreenState extends State<MyTripEditItineraryScreen> {
                   padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
-                      if (isEditMode)
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () async {
-                              final confirm = await showDialog<bool>(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text("Delete Detail"),
-                                  content: const Text(
-                                      "Are you sure you want to delete this detail?"),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                      child: const Text("Cancel"),
-                                    ),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
-                                      child: const Text("Delete",
-                                          style: TextStyle(color: Colors.red)),
-                                    ),
-                                  ],
-                                ),
-                              );
-
-                              if (confirm == true) {
-                                if (detail.details_id != null) {
-                                  // Delete from Supabase
-                                  await Supabase.instance.client
-                                      .from('ItineraryDetails')
-                                      .delete()
-                                      .eq('details_id', detail.details_id!);
-                                }
-                                setState(() {
-                                  itineraryPerDate[index].removeAt(detailIndex);
-                                });
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Detail deleted")),
-                                );
-                              }
-                            },
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: detail.time != null
+                                    ? detail.time!.format(context)
+                                    : '',
+                              ),
+                              decoration: const InputDecoration(
+                                  labelText: 'Preferred Time'),
+                              onTap: isEditMode
+                                  ? () async {
+                                      final picked = await showTimePicker(
+                                        context: context,
+                                        initialTime:
+                                            detail.time ?? TimeOfDay.now(),
+                                      );
+                                      if (picked != null) {
+                                        setState(() => detail.time = picked);
+                                      }
+                                    }
+                                  : null,
+                            ),
                           ),
-                        ),
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: detail.time != null
-                              ? detail.time!.format(context)
-                              : '',
-                        ),
-                        decoration:
-                            const InputDecoration(labelText: 'Preferred Time'),
-                        onTap: isEditMode
-                            ? () async {
-                                final picked = await showTimePicker(
+                          if (isEditMode)
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () async {
+                                final confirm = await showDialog<bool>(
                                   context: context,
-                                  initialTime: detail.time ?? TimeOfDay.now(),
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Delete Detail"),
+                                    content: const Text(
+                                        "Are you sure you want to delete this detail?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: const Text("Delete",
+                                            style:
+                                                TextStyle(color: Colors.red)),
+                                      ),
+                                    ],
+                                  ),
                                 );
-                                if (picked != null) {
-                                  setState(() => detail.time = picked);
+
+                                if (confirm == true) {
+                                  if (detail.details_id != null) {
+                                    await Supabase.instance.client
+                                        .from('ItineraryDetails')
+                                        .delete()
+                                        .eq('details_id', detail.details_id!);
+                                  }
+                                  setState(() {
+                                    itineraryPerDate[index]
+                                        .removeAt(detailIndex);
+                                  });
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("Detail deleted")),
+                                  );
                                 }
-                              }
-                            : null,
+                              },
+                            ),
+                        ],
                       ),
                       TextFormField(
                         initialValue: detail.name,
@@ -311,7 +318,7 @@ class _MyTripEditItineraryScreenState extends State<MyTripEditItineraryScreen> {
           .from('things_to_carry')
           .select('*')
           .eq('trip_id', widget.trip_id)
-          .maybeSingle(), // We expect one record per trip
+          .maybeSingle(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -323,102 +330,172 @@ class _MyTripEditItineraryScreenState extends State<MyTripEditItineraryScreen> {
           return const Text("No items yet.");
         }
 
-        // Assuming snapshot.data is a Map<String, dynamic>
         final data = snapshot.data as Map<String, dynamic>;
         final List<dynamic> carryItems = data['carry_item'] != null
             ? jsonDecode(data['carry_item']) as List<dynamic>
             : [];
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Text(
-              "Things to Carry:",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            ...carryItems.asMap().entries.map((entry) {
-              final index = entry.key + 1;
-              final item = entry.value;
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text("$index. $item"),
-              );
-            }),
-            const SizedBox(height: 10),
-            TextButton.icon(
-              onPressed: () async {
-                final newItem = await showDialog<String>(
-                  context: context,
-                  builder: (context) {
-                    String inputText = "";
-                    return AlertDialog(
-                      title: const Text("Add New Item"),
-                      content: TextField(
-                        autofocus: true,
-                        decoration:
-                            const InputDecoration(hintText: "Enter item name"),
-                        onChanged: (value) {
-                          inputText = value;
-                        },
+        return Card(
+          color: const Color.fromRGBO(0, 157, 192, .2),
+          elevation: 1,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Things to Carry",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                if (carryItems.isEmpty)
+                  const Text("No items added yet."),
+                ...carryItems.asMap().entries.map((entry) {
+                  final index = entry.key + 1;
+                  final item = entry.value;
+                  return Card(
+                    elevation: 2,
+                    margin: const EdgeInsets.symmetric(vertical: 6),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Text("$index. $item")),
+                          if (isEditMode)
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Delete Item"),
+                                    content: const Text(
+                                        "Are you sure you want to delete this item?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: const Text("Delete",
+                                            style: TextStyle(color: Colors.red)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+
+                                if (confirm == true) {
+                                  try {
+                                    // Remove item from the list
+                                    carryItems.removeAt(entry.key);
+
+                                    // Update the database with the updated list
+                                    await Supabase.instance.client
+                                        .from('things_to_carry')
+                                        .update({
+                                      'carry_item': jsonEncode(carryItems)
+                                    }).eq('trip_id', widget.trip_id);
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text("Item deleted")),
+                                    );
+
+                                    setState(() {});
+                                  } catch (e) {
+                                    print("Error while deleting item: $e");
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text("Error deleting item.")),
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                        ],
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text("Cancel"),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(inputText),
-                          child: const Text("Add"),
-                        ),
-                      ],
+                    ),
+                  );
+                }),
+                const SizedBox(height: 10),
+                TextButton.icon(
+                  onPressed: () async {
+                    final newItem = await showDialog<String>(
+                      context: context,
+                      builder: (context) {
+                        String inputText = "";
+                        return AlertDialog(
+                          title: const Text("Add New Item"),
+                          content: TextField(
+                            autofocus: true,
+                            decoration: const InputDecoration(
+                                hintText: "Enter item name"),
+                            onChanged: (value) {
+                              inputText = value;
+                            },
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text("Cancel"),
+                            ),
+                            TextButton(
+                              onPressed: () =>
+                                  Navigator.of(context).pop(inputText),
+                              child: const Text("Add"),
+                            ),
+                          ],
+                        );
+                      },
                     );
-                  },
-                );
 
-                if (newItem != null && newItem.trim().isNotEmpty) {
-                  try {
-                    // Fetch the current record
-                    final currentResponse = await Supabase.instance.client
-                        .from('things_to_carry')
-                        .select('*')
-                        .eq('trip_id', widget.trip_id)
-                        .single();
+                    if (newItem != null && newItem.trim().isNotEmpty) {
+                      try {
+                        final currentResponse = await Supabase.instance.client
+                            .from('things_to_carry')
+                            .select('*')
+                            .eq('trip_id', widget.trip_id)
+                            .single();
 
-                    final currentData = currentResponse as Map<String, dynamic>;
-                    final List<dynamic> currentItems =
+                        final currentData =
+                        currentResponse as Map<String, dynamic>;
+                        final List<dynamic> currentItems =
                         currentData['carry_item'] != null
                             ? jsonDecode(currentData['carry_item'])
-                                as List<dynamic>
+                        as List<dynamic>
                             : [];
 
-                    // Add the new item
-                    currentItems.add(newItem.trim());
+                        currentItems.add(newItem.trim());
 
-                    // Update the record
-                    await Supabase.instance.client
-                        .from('things_to_carry')
-                        .update({'carry_item': jsonEncode(currentItems)}).eq(
+                        await Supabase.instance.client
+                            .from('things_to_carry')
+                            .update({'carry_item': jsonEncode(currentItems)}).eq(
                             'trip_id', widget.trip_id);
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Item added!")),
-                    );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Item added!")),
+                        );
 
-                    setState(() {}); // Refresh UI
-                  } catch (e) {
-                    print("Error while adding item: $e");
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Error adding item.")),
-                    );
-                  }
-                }
-              },
-              icon: const Icon(Icons.add),
-              label: const Text("Add Item"),
+                        setState(() {}); // Refresh UI
+                      } catch (e) {
+                        print("Error while adding item: $e");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Error adding item.")),
+                        );
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.add),
+                  label: const Text("Add Item"),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
     );
@@ -428,32 +505,44 @@ class _MyTripEditItineraryScreenState extends State<MyTripEditItineraryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: isEditMode
-              ? SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: _tripNameController,
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                      labelText: "Enter Trip Name : ",
-                      border: InputBorder.none,
-                    ),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+        automaticallyImplyLeading: false,
+        title: isEditMode
+            ? Row(
+                children: [
+                  ArrowBackButton(),
+                  Container(
+                    width: 250,
+                    child: TextField(
+                      controller: _tripNameController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        labelText: "Enter Trip Name : ",
+                        border: InputBorder.none,
+                      ),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                )
-              : Text(tripName),
-        ),
+                ],
+              )
+            : Row(
+                children: [
+                  ArrowBackButton(),
+                  Container(
+                      width: 250,
+                      child: Text(tripName, overflow: TextOverflow.ellipsis,),
+                  ),
+                ],
+              ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
             ...List.generate(dateList.length, _tripTemplate),
-            ThingsToCarryWidget(tripId: widget.trip_id),
+            _buildThingsToCarry(),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -467,7 +556,8 @@ class _MyTripEditItineraryScreenState extends State<MyTripEditItineraryScreen> {
                   child: const Text("Save"),
                 ),
               ],
-            )
+            ),
+            SizedBox(height: 100,),
           ],
         ),
       ),

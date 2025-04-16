@@ -39,11 +39,14 @@ dependencies:
   permission_handler: ^11.0.0
   image_picker: ^1.1.2
   uuid: ^4.5.1
+  flutter_gemini: ^3.0.0
+  dash_chat_2: ^0.0.21
+  flutter_markdown: ^0.7.7
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  intl: ^0.20.2
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3
@@ -85,6 +88,7 @@ flutter:
     - assets/images/google-icon.png
     - assets/images/MTP_App_Icon.png
     - assets/images/icons/home-active-icon.svg
+    - assets/images/icons/ai-chat-icon.png
     - assets/images/icons/home-notactive-icon.svg
     - assets/images/icons/home.svg
     - assets/images/icons/create_generate-active-icon.svg

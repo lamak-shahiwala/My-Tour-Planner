@@ -402,6 +402,9 @@ class _CreateTripState extends State<CreateTrip> {
                           "Next",
                           style: save_next_button,
                         )),
+                    SizedBox(
+                      height: 50.0,
+                    ),
                   ],
                 ),
               ),
