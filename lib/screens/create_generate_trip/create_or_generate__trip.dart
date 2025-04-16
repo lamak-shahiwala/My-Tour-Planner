@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/screens/chat_bot/chat_bot.dart';
 import 'package:my_tour_planner/screens/create_trip/create_trip.dart';
 import 'package:my_tour_planner/screens/generate_trip/generate_trip.dart';
 import 'package:my_tour_planner/services/fetch_profile_photo.dart';
@@ -6,6 +7,8 @@ import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../utilities/button/floating_button.dart';
 
 class Create_or_Generate__Trip extends StatefulWidget {
   Create_or_Generate__Trip({super.key});
@@ -34,6 +37,15 @@ class _Create_or_Generate__TripState extends State<Create_or_Generate__Trip> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingButton(
+        buttonPadding: EdgeInsets.symmetric(horizontal: 6, vertical:  6,),
+        buttonBackgroundColor: Color.fromRGBO(0, 157, 192, 0.2),
+        buttonHeroTag: 'chat_button',
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> ChatBot()));
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

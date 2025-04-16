@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:my_tour_planner/services/consts.dart';
 import 'package:my_tour_planner/theme/perl.dart';
 import 'package:my_tour_planner/screens/intro/welcome.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -6,10 +8,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-      url: "https://lyasmbjryerqzhttncmr.supabase.co",
-      anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5YXNtYmpyeWVycXpodHRuY21yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5NDM5MDEsImV4cCI6MjA1NjUxOTkwMX0.TjqeZ-75-5PE0xOsDq8ovuXvFFx2QQyWpld7WaYEe2Q",
+    url: SUPABASE_PROJECT_URL,
+    anonKey: SUPABASE_API_KEY,
   );
-  runApp(MaterialApp(home: const welcome(), theme: pearl,));
+  Gemini.init(apiKey: GEMINI_API_KEY);
+  runApp(MaterialApp(
+    home: const welcome(),
+    theme: pearl,
+  ));
 }
 
 class MyTourPlanner extends StatelessWidget {
@@ -17,10 +23,9 @@ class MyTourPlanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const Scaffold(
-      body: Column(children: [
-        Text("IS THIS WINDOW ACTIVE??")
-      ],)
-    );
+    return const Scaffold(
+        body: Column(
+      children: [Text("IS THIS WINDOW ACTIVE??")],
+    ));
   }
 }

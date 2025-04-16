@@ -1,0 +1,3 @@
+const String GEMINI_API_KEY = "AIzaSyCIFoaF3EBaMLOPXBKEDYpMY8MXUuALXXc";
+const String SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5YXNtYmpyeWVycXpodHRuY21yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5NDM5MDEsImV4cCI6MjA1NjUxOTkwMX0.TjqeZ-75-5PE0xOsDq8ovuXvFFx2QQyWpld7WaYEe2Q";
+const String SUPABASE_PROJECT_URL = "https://lyasmbjryerqzhttncmr.supabase.co";

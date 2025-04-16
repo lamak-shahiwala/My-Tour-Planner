@@ -257,14 +257,16 @@ class _GenerateTripState extends State<GenerateTrip> {
 
                           int? tripId = await tripID.getTripId();
 
-
                           if (startDate != null &&
                               endDate != null &&
                               location.text.isNotEmpty &&
                               trip_name.text.isNotEmpty) {
-
-                            FormatStartDate = startDate != null ? DateFormat('dd-MM-yyyy').format(startDate!) : null;
-                            FormatEndDate = endDate != null ? DateFormat('dd-MM-yyyy').format(endDate!) : null;
+                            FormatStartDate = startDate != null
+                                ? DateFormat('dd-MM-yyyy').format(startDate!)
+                                : null;
+                            FormatEndDate = endDate != null
+                                ? DateFormat('dd-MM-yyyy').format(endDate!)
+                                : null;
 
                             Navigator.push(
                                 context,
@@ -299,6 +301,9 @@ class _GenerateTripState extends State<GenerateTrip> {
                           "Next",
                           style: save_next_button,
                         )),
+                    SizedBox(
+                      height: 50.0,
+                    ),
                   ],
                 ),
               ),

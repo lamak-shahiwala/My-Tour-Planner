@@ -5,7 +5,6 @@ import 'package:my_tour_planner/utilities/app_bar/bottom_app_bar.dart';
 import 'package:my_tour_planner/utilities/search_bar/grey_search_bar.dart';
 import 'home_grid.dart';
 
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -63,7 +62,8 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: [
-          Expanded(child: HomeGrid(searchQuery: searchQuery)),
+          Expanded(
+              child: HomeGrid(searchQuery: searchQuery)),
         ],
       ),
       bottomNavigationBar: mtp_BottomAppBar(

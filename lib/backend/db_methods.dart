@@ -78,6 +78,16 @@ class ProfileDB {
       print("Insert error: $e");
     }
   }
+
+  Future<bool> doesUsernameExist(String username) async {
+    final response = await Supabase.instance.client
+        .from('Profile')
+        .select('username')
+        .eq('username', username)
+        .maybeSingle();
+
+    return response != null;
+  }
 }
 
 class PreferencesDB {
