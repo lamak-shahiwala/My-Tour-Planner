@@ -5,6 +5,8 @@ import 'package:my_tour_planner/utilities/button/button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'generate_pdf.dart';
+
 class MyTripTemplateView extends StatefulWidget {
   const MyTripTemplateView({
     super.key,
@@ -27,6 +29,7 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
   double _sheetExtent = 0.4;
   late final budgetRange;
   bool isLoading = true;
+  bool isDownloading = false;
 
   // late String templateDescription;
 
@@ -290,21 +293,60 @@ class _TripTemplateViewState extends State<MyTripTemplateView> {
 
           // Fixed Bottom Button
           Positioned(
-              left: 20,
-              right: 20,
-              bottom: 20,
-              child: active_button_blue(
-                  onPress: () {
-                    Navigator.push(
+            left: 20,
+            right: 20,
+            bottom: 20,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: active_button_blue(
+                    onPress: () {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MyTripEditItineraryScreen(
-                                trip_id: widget.tripID)));
-                  },
-                  buttonLabel: Text(
-                    "Edit/View Itinerary",
-                    style: active_button_text_blue,
-                  ))),
+                          builder: (context) =>
+                              MyTripEditItineraryScreen(trip_id: widget.tripID),
+                        ),
+                      );
+                    },
+                    buttonLabel: Text(
+                      "Edit/View Itinerary",
+                      style: active_button_text_blue,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                IconButton(
+                    icon: const Icon(Icons.download,
+                        color: Colors.black, size: 28),
+                    onPressed: isDownloading
+                        ? null
+                        : () async {
+                            setState(() => isDownloading = true);
+                            await generateItineraryPdf(widget.tripID, context);
+                            setState(() => isDownloading = false);
+                          }),
+              ],
+            ),
+          ),
+
+          // Positioned(
+          //     left: 20,
+          //     right: 20,
+          //     bottom: 20,
+          //     child: active_button_blue(
+          //         onPress: () {
+          //           Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                   builder: (context) => MyTripEditItineraryScreen(
+          //                       trip_id: widget.tripID)));
+          //         },
+          //         buttonLabel: Text(
+          //           "Edit/View Itinerary",
+          //           style: active_button_text_blue,
+          //         ))),
         ],
       ),
     );

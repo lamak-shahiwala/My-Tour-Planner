@@ -47,7 +47,8 @@ class _HomeGridState extends State<HomeGrid> {
     try {
       final response = await Supabase.instance.client
           .from('Template')
-          .select('template_id, trip_id, Trip(trip_name, cover_photo_url, city_location, trip_type)')
+          .select(
+          'template_id, trip_id, Trip(trip_name, cover_photo_url, city_location, trip_type)')
           .eq('isPublic', true);
 
       final Map<String, List<Map<String, String>>> groupedData = {};
@@ -59,7 +60,8 @@ class _HomeGridState extends State<HomeGrid> {
 
         // 🔍 Normalize and match against user input
         if (widget.searchQuery.isNotEmpty) {
-          final queryWords = widget.searchQuery.toLowerCase().split(RegExp(r'\s+'));
+          final queryWords =
+          widget.searchQuery.toLowerCase().split(RegExp(r'\s+'));
           final locationWords = cityLocation.toLowerCase();
 
           // check if any word in query matches anywhere in location
@@ -174,7 +176,8 @@ class HomeGridSection extends StatelessWidget {
               index == tripDetails.length - 1 ? 20.0 : 0.0;
 
               return Padding(
-                padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
+                padding:
+                EdgeInsets.only(left: leftPadding, right: rightPadding),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
