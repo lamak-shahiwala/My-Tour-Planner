@@ -103,7 +103,7 @@ class _TripTemplateViewState extends State<TripTemplateView> {
     }
 
     try {
-      print("▶️ Step 1: Get template's original trip ID");
+      print("Step 1: Get template's original trip ID");
       final templateResponse = await supabase
           .from('Template')
           .select('trip_id')
@@ -113,9 +113,9 @@ class _TripTemplateViewState extends State<TripTemplateView> {
       final originalTripId = templateResponse?['trip_id'];
       if (originalTripId == null) throw Exception("No trip found in template.");
 
-      print("✅ Template has original tripID: $originalTripId");
+      print("Template has original tripID: $originalTripId");
 
-      print("▶️ Step 2: Fetch trip data");
+      print("Step 2: Fetch trip data");
       final originalTrip = await supabase
           .from('Trip')
           .select()
@@ -125,7 +125,7 @@ class _TripTemplateViewState extends State<TripTemplateView> {
       if (originalTrip == null)
         throw Exception("Original trip data not found.");
 
-      print("▶️ Step 3: Creating new trip for user");
+      print("Step 3: Creating new trip for user");
       final newTrip = await supabase
           .from('Trip')
           .insert({
@@ -143,9 +143,9 @@ class _TripTemplateViewState extends State<TripTemplateView> {
           .single();
 
       final newTripId = newTrip['trip_id'];
-      print("✅ New trip created with trip_id: $newTripId");
+      print("New trip created with trip_id: $newTripId");
 
-      print("▶️ Step 4: Cloning itinerary");
+      print("Step 4: Cloning itinerary");
       final oldItineraries = await supabase
           .from('Itinerary')
           .select()
@@ -178,7 +178,7 @@ class _TripTemplateViewState extends State<TripTemplateView> {
         }
       }
 
-      print("▶️ Step 5: Cloning things to carry");
+      print("Step 5: Cloning things to carry");
       // Step 5: Clone things to carry
       final thingsCarry = await supabase
           .from('things_to_carry')
@@ -193,7 +193,7 @@ class _TripTemplateViewState extends State<TripTemplateView> {
       }
 
 
-      print("▶️ Step 6: Remove bookmark after cloning");
+      print(" Step 6: Remove bookmark after cloning");
       await supabase
           .from('Bookmark')
           .delete()
@@ -204,7 +204,7 @@ class _TripTemplateViewState extends State<TripTemplateView> {
         isBookmarked = false;
       });
 
-      print("✅ All cloning complete.");
+      print("All cloning complete.");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Trip itinerary added to My Trips")),
       );
