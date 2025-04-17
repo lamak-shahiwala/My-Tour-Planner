@@ -1,8 +1,5 @@
-/*
-* This file will contain user registration functionalities.
-* *IMP*
-* */
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/screens/auth/forgot_password.dart';
 import 'package:my_tour_planner/screens/auth/user_registration.dart';
 import 'package:my_tour_planner/services/auth_gate.dart';
 import 'package:my_tour_planner/services/auth_services.dart';
@@ -23,8 +20,9 @@ class _UserLoginState extends State<UserLogin> {
   final authService = AuthService();
 
   final email_controller = TextEditingController();
-
   final password_controller = TextEditingController();
+
+  bool _obscurePassword = true;
 
   void login() async {
     final email = email_controller.text;
@@ -50,6 +48,7 @@ class _UserLoginState extends State<UserLogin> {
       }
     }
   }
+
   void google_login() async {
     final res = await authService.nativeGoogleSignIn();
 
@@ -101,15 +100,46 @@ class _UserLoginState extends State<UserLogin> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: LightGreyTextField(
-                  hintText: "Password",
+                child: TextField(
                   controller: password_controller,
-                  obscureText: true,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    hintStyle: textField_placeholder,
+                    filled: true,
+                    fillColor: const Color(0xFFF4F4F4),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFC4C4C4),
+                        width: .2,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFF4F4F4),
+                        width: .2,
+                      ),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        color: const Color.fromRGBO(117, 117, 117, 1),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                  ),
                 ),
               ),
               GestureDetector(
-                onTap: (){
-
+                onTap: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => ForgotPassword()));
                 },
                 child: Align(
                   alignment: Alignment.topRight,
@@ -159,7 +189,7 @@ class _UserLoginState extends State<UserLogin> {
                       content: Text("Internet Connection not Found."),
                       duration: Duration(seconds: 1),
                     ));
-                  }else{
+                  } else {
                     google_login();
                   }
                 },
@@ -217,5 +247,3 @@ class _UserLoginState extends State<UserLogin> {
     );
   }
 }
-
-

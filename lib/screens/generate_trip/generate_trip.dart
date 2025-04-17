@@ -10,6 +10,7 @@ import 'package:my_tour_planner/backend/db_methods.dart';
 import 'package:my_tour_planner/backend/classes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../utilities/image_picker/template_cover_picker.dart';
 import '../create_trip/create_itinerary.dart';
 
 class GenerateTrip extends StatefulWidget {
@@ -33,6 +34,24 @@ class _GenerateTripState extends State<GenerateTrip> {
     "Shopping",
     "Food"
   ];
+  String? selectedBudgetValue;
+  String? customRange;
+  final List<String> budgetRange = [
+    "Enter Custom Range",
+    "Below ₹1,000",
+    "₹1,000 - ₹2,500",
+    "₹2,500 - ₹5,000",
+    "₹5,000 - ₹10,000",
+    "₹10,000 - ₹15,000",
+    "₹15,000 - ₹20,000",
+    "₹20,000 - ₹30,000",
+    "₹30,000 - ₹50,000",
+    "₹50,000 - ₹75,000",
+    "₹75,000 - ₹1,00,000",
+    "₹1,00,000 - ₹1,25,000",
+    "₹1,25,000 - ₹1,50,000",
+    "Above ₹1,50,000",
+  ];
 
   final String page_title =
       "Generate your trip Itinerary.\nProvide details for your\nIdeal Trip.";
@@ -50,6 +69,8 @@ class _GenerateTripState extends State<GenerateTrip> {
 
   String? FormatStartDate;
   String? FormatEndDate;
+
+  String? _imageUrl;
 
   Future<void> _selectStartDate(BuildContext context) async {
     DateTime? startDatePicked = await showDatePicker(
@@ -120,192 +141,289 @@ class _GenerateTripState extends State<GenerateTrip> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: ArrowBackButton(),
+      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 30,
+              Text(
+                page_title,
+                style: sub_heading,
+                textAlign: TextAlign.center,
               ),
-              ArrowBackButton(),
+              SizedBox(height: 30,),
+              TemplateCoverPicker(
+                  imageUrl: _imageUrl,
+                  onUpload: (imageUrl) async {
+                    setState(() {
+                      _imageUrl = imageUrl;
+                    });
+                  }),
               SizedBox(
-                height: 50,
+                height: 40,
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      page_title,
-                      style: sub_heading,
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    WhiteTextField(
-                        labelText: "Enter Trip Name", controller: trip_name),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    OpenStreetMapWhiteSearchBar(
-                        hintText: "Select Location", controller: location),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        WhiteDatePicker_button(
-                          onPress: () => _selectStartDate(context),
-                          buttonLabel: Text(
-                            startDate == null
-                                ? "Start Date"
-                                : "${DateFormat("dd MMM, y").format(startDate ?? DateTime.now())}",
-                            style: TextStyle(
-                              color: Color(0xFF666666),
-                              fontSize: 18,
-                              fontFamily: "Sofia_Sans",
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        WhiteDatePicker_button(
-                          onPress: () => _selectEndDate(context),
-                          buttonLabel: Text(
-                            endDate == null
-                                ? "End Date"
-                                : "${DateFormat("dd MMM, y").format(endDate ?? DateTime.now())}",
-                            style: TextStyle(
-                              color: Color(0xFF666666),
-                              fontSize: 18,
-                              fontFamily: "Sofia_Sans",
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 255, 255, 1),
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: Color(0xFFD8DDE3),
-                          width: 1.2,
-                        ),
-                      ),
-                      child: DropdownButton<String>(
-                        value: selectedValue,
-                        hint: Text("Select Trip Type"),
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        style: TextStyle(
-                          color: Color(0xFF666666), //Color(0xFF000000),
-                          fontSize: 16,
-                          fontFamily: "Sofia_Sans",
-                          fontWeight: FontWeight.w400,
-                        ),
-                        // Text styling
-                        icon: Icon(Icons.keyboard_arrow_down,
-                            color: Color(0xFF666666)),
-                        // Custom icon
-                        dropdownColor: Colors.grey[200],
-                        // Background color of dropdown
-                        onChanged: (newValue) {
-                          setState(() {
-                            selectedValue = newValue;
-                          });
-                        },
-                        items: types.map((type) {
-                          return DropdownMenuItem<String>(
-                            value: type,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(type),
-                            ),
-                          );
-                        }).toList(),
+              WhiteTextField(
+                  labelText: "Enter Trip Name", controller: trip_name),
+              SizedBox(
+                height: 25,
+              ),
+              OpenStreetMapWhiteSearchBar(
+                  hintText: "Select Location", controller: location),
+              SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  WhiteDatePicker_button(
+                    onPress: () => _selectStartDate(context),
+                    buttonLabel: Text(
+                      startDate == null
+                          ? "Start Date"
+                          : "${DateFormat("dd MMM, y").format(startDate ?? DateTime.now())}",
+                      style: TextStyle(
+                        color: Color(0xFF666666),
+                        fontSize: 16,
+                        fontFamily: "Sofia_Sans",
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(
-                      height: 25,
+                  ),
+                  WhiteDatePicker_button(
+                    onPress: () => _selectEndDate(context),
+                    buttonLabel: Text(
+                      endDate == null
+                          ? "End Date"
+                          : "${DateFormat("dd MMM, y").format(endDate ?? DateTime.now())}",
+                      style: TextStyle(
+                        color: Color(0xFF666666),
+                        fontSize: 16,
+                        fontFamily: "Sofia_Sans",
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                    SaveNextButton(
-                        onPress: () async {
-                          // Retrieving User ID
-                          final supabase = Supabase.instance.client;
-                          final user = supabase.auth.currentUser;
-                          String? userId = user?.id;
-
-                          if (userId == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("User not logged in!"),
-                              duration: Duration(milliseconds: 400),
-                            ));
-                            return;
-                          }
-
-                          int? tripId = await tripID.getTripId();
-
-                          if (startDate != null &&
-                              endDate != null &&
-                              location.text.isNotEmpty &&
-                              trip_name.text.isNotEmpty) {
-                            FormatStartDate = startDate != null
-                                ? DateFormat('dd-MM-yyyy').format(startDate!)
-                                : null;
-                            FormatEndDate = endDate != null
-                                ? DateFormat('dd-MM-yyyy').format(endDate!)
-                                : null;
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CreateItinerary(
-                                          startDate: startDate,
-                                          endDate: endDate,
-                                          trip_name: trip_name.text,
-                                          location_name: location.text,
-                                          trip_type: selectedValue!,
-                                          trip_id: tripId!,
-                                        )));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("Please fill all the fields"),
-                              duration: Duration(milliseconds: 400),
-                            ));
-                          }
-
-                          // Database
-                          final newTrip = Generate_Trip(
-                              trip_name: trip_name.text,
-                              start_date: FormatStartDate,
-                              end_date: FormatEndDate,
-                              city_location: location.text,
-                              trip_type: selectedValue!,
-                              user_id: userId);
-
-                          trip_db.generateTrip(newTrip);
-                        },
-                        buttonLabel: Text(
-                          "Next",
-                          style: save_next_button,
-                        )),
-                    SizedBox(
-                      height: 50.0,
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: Color(0xFFD8DDE3),
+                    width: 1.2,
+                  ),
                 ),
+                child: DropdownButton<String>(
+                  value: selectedBudgetValue == "Enter Custom Range"
+                      ? null
+                      : selectedBudgetValue,
+                  hint: Text(customRange ?? "Select Budget Range"),
+                  isExpanded: true,
+                  underline: SizedBox(),
+                  style: TextStyle(
+                    color: Color(0xFF666666),
+                    fontSize: 16,
+                    fontFamily: "Sofia_Sans",
+                    fontWeight: FontWeight.w400,
+                  ),
+                  icon: Icon(Icons.keyboard_arrow_down,
+                      color: Color(0xFF666666)),
+                  dropdownColor: Colors.grey[200],
+                  onChanged: (newValue) {
+                    if (newValue == "Enter Custom Range") {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          final minController = TextEditingController();
+                          final maxController = TextEditingController();
+
+                          return AlertDialog(
+                            title: Text("Enter Custom Budget Range"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextField(
+                                  controller: minController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                      labelText: "Min Budget"),
+                                ),
+                                TextField(
+                                  controller: maxController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                      labelText: "Max Budget"),
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("Cancel"),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  final min = minController.text;
+                                  final max = maxController.text;
+
+                                  if (min.isNotEmpty && max.isNotEmpty) {
+                                    setState(() {
+                                      customRange = "₹$min - ₹$max";
+                                      selectedBudgetValue =
+                                      "Enter Custom Range"; // Not in the list, so Dropdown won't try to match
+                                    });
+                                  }
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Apply"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      setState(() {
+                        selectedBudgetValue = newValue;
+                        customRange =
+                        null; // clear custom text if predefined selected
+                      });
+                    }
+                  },
+                  items: budgetRange.map((type) {
+                    return DropdownMenuItem<String>(
+                      value: type,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(type),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: Color(0xFFD8DDE3),
+                    width: 1.2,
+                  ),
+                ),
+                child: DropdownButton<String>(
+                  value: selectedValue,
+                  hint: Text("Select Trip Type"),
+                  isExpanded: true,
+                  underline: SizedBox(),
+                  style: TextStyle(
+                    color: Color(0xFF666666),
+                    fontSize: 16,
+                    fontFamily: "Sofia_Sans",
+                    fontWeight: FontWeight.w400,
+                  ),
+                  // Text styling
+                  icon: Icon(Icons.keyboard_arrow_down,
+                      color: Color(0xFF666666)),
+                  // Custom icon
+                  dropdownColor: Colors.grey[200],
+                  // Background color of dropdown
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedValue = newValue;
+                    });
+                  },
+                  items: types.map((type) {
+                    return DropdownMenuItem<String>(
+                      value: type,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(type),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              SaveNextButton(
+                  onPress: () async {
+                    // Retrieving User ID
+                    final supabase = Supabase.instance.client;
+                    final user = supabase.auth.currentUser;
+                    String? userId = user?.id;
+
+                    if (userId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("User not logged in!"),
+                        duration: Duration(milliseconds: 400),
+                      ));
+                      return;
+                    }
+
+                    int? tripId = await tripID.getTripId();
+
+                    if (startDate != null &&
+                        endDate != null &&
+                        location.text.isNotEmpty &&
+                        trip_name.text.isNotEmpty) {
+                      FormatStartDate = startDate != null
+                          ? DateFormat('dd-MM-yyyy').format(startDate!)
+                          : null;
+                      FormatEndDate = endDate != null
+                          ? DateFormat('dd-MM-yyyy').format(endDate!)
+                          : null;
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CreateItinerary(
+                                    startDate: startDate,
+                                    endDate: endDate,
+                                    trip_name: trip_name.text,
+                                    location_name: location.text,
+                                    trip_type: selectedValue!,
+                                    trip_id: tripId!,
+                                  )));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Please fill all the fields"),
+                        duration: Duration(milliseconds: 400),
+                      ));
+                    }
+
+                    // Database
+                    final newTrip = Generate_Trip(
+                        trip_name: trip_name.text,
+                        start_date: FormatStartDate,
+                        end_date: FormatEndDate,
+                        city_location: location.text,
+                        trip_type: selectedValue!,
+                        user_id: userId);
+
+                    trip_db.generateTrip(newTrip);
+                  },
+                  buttonLabel: Text(
+                    "Next",
+                    style: save_next_button,
+                  )),
+              SizedBox(
+                height: 50.0,
               ),
             ],
           ),
