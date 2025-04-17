@@ -174,7 +174,8 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
     final details = itineraryPerDate[index];
 
     return Card(
-      elevation: 4,
+      color: Color.fromRGBO(0, 157, 192, .2), // Background color for the card
+      elevation: 1,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -186,7 +187,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               children: [
                 Text("Day ${index + 1}",
                     style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(formattedDate)
+                Text(formattedDate),
               ],
             ),
             const SizedBox(height: 10),
@@ -200,18 +201,177 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                   padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
-                      if (isEditMode)
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: detail.time != null
+                                    ? detail.time!.format(context)
+                                    : '',
+                              ),
+                              decoration: const InputDecoration(
+                                  labelText: 'Preferred Time'),
+                              onTap: isEditMode
+                                  ? () async {
+                                final picked = await showTimePicker(
+                                  context: context,
+                                  initialTime: detail.time ?? TimeOfDay.now(),
+                                );
+                                if (picked != null) {
+                                  setState(() => detail.time = picked);
+                                }
+                              }
+                                  : null,
+                            ),
+                          ),
+                          if (isEditMode)
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Delete Detail"),
+                                    content: const Text(
+                                        "Are you sure you want to delete this detail?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: const Text("Delete",
+                                            style: TextStyle(color: Colors.red)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+
+                                if (confirm == true) {
+                                  if (detail.details_id != null) {
+                                    await Supabase.instance.client
+                                        .from('ItineraryDetails')
+                                        .delete()
+                                        .eq('details_id', detail.details_id!);
+                                  }
+                                  setState(() {
+                                    itineraryPerDate[index]
+                                        .removeAt(detailIndex);
+                                  });
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("Detail deleted")),
+                                  );
+                                }
+                              },
+                            ),
+                        ],
+                      ),
+                      TextFormField(
+                        initialValue: detail.name,
+                        readOnly: !isEditMode,
+                        decoration:
+                        const InputDecoration(labelText: 'Detail Name'),
+                        onChanged: (val) => detail.name = val,
+                      ),
+                      TextFormField(
+                        initialValue: detail.note,
+                        readOnly: !isEditMode,
+                        decoration:
+                        const InputDecoration(labelText: 'Custom Notes'),
+                        onChanged: (val) => detail.note = val,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+            if (isEditMode)
+              TextButton.icon(
+                onPressed: () {
+                  final itineraryId = itineraryPerDate[index].isNotEmpty
+                      ? itineraryPerDate[index].first.itinerary_id
+                      : null;
+
+                  setState(() => itineraryPerDate[index].add(
+                    ItineraryDetail(itinerary_id: itineraryId),
+                  ));
+                },
+                icon: const Icon(Icons.add),
+                label: const Text("Add Detail"),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildThingsToCarry() {
+    return FutureBuilder(
+      future: Supabase.instance.client
+          .from('things_to_carry')
+          .select('*')
+          .eq('trip_id', widget.trip_id)
+          .maybeSingle(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return const Text("Failed to load things to carry.");
+        }
+        if (snapshot.data == null) {
+          return const Text("No items yet.");
+        }
+
+        final data = snapshot.data as Map<String, dynamic>;
+        final List<dynamic> carryItems = data['carry_item'] != null
+            ? jsonDecode(data['carry_item']) as List<dynamic>
+            : [];
+
+        return Card(
+          color: const Color.fromRGBO(0, 157, 192, .2),
+          elevation: 1,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Things to Carry",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                if (carryItems.isEmpty)
+                  const Text("No items added yet."),
+                ...carryItems.asMap().entries.map((entry) {
+                  final index = entry.key + 1;
+                  final item = entry.value;
+                  return Card(
+                    elevation: 2,
+                    margin: const EdgeInsets.symmetric(vertical: 6),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Text("$index. $item")),
+                          IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () async {
                               final confirm = await showDialog<bool>(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: const Text("Delete Detail"),
+                                  title: const Text("Delete Item"),
                                   content: const Text(
-                                      "Are you sure you want to delete this detail?"),
+                                      "Are you sure you want to delete this item?"),
                                   actions: [
                                     TextButton(
                                       onPressed: () =>
@@ -229,196 +389,112 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                               );
 
                               if (confirm == true) {
-                                if (detail.details_id != null) {
-                                  // Delete from Supabase
-                                  await Supabase.instance.client
-                                      .from('ItineraryDetails')
-                                      .delete()
-                                      .eq('details_id', detail.details_id!);
-                                }
-                                setState(() {
-                                  itineraryPerDate[index].removeAt(detailIndex);
-                                });
+                                try {
+                                  // Remove item from the list
+                                  carryItems.removeAt(entry.key);
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Detail deleted")),
-                                );
+                                  // Update the database with the updated list
+                                  await Supabase.instance.client
+                                      .from('things_to_carry')
+                                      .update({
+                                    'carry_item': jsonEncode(carryItems)
+                                  }).eq('trip_id', widget.trip_id);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("Item deleted")),
+                                  );
+
+                                  setState(() {});
+                                } catch (e) {
+                                  print("Error while deleting item: $e");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("Error deleting item.")),
+                                  );
+                                }
                               }
                             },
                           ),
-                        ),
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: detail.time != null
-                              ? detail.time!.format(context)
-                              : '',
-                        ),
-                        decoration:
-                            const InputDecoration(labelText: 'Preferred Time'),
-                        onTap: isEditMode
-                            ? () async {
-                                final picked = await showTimePicker(
-                                  context: context,
-                                  initialTime: detail.time ?? TimeOfDay.now(),
-                                );
-                                if (picked != null) {
-                                  setState(() => detail.time = picked);
-                                }
-                              }
-                            : null,
+                        ],
                       ),
-                      TextFormField(
-                        initialValue: detail.name,
-                        readOnly: !isEditMode,
-                        decoration:
-                            const InputDecoration(labelText: 'Detail Name'),
-                        onChanged: (val) => detail.name = val,
-                      ),
-                      TextFormField(
-                        initialValue: detail.note,
-                        readOnly: !isEditMode,
-                        decoration:
-                            const InputDecoration(labelText: 'Custom Notes'),
-                        onChanged: (val) => detail.note = val,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
-            if (isEditMode)
-              TextButton.icon(
-                onPressed: () {
-                  final itineraryId = itineraryPerDate[index].isNotEmpty
-                      ? itineraryPerDate[index].first.itinerary_id
-                      : null;
-
-                  setState(() => itineraryPerDate[index].add(
-                        ItineraryDetail(itinerary_id: itineraryId),
-                      ));
-                },
-                icon: const Icon(Icons.add),
-                label: const Text("Add Detail"),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildThingsToCarry() {
-    return FutureBuilder(
-      future: Supabase.instance.client
-          .from('things_to_carry')
-          .select('*')
-          .eq('trip_id', widget.trip_id)
-          .single(), // We expect one record per trip
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError || snapshot.data == null) {
-          return const Text("Failed to load things to carry.");
-        }
-
-        // Assuming snapshot.data is a Map<String, dynamic>
-        final data = snapshot.data as Map<String, dynamic>;
-        final List<dynamic> carryItems = data['carry_item'] != null
-            ? jsonDecode(data['carry_item']) as List<dynamic>
-            : [];
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Text(
-              "Things to Carry:",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            ...carryItems.asMap().entries.map((entry) {
-              final index = entry.key + 1;
-              final item = entry.value;
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text("$index. $item"),
-              );
-            }),
-            const SizedBox(height: 10),
-            TextButton.icon(
-              onPressed: () async {
-                final newItem = await showDialog<String>(
-                  context: context,
-                  builder: (context) {
-                    String inputText = "";
-                    return AlertDialog(
-                      title: const Text("Add New Item"),
-                      content: TextField(
-                        autofocus: true,
-                        decoration:
-                            const InputDecoration(hintText: "Enter item name"),
-                        onChanged: (value) {
-                          inputText = value;
-                        },
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text("Cancel"),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(inputText),
-                          child: const Text("Add"),
-                        ),
-                      ],
+                    ),
+                  );
+                }),
+                const SizedBox(height: 10),
+                TextButton.icon(
+                  onPressed: () async {
+                    final newItem = await showDialog<String>(
+                      context: context,
+                      builder: (context) {
+                        String inputText = "";
+                        return AlertDialog(
+                          title: const Text("Add New Item"),
+                          content: TextField(
+                            autofocus: true,
+                            decoration: const InputDecoration(
+                                hintText: "Enter item name"),
+                            onChanged: (value) {
+                              inputText = value;
+                            },
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text("Cancel"),
+                            ),
+                            TextButton(
+                              onPressed: () =>
+                                  Navigator.of(context).pop(inputText),
+                              child: const Text("Add"),
+                            ),
+                          ],
+                        );
+                      },
                     );
-                  },
-                );
 
-                if (newItem != null && newItem.trim().isNotEmpty) {
-                  try {
-                    // Fetch the current record
-                    final currentResponse = await Supabase.instance.client
-                        .from('things_to_carry')
-                        .select('*')
-                        .eq('trip_id', widget.trip_id)
-                        .single();
+                    if (newItem != null && newItem.trim().isNotEmpty) {
+                      try {
+                        final currentResponse = await Supabase.instance.client
+                            .from('things_to_carry')
+                            .select('*')
+                            .eq('trip_id', widget.trip_id)
+                            .single();
 
-                    final currentData = currentResponse as Map<String, dynamic>;
-                    final List<dynamic> currentItems =
+                        final currentData =
+                        currentResponse as Map<String, dynamic>;
+                        final List<dynamic> currentItems =
                         currentData['carry_item'] != null
                             ? jsonDecode(currentData['carry_item'])
-                                as List<dynamic>
+                        as List<dynamic>
                             : [];
 
-                    // Add the new item
-                    currentItems.add(newItem.trim());
+                        currentItems.add(newItem.trim());
 
-                    // Update the record
-                    await Supabase.instance.client
-                        .from('things_to_carry')
-                        .update({'carry_item': jsonEncode(currentItems)}).eq(
-                            'trip_id', widget.trip_id);
+                        await Supabase.instance.client
+                            .from('things_to_carry')
+                            .update({'carry_item': jsonEncode(currentItems)})
+                            .eq('trip_id', widget.trip_id);
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Item added!")),
-                    );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Item added!")),
+                        );
 
-                    setState(() {}); // Refresh UI
-                  } catch (e) {
-                    print("Error while adding item: $e");
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Error adding item.")),
-                    );
-                  }
-                }
-              },
-              icon: const Icon(Icons.add),
-              label: const Text("Add Item"),
+                        setState(() {}); // Refresh UI
+                      } catch (e) {
+                        print("Error while adding item: $e");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Error adding item.")),
+                        );
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.add),
+                  label: const Text("Add Item"),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
     );

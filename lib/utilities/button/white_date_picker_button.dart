@@ -19,7 +19,7 @@ class WhiteDatePicker_button extends StatelessWidget {
 
   const WhiteDatePicker_button({
     super.key,
-    this.height = 48.0,
+    this.height = 47.0,
     this.width = 128.0,
     this.horizontalMargin = 0,
     this.verticalMargin = 0,
