@@ -122,7 +122,9 @@ Future<void> generateItineraryPdf(final tripId, BuildContext context) async {
     final endDate = DateTime.parse(tripRes['end_date']);
 
     List<DateTime> fullDateList = [];
-    for (DateTime d = startDate; !d.isAfter(endDate); d = d.add(Duration(days: 1))) {
+    for (DateTime d = startDate;
+        !d.isAfter(endDate);
+        d = d.add(Duration(days: 1))) {
       fullDateList.add(d);
     }
 
@@ -171,9 +173,10 @@ Future<void> generateItineraryPdf(final tripId, BuildContext context) async {
           ),
         ),
         build: (context) => [
-          pw.Text('Itinerary: $tripName', style: pw.TextStyle(fontSize: 32,fontWeight: pw.FontWeight.bold)),
+          pw.Text('Itinerary: $tripName',
+              style:
+                  pw.TextStyle(fontSize: 32, fontWeight: pw.FontWeight.bold)),
           pw.SizedBox(height: 25),
-
           ...fullDateList.asMap().entries.expand((entry) {
             final i = entry.key;
             final date = entry.value;
@@ -186,29 +189,31 @@ Future<void> generateItineraryPdf(final tripId, BuildContext context) async {
 
             return [
               pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                pw.Text("Day ${i + 1}",
-                    style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
-                pw.Text("[$formattedDate]",
-                    style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
-              ]),
+                    pw.Text("Day ${i + 1}",
+                        style: pw.TextStyle(
+                            fontSize: 16, fontWeight: pw.FontWeight.bold)),
+                    pw.Text("[$formattedDate]",
+                        style: pw.TextStyle(
+                            fontSize: 16, fontWeight: pw.FontWeight.bold)),
+                  ]),
               pw.SizedBox(height: 6),
               if (details.isEmpty) pw.Text("No activities planned."),
               ...details.map((detail) => pw.Padding(
-                padding: const pw.EdgeInsets.only(bottom: 8),
-                child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    if (detail['preferred_time'] != null)
-                      pw.Text("Time: ${detail['preferred_time']}"),
-                    pw.Text("${detail['details_name']}"),
-                    if (detail['custom_notes'] != null &&
-                        detail['custom_notes'].toString().isNotEmpty)
-                      pw.Text("Note: ${detail['custom_notes']}"),
-                  ],
-                ),
-              )),
+                    padding: const pw.EdgeInsets.only(bottom: 8),
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        if (detail['preferred_time'] != null)
+                          pw.Text("Time: ${detail['preferred_time']}"),
+                        pw.Text("${detail['details_name']}"),
+                        if (detail['custom_notes'] != null &&
+                            detail['custom_notes'].toString().isNotEmpty)
+                          pw.Text("Note: ${detail['custom_notes']}"),
+                      ],
+                    ),
+                  )),
               if (i < fullDateList.length - 1) ...[
                 pw.SizedBox(height: 10),
                 _buildDottedLine(),
@@ -219,7 +224,8 @@ Future<void> generateItineraryPdf(final tripId, BuildContext context) async {
           pw.Divider(),
           pw.SizedBox(height: 10),
           pw.Text("Things to Carry",
-              style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+              style:
+                  pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
           if (carryItems.isEmpty) pw.Text("No items listed."),
           if (carryItems.isNotEmpty)
             ...carryItems.map((item) => pw.Bullet(text: item)).toList(),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/screens/home/recommend.dart';
 import 'package:my_tour_planner/screens/home/trip_template_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+// import 'dart:convert';
+// import 'package:http/http.dart' as http;
 
 class HomeGrid extends StatefulWidget {
   final String searchQuery;
@@ -18,7 +21,7 @@ class _HomeGridState extends State<HomeGrid> {
   @override
   void initState() {
     super.initState();
-    fetchTripTemplates();
+    // fetchTripTemplates();
   }
 
   @override
@@ -43,12 +46,46 @@ class _HomeGridState extends State<HomeGrid> {
     }
   }
 
+  // Future<void> fetchRecommendedTrips() async {
+  //   final userId = Supabase.instance.client.auth.currentUser?.id;
+  //   if (userId == null) return;
+  //
+  //   final url = Uri.parse('https://mtpbbyphoenix.pythonanywhere.com/recommend');
+  //   final response = await http.post(
+  //     url,
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: jsonEncode({'user_id': userId}),
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     final json = jsonDecode(response.body);
+  //     final List<dynamic> trips = json['Recommended Trips'];
+  //
+  //     final List<Map<String, String>> recommendedTrips =
+  //         trips.map<Map<String, String>>((trip) {
+  //       return {
+  //         'title': trip['trip_name'].toString(),
+  //         'image': (trip['cover_photo_url'] ?? '').toString(),
+  //         'location': trip['city_location'].toString(),
+  //         'trip_id': trip['trip_id'].toString(),
+  //         'template_id': trip['template_id'].toString(),
+  //       };
+  //     }).toList();
+  //
+  //     setState(() {
+  //       categorizedTrips['Recommended for You'] = recommendedTrips;
+  //     });
+  //   } else {
+  //     print('Recommendation failed: ${response.body}');
+  //   }
+  // }
+
   Future<void> fetchTripTemplates() async {
     try {
       final response = await Supabase.instance.client
           .from('Template')
           .select(
-          'template_id, trip_id, Trip(trip_name, cover_photo_url, city_location, trip_type)')
+              'template_id, trip_id, Trip(trip_name, cover_photo_url, city_location, trip_type)')
           .eq('isPublic', true);
 
       final Map<String, List<Map<String, String>>> groupedData = {};
@@ -61,7 +98,7 @@ class _HomeGridState extends State<HomeGrid> {
         // 🔍 Normalize and match against user input
         if (widget.searchQuery.isNotEmpty) {
           final queryWords =
-          widget.searchQuery.toLowerCase().split(RegExp(r'\s+'));
+              widget.searchQuery.toLowerCase().split(RegExp(r'\s+'));
           final locationWords = cityLocation.toLowerCase();
 
           // check if any word in query matches anywhere in location
@@ -119,6 +156,7 @@ class _HomeGridState extends State<HomeGrid> {
             ),
           ),
           const SizedBox(height: 10),
+          const RecommendedSection(),
           ...categorizedTrips.entries.map((entry) {
             return HomeGridSection(
               Categorytitle: entry.key,
@@ -173,11 +211,11 @@ class HomeGridSection extends StatelessWidget {
 
               double leftPadding = index == 0 ? 20.0 : 0.0;
               double rightPadding =
-              index == tripDetails.length - 1 ? 20.0 : 0.0;
+                  index == tripDetails.length - 1 ? 20.0 : 0.0;
 
               return Padding(
                 padding:
-                EdgeInsets.only(left: leftPadding, right: rightPadding),
+                    EdgeInsets.only(left: leftPadding, right: rightPadding),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -203,29 +241,29 @@ class HomeGridSection extends StatelessWidget {
                       children: [
                         trip['image'] != ''
                             ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            trip['image']!,
-                            height: 370,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        )
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  trip['image']!,
+                                  height: 370,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
                             : Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color.fromRGBO(111, 111, 111, 1),
-                          ),
-                          height: 370,
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          child: const Text(
-                            "[No Image]",
-                            style: TextStyle(
-                              color: Color.fromRGBO(50, 50, 50, 1),
-                            ),
-                          ),
-                        ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color.fromRGBO(111, 111, 111, 1),
+                                ),
+                                height: 370,
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  "[No Image]",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(50, 50, 50, 1),
+                                  ),
+                                ),
+                              ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 0, 30),
                           child: Column(
