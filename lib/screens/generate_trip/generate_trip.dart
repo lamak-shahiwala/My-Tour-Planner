@@ -8,10 +8,41 @@ import 'package:my_tour_planner/utilities/button/white_date_picker_button.dart';
 import 'package:my_tour_planner/utilities/text/text_styles.dart';
 import 'package:my_tour_planner/utilities/text_field/white_text_field.dart';
 import 'package:intl/intl.dart';
-import 'package:my_tour_planner/backend/db_methods.dart';
 import 'package:my_tour_planner/backend/classes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../utilities/image_picker/template_cover_picker.dart';
+
+
+class GenerateTripDatabase {
+  final supabase = Supabase.instance.client;
+
+  Future<void> insertTrip({
+    required String userId,
+    required String tripName,
+    required String? startDate,
+    required String? endDate,
+    required String? cityLocation,
+    required String? tripType,
+    required String? budget,
+    required String? coverPhotoUrl,
+  }) async {
+    final response = await supabase.from('Trip').insert({
+      'user_id': userId,
+      'trip_name': tripName,
+      'start_date': startDate,
+      'end_date': endDate,
+      'city_location': cityLocation,
+      'trip_type': tripType,
+      'trip_budget': budget,
+      'cover_photo_url': coverPhotoUrl,
+    }).select(); // This returns the inserted row(s), optional
+
+    if (response.isEmpty) {
+      throw Exception('Failed to insert trip');
+    }
+  }
+}
 
 
 class GenerateTrip extends StatefulWidget {
@@ -407,15 +438,16 @@ class _GenerateTripState extends State<GenerateTrip> {
                       ));
                     }
 
-                    final newTrip = Generate_Trip(
-                        trip_name: trip_name.text,
-                        start_date: FormatStartDate,
-                        end_date: FormatEndDate,
-                        city_location: location.text,
-                        trip_type: selectedValue!,
-                        user_id: userId);
-
-                    trip_db.generateTrip(newTrip);
+                    await trip_db.insertTrip(
+                      userId: userId,
+                      tripName: trip_name.text,
+                      startDate: FormatStartDate,
+                      endDate: FormatEndDate,
+                      cityLocation: location.text,
+                      tripType: selectedValue,
+                      budget: selectedBudgetValue == "Enter Custom Range" ? customRange : selectedBudgetValue,
+                      coverPhotoUrl: _imageUrl,
+                    );
                   },
                   buttonLabel: Text(
                     "Next",
