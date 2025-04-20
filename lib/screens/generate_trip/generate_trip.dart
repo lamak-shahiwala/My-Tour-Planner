@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:my_tour_planner/screens/generate_trip/generateItinerary.dart';
 import 'package:my_tour_planner/utilities/text_field/open_street_map_white_search_bar.dart';
 import 'package:my_tour_planner/utilities/button/arrow_back_button.dart';
 import 'package:my_tour_planner/utilities/button/save_next_button.dart';
@@ -9,9 +11,8 @@ import 'package:intl/intl.dart';
 import 'package:my_tour_planner/backend/db_methods.dart';
 import 'package:my_tour_planner/backend/classes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../utilities/image_picker/template_cover_picker.dart';
-import '../create_trip/create_itinerary.dart';
+
 
 class GenerateTrip extends StatefulWidget {
   GenerateTrip({
@@ -363,7 +364,6 @@ class _GenerateTripState extends State<GenerateTrip> {
               ),
               SaveNextButton(
                   onPress: () async {
-                    // Retrieving User ID
                     final supabase = Supabase.instance.client;
                     final user = supabase.auth.currentUser;
                     String? userId = user?.id;
@@ -392,13 +392,13 @@ class _GenerateTripState extends State<GenerateTrip> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CreateItinerary(
-                                    startDate: startDate,
-                                    endDate: endDate,
-                                    trip_name: trip_name.text,
-                                    location_name: location.text,
-                                    trip_type: selectedValue!,
-                                    trip_id: tripId!,
+                              builder: (context) => CreateTripFlow(
+                                    startDate: startDate.toString(),
+                                    endDate: endDate.toString(),
+                                    location: location.text,
+                                    tripType: selectedValue!,
+                                    tripId: tripId!,
+                                    budget: selectedBudgetValue!,
                                   )));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -407,7 +407,6 @@ class _GenerateTripState extends State<GenerateTrip> {
                       ));
                     }
 
-                    // Database
                     final newTrip = Generate_Trip(
                         trip_name: trip_name.text,
                         start_date: FormatStartDate,
