@@ -32,11 +32,10 @@
 
 ## Screenshots
 
-| Screen           | Screenshots                                   |                         |             |         |              |
-|-------------------|-----------------------------------------------|----------------------| ------------------------|--------------------------------|------------------------------|
+| Screen           | Screenshot - 1                                   | Screenshot - 2                                   | Screenshot - 3                                    |
+|-------------------|-----------------------------------------------|----------------------------------------------------| -------------------------------------------|
 | Welcome Screens     | <img src="screenshots/splash.png" alt="" width="220" />   | <img src="screenshots/welcome.png" alt="" width="220" /> |
 | Auth Screens     | <img src="screenshots/createAccount.png" alt="" width="220" />   | <img src="screenshots/login.png" alt="" width="220" /> |
-| Preferences Screens     | <img src="screenshots/preferencesIntro.png" alt="" width="220" />   | <img src="screenshots/preferencesThings.png" alt="" width="220" /> | <img src="screenshots/preferencesBudget.png" alt="" width="220" /> | <img src="screenshots/preferencesClimate.png" alt="" width="220" /> | <img src="screenshots/preferencesMonth.png" alt="" width="220" /> |
 | Home Screens     | <img src="screenshots/home.png" alt="" width="220" />   | <img src="screenshots/homeSearch.png" alt="" width="220" /> | <img src="screenshots/itineraryPage.png" alt="" width="220" /> |
 | MyTrips & Bookmarks    | <img src="screenshots/myTrips.png" alt="" width="220" />   | <img src="screenshots/bookmarks.png" alt="" width="220" /> | 
 | Create Itinerary    | <img src="screenshots/tripCreation.png" alt="" width="220" />   | <img src="screenshots/itineraryCreation_tripCreation.png" alt="" width="220" /> | <img src="screenshots/thingsToCarry_tripCreation.png" alt="" width="220" /> |
