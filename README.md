@@ -46,3 +46,8 @@
 | Other Preferences Screens   | <img src="screenshots/preferencesClimate.png" alt="" width="220" /> | <img src="screenshots/preferencesMonth.png" alt="" width="220" /> |
 | Other Screens   | <img src="screenshots/userDetails.png" alt="" width="220" />   | <img src="screenshots/forgotPassword.png" alt="" width="220" /> | <img src="screenshots/navBar.png" alt="" width="220" /> |
 
+---
+
+## Figma WireFrame(Prototype) 
+
+You can find the wireframe designed for the following application [here!](https://www.figma.com/proto/xjXGrDfzCRfHWtJAr7ouXr/Wireframe---MY-TOUR-PLANNER?page-id=0%3A1&node-id=6-59&node-type=canvas&viewport=-3115%2C409%2C0.75&t=Ge8uCXagl0o8zhjs-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1%3A2)
