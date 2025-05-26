@@ -1,4 +1,4 @@
-# 🗺️ My-Tour-Planner 🌍
+![create_generatePage](https://github.com/user-attachments/assets/bec8edd7-99d7-4119-9b7a-a86974cfc1a6)# 🗺️ My-Tour-Planner 🌍
 
 **My-Tour-Planner** is a smart, Flutter-powered mobile app that helps you plan your perfect trip itinerary effortlessly. Powered by AI (Gemini API) and enriched with OpenStreetMap for accurate location search, this app is your personal travel assistant — chat, search, create, edit, and bookmark your trips all in one place!
 
@@ -32,8 +32,8 @@
 
 ## Screenshots
 
-| Screen           | Screenshots                                   | 
-|-------------------|-----------------------------------------------|
+| Screen           | Screenshots                                   |                         |             |         |              |
+|-------------------|-----------------------------------------------|----------------------| ------------------------|--------------------------------|------------------------------|
 | Welcome Screens     | <img src="screenshots/splash.png" alt="" width="220" />   | <img src="screenshots/welcome.png" alt="" width="220" /> |
 | Auth Screens     | <img src="screenshots/createAccount.png" alt="" width="220" />   | <img src="screenshots/login.png" alt="" width="220" /> |
 | Preferences Screens     | <img src="screenshots/preferencesIntro.png" alt="" width="220" />   | <img src="screenshots/preferencesThings.png" alt="" width="220" /> | <img src="screenshots/preferencesBudget.png" alt="" width="220" /> | <img src="screenshots/preferencesClimate.png" alt="" width="220" /> | <img src="screenshots/preferencesMonth.png" alt="" width="220" /> |
