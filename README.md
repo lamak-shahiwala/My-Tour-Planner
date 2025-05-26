@@ -42,5 +42,7 @@
 | Generate Itinerary    | <img src="screenshots/tripGeneration.png" alt="" width="220" />   | <img src="screenshots/itinerary_tripGeneration.png" alt="" width="220" /> | <img src="screenshots/tripEditor.png" alt="" width="220" /> |
 | Trip Planning & Chatbot   | <img src="screenshots/create_generatePage.png" alt="" width="220" />   | <img src="screenshots/chatbot.png" alt="" width="220" /> |
 | Download Itinerary   | <img src="screenshots/itineraryPage_myTrips.png" alt="" width="220" />   | <img src="screenshots/downloadItinerary.png" alt="" width="220" /> | <img src="screenshots/pdfView_Itinerary.png" alt="" width="220" /> |
+| Preferences Screens     | <img src="screenshots/preferencesIntro.png" alt="" width="220" />   | <img src="screenshots/preferencesThings.png" alt="" width="220" /> | <img src="screenshots/preferencesBudget.png" alt="" width="220" /> |
+| Other Preferences Screens   | <img src="screenshots/preferencesClimate.png" alt="" width="220" /> | <img src="screenshots/preferencesMonth.png" alt="" width="220" /> |
 | Other Screens   | <img src="screenshots/userDetails.png" alt="" width="220" />   | <img src="screenshots/forgotPassword.png" alt="" width="220" /> | <img src="screenshots/navBar.png" alt="" width="220" /> |
 
