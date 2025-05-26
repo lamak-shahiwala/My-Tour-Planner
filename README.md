@@ -20,11 +20,11 @@
 ## 🛠️ Tech Stack
 
 | Technology      | Role                               |
-|-----------------|----------------------------------|
-| Flutter & Dart  | Frontend mobile app development   |
-| Python          | Backend logic and API integration |
+|-----------------|------------------------------------|
+| Flutter & Dart  | Frontend mobile app development    |
+| Dart & Python   | Backend logic and API integration  |
 | Gemini API      | AI-powered chatbot & itinerary generation |
-| OpenStreetMap   | Location search        |
+| OpenStreetMap   | Location search                    |
 | Supabase        | Authentication, Database & Storage|
 | Figma           | UI/UX design                      |
 
@@ -50,4 +50,10 @@
 
 ## Figma WireFrame(Prototype) 
 
-You can find the wireframe designed for the following application [here!](https://www.figma.com/proto/xjXGrDfzCRfHWtJAr7ouXr/Wireframe---MY-TOUR-PLANNER?page-id=0%3A1&node-id=6-59&node-type=canvas&viewport=-3115%2C409%2C0.75&t=Ge8uCXagl0o8zhjs-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1%3A2)
+### You can find the wireframe designed for the following application [here!](https://www.figma.com/proto/xjXGrDfzCRfHWtJAr7ouXr/Wireframe---MY-TOUR-PLANNER?page-id=0%3A1&node-id=6-59&node-type=canvas&viewport=-3115%2C409%2C0.75&t=Ge8uCXagl0o8zhjs-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1%3A2)
+- It is recommended to open in figma app for more clear view.
+- Press R to restart the prototype once you open it.
+  
+---
+
+Happy Coding....Happy Travel Planning!
